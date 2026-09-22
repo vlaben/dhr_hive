@@ -1,0 +1,51 @@
+# ---------------------------------------------------------------------------- #
+|                                   REQUEST                                    |
++ ---------------------------------------------------------------------------- +
+|               | [                                                            |
+| COM_SUID      |      5,                [0]  i                                |            com::suid::control
+| COM_TYPE      |      2,                [1]  i                                |            com::type::execute
+| COM_EXID      |      2,                [2]  i                                | subsystem::com::exid::set_log_severities
+| COM_ARGV      |      [                 [3]  a                                |
+|               |           veh_severity,    [0]  i                            |
+|               |           obj_severity,    [1]  i                            |
+|               |           plr_severity,    [2]  i                            |
+|               |           srv_severity     [3]  i                            |
+|               |      ]                                                       |
+|               | ]                                                            |
+|               | ------------------------------------------------------------ |
+|          repr | "(i,i,i,(i,i,i,i))"                                          | <-- expected types
+|               | ------------------------------------------------------------ |
+|        packet | "[5,2,2,[1,2,3,4]]"                                          | <-- example
+|               | ------------------------------------------------------------ |
+|          argv | [0] new log severity level for vehicle subsystem provider    |
+|               | [1] new log severity level for object  subsystem provider    |
+|               | [2] new log severity level for player  subsystem provider    |
+|               | [3] new log severity level for server  subsystem provider    |
+|               | ------------------------------------------------------------ |
+|               | Acceptable log severity levels:                              |
+|               | 0 : trace                                                    |
+|               | 1 : debug                                                    |
+|               | 2 : info                                                     |
+|               | 3 : warning                                                  |
+|               | 4 : error                                                    |
+|               | 5 : fatal                                                    |
+|               | 6 : off                                                      |
++ ---------------------------------------------------------------------------- +
+
+
+
++ ---------------------------------------------------------------------------- +
+|                                   RESPONSE                                   |
++ ---------------------------------------------------------------------------- +
+| COM_EXID      |                                                              |
+| success       | [2,0,"success message"]                                      |
++ ------------- + ------------------------------------------------------------ +
+| COM_EXID      |                                                              |
+| failure       | [2,1,"failure message"]                                      |
++ ------------- + ------------------------------------------------------------ +
+| hive RESPONSE | [2,2,"err_INVALID"]                                          |
+| failure       | [2,2,"err_RESSIZE"]                                          |
++ ------------- + ------------------------------------------------------------ +
+| hive SYSTEM   | [2,3,"err_ABORTED"]                                          |
+| failure       | [2,3,"err_REVOKED"]                                          |
++ ---------------------------------------------------------------------------- +

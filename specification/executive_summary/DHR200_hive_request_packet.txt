@@ -1,0 +1,315 @@
+# -------------------------------------------------------- #
+# DHR hive request packet executive summary                #
+# Copyright (c) 2023, Vladimir Benes (iben)                #
+# -------------------------------------------------------- #
+
+
+# [A] NAMING CONVENTION:
+# -------------------------------------------------------- |
+
+  COM_SUID : system element unique ID
+  COM_TYPE : type of request
+  COM_EXID : execution id
+  COM_ARGV : argument vector
+
+
+
+# [B] PACKET REQUIRED STRUCTURE:
+# -------------------------------------------------------- |
+
+  + ---------------------------------------------------------- |
+  |             HEADER             |          PAYLOAD          |
+  + ------------------------------ + ------------------------- |
+  | COM_SUID | COM_TYPE | COM_EXID | COM_ARGV[ARG1,[...,]ARGN] |
+  + ---------------------------------------------------------- |
+                         (max packet size : 10 x 1'024 = 10KB)
+
+  + ------------------------------------------------- +
+  |                 |               repr              |
+  |                 |         (flat signature)        |
+  |                 + ------------------------------- |
+  |                 |   (                             |
+  |                 |       i,                        | HEADER  : COM_SUID
+  |                 |       i,                        |           COM_TYPE
+  |   Packet:       |       i,                        |           COM_EXID
+  |   -------       |       a                         | PAYLOAD : COM_ARGV[ARG1,[...,]ARGN]
+  |   [             |   )                             |
+  |       6,        + ------------------------------- +
+  |       1,        |               repr              |
+  |       1,        |      (recursive signature)      |
+  |       [         + ------------------------------- |
+  |          true,  |                                 |
+  |          ...    |   (                             |
+  |       ]         |       i,                        | HEADER  : COM_SUID
+  |   ]             |       i,                        |           COM_TYPE
+  |                 |       i,                        |           COM_EXID
+  |                 |       (                         | PAYLOAD : COM_ARGV[
+  |                 |           b,                    |             ARG1,
+  |                 |           ...                   |             ...
+  |                 |       )                         |           ]
+  |                 |   )                             |
+  + ------------------------------------------------- +
+
+
+
+# [B1/1] HEADER: COM_SUID:
+# -------------------------------------------------------- |
+
+                                                              + ------------------------------------------------------------------------------------------------------------ +
+                                                              |      system levels hierarchy       |     system elements hierarchy      |     system reporting hierarchy     |
+  + -------------------------------------------------------- ++ ---------------------------------- + ---------------------------------- + ---------------------------------- +
+  | COM_SUID           | value  | scope                      || system:                            | dhr_hive[_d].dll:                  | Arma RPT:                          |
+  + ------------------ + ------ + -------------------------- ++ |                                  | |                                  | |                                  |
+  | controller         | 6      | system controller          || \ system controller                | \ com::suid::controller            | \ error_id::system                 |
+  | ------------------ + ------ + -------------------------- ||   |                                |   |                                |   |                                |
+  | control            | 5      | subsystem control          ||   \  subsystem provider control    |   \ com::suid::control             |   \ error_id::control              |
+  | ------------------ + ------ + -------------------------- ||      |                             |     |                              |     |                              |
+  | server             | 4      | support subsystem provider ||      | subsystem server  provider  |     | com::suid::server            |     | error_id::server             |
+  | ------------------ + ------ + -------------------------- ||      |                             |     |                              |     |                              |
+  | player             | 3      | support subsystem provider ||      | subsystem player  provider  |     | com::suid::player            |     | error_id::player             |
+  | ------------------ + ------ + -------------------------- ||      |                             |     |                              |     |                              |
+  | object             | 2      | support subsystem provider ||      | subsystem object  provider  |     | com::suid::object            |     | error_id::object             |
+  | ------------------ + ------ + -------------------------- ||      |                             |     |                              |     |                              |
+  | vehicle            | 1      | support subsystem provider ||      \  subsystem vehicle provider |     \ com::suid::vehicle           |     \ error_id::vehicle            |
+  + -------------------------------------------------------- ++ ------------------------------------------------------------------------------------------------------------ +
+
+
+
+# [B1/2] HEADER: COM_TYPE:
+# -------------------------------------------------------- |
+
+  + ------------------------------------------------------------------------- + ------------------------------------------------------------------------- +
+  |                  (DHR hive request packet specification)                  |                 (DHR hive response packet specification)                  |
+  |                                    REQUEST                                |                                   RESPONSE                                |
+  + ------------------------------------------------------------------------- + ------------------------------------------------------------------------- +
+  | COM_TYPE    | value   | description                                       | response size | COM_EXID success             | <?> failure                |
+  + ----------- + ------- + ------------------------------------------------- + ------------- + ---------------------------- + -------------------------- +
+  |             |         | SYNC call type.                                   | 3             |                              |                            |
+  |             |         |                                                   |               |                              |                            |
+  | auth        | 1       | System packets controlling interaction            |               | [1,0,"DATA"]                 | COM_EXID failure:          |
+  |             |         | with dhr_hive[_d].dll.                            |               |                              | -----------------          |
+  |             |         | Guarded, strictly handled by the rules.           |               |                              | [1,1,"DATA"]               |
+  |             |         |                                                   |               |                              |                            |
+  |             |         |                                                   |               |                              | hive RESPONSE failure:     |
+  |             |         |                                                   |               |                              | ----------------------     |
+  |             |         |                                                   |               |                              | [1,2,"err_INVALID"]        |
+  |             |         |                                                   |               |                              | [1,2,"err_RESSIZE"]        |
+  |             |         |                                                   |               |                              |                            |
+  |             |         | On fail auth, all subsequent packets              |               |                              | hive SYSTEM failure:       |
+  |             |         | are blocked (Arma2OA server will always           |               |                              | --------------------       |
+  |             |         | receive "err_REVOKED" response on each            |               |                              | [1,3,"err_ABORTED"]        |
+  |             |         | subsequent call).                                 |               |                              | [1,3,"err_REVOKED"]        |
+  + ----------- + ------- + ------------------------------------------------- + ------------- + ---------------------------- + -------------------------- +
+  |             |         | Execute call type.                                | 3             |                              |                            |
+  |             |         |                                                   |               |                              |                            |
+  | execute     | 2       | Generally, request dispatcher to the target       |               | [2,0,"DATA"]                 | COM_EXID failure:          |
+  |             |         | background worker thread (without tracking).      |               | [2,0,""]                     | -----------------          |
+  |             |         |                                                   |               |                              | [2,1,"DATA"]               |
+  |             |         | Since packet from Arma2OA server is always        |               |                              |                            |
+  |             |         | deserialized and validated, caller should         |               |                              | hive RESPONSE failure:     |
+  |             |         | always inspect at least RES_CODE                  |               |                              | ----------------------     |
+  |             |         | (even on success).                                |               |                              | [2,2,"err_INVALID"]        |
+  |             |         |                                                   |               |                              | [2,2,"err_RESSIZE"]        |
+  |             |         | Call is very fast - once validation               |               |                              |                            |
+  |             |         | is succcessfully done, packet is (mostly) passed  |               |                              | hive SYSTEM failure:       |
+  |             |         | to the target COM_SUID and enqueued to the worker |               |                              | --------------------       |
+  |             |         | thread queue, hence main thread blocking is       |               |                              | [2,3,"err_ABORTED"]        |
+  |             |         | minimal (non significant).                        |               |                              | [2,3,"err_REVOKED"]        |
+  + ----------- + ------- + ------------------------------------------------- + ------------- + ---------------------------- + -------------------------- +
+  |             |         | ASYNC call type.                                  | 4             |                              |                            |
+  |             |         |                                                   |               |                              |                            |
+  | promise     | 3       | Creates promise, stores future and returns        |               | [3,0,PRID,"DATA"]            | COM_EXID failure:          |
+  |             |         | back to the caller without blocking the main      |               | [3,0,PRID,""]                | -----------------          |
+  |             |         | thread. Caller will receive unique promise ID     |               |                              | [3,1,PRID,"DATA"]          |
+  |             |         | (PRID), which will be used for the next call,     |               |                              |                            |
+  |             |         | when future result is required.                   |               |                              | hive RESPONSE failure:     |
+  |             |         |                                                   |               |                              | ----------------------     |
+  |             |         |                                                   |               |                              | [3,2,PRID,"err_INVALID"]   |
+  |             |         |                                                   |               |                              | [3,2,PRID,"err_RESSIZE"]   |
+  |             |         |                                                   |               |                              |                            |
+  |             |         |                                                   |               |                              | hive SYSTEM failure:       |
+  |             |         |                                                   |               |                              | --------------------       |
+  |             |         |                                                   |               |                              | [3,3,PRID,"err_ABORTED"]   |
+  |             |         |                                                   |               |                              | [3,3,PRID,"err_REVOKED"]   |
+  + ----------- + ------- + ------------------------------------------------- + ------------- + ---------------------------- + -------------------------- +
+  |             |         | Part of ASYNC call type.                          | 5             |                              |                            |
+  |             |         |                                                   |               |                              |                            |
+  | future      | 4       | Looks up the future result using unique           |               |                              |                            |
+  |             |         | PRID as received from promise request COM_TYPE.   |               |                              |                            |
+  |             |         |                                                   |               |                              |                            |
+  |             |         | If response is not ready yet, caller receives     |               | result not available yet:    | COM_EXID failure:          |
+  |             |         | signal (RES_CODE = -1) to repeat request later.   |               | -------------------------    | -----------------          |
+  |             |         |                                                   |               | [4,-1,PRID,0,""]             | [4,1,PRID,0,"DATA"]        |
+  |             |         |                                                   |               |                              |                            |
+  |             |         | When invalid PRID is received, a special          |               |                              | invalid PRID:              |
+  |             |         | RESPONSE is sent back to the caller,              |               |                              | -------------              |
+  |             |         | where PRID == 0 signals the fact.                 |               |                              | [4,1,0,0,""]               |
+  |             |         |                                                   |               |                              |                            |
+  |             |         | All responses having RES_QUID = 0 (no msgs left)  |               | single packet result:        | hive RESPONSE failure:     |
+  |             |         | are considered complete single packet result.     |               | ---------------------        | ----------------------     |
+  |             |         |                                                   |               | [4,0,PRID,0,"DATA_0"]        | [4,2,PRID,0,"err_INVALID"] |
+  |             |         |                                                   |               |                              | [4,2,PRID,0,"err_RESSIZE"] |
+  |             |         | All responses having RES_QUID > 0 (msgs left)     |               | multi packet result:         |                            |
+  |             |         | are considered multi packet result                |               | --------------------         | hive SYSTEM failure:       |
+  |             |         | and concrete RES_QUID value represents            |               | [4,0,PRID,2,"DATA_0"]        | --------------------       |
+  |             |         | the answer to the question:                       |               | [4,0,PRID,1,"DATA_1"]        | [4,3,PRID,0,"err_ABORTED"] |
+  |             |         | "HOW MANY TIMES SHOULD I SENT FUTURE COM_TYPE     |               | [4,0,PRID,0,"DATA_2"]        | [4,3,PRID,0,"err_REVOKED"] |
+  |             |         |  REQUEST TO RECEIVE COMPLETE RESPONSE?"           |               |                              |                            |
+  + ----------------------------------------------------------------------------------------------------------------------------------------------------- +
+
+
+
+# [B1/3] HEADER: COM_EXID:
+# -------------------------------------------------------- |
+
+  + --------------------------------------------- +
+  |          Each COM_SUID has available          |
+  |          31 unique execution ID calls         |
+  + --------------------------------------------- +
+  | COM_SUID           | COM_EXID available range |
+  + ------------------ + ------------------------ +
+  | controller         |                          |
+  | ------------------ |                          |
+  | control            |                          |
+  | ------------------ |                          |
+  | server             |       <1*, 31>**         |
+  | ------------------ |                          |
+  | player             |                          |
+  | ------------------ |                          |
+  | object             |                          |
+  | ------------------ |                          |
+  | vehicle            |                          |
+  + --------------------------------------------- +
+
+  *  COM_EXID 0 is reserved for internal purposes, hence 31 calls instead of 32.
+
+  ** 31* unique COM_EXID calls per COM_SUID / 186 (6 * 31) per whole system
+     is more then enough to satisfy DayZ Epoch requirements.
+     If there is ever need to increase this value, it is possible to replace
+     32 bit bitmask with 64 bit bitmask in source code, which would allow 63*
+     unique COM_EXID calls / 378 (6 * 63) (source code update would be required).
+
+
+
+# [B2] PAYLOAD: COM_ARGV[ARG1,[...,]ARGN]:
+# -------------------------------------------------------- |
+
+  + -------------------------------------------------------------------------------------------------------------- +
+  |                                                    MAPPING                                                     |
+  |                                           ARMA 2OA SQF TYPES -> C++                                            |
+  + -------------------------------------------------------------------------------------------------------------- +
+  |                  |                                       c++ sqf::param                                        |
+  |                  | ------------------------------------------------------------------------------------------- |
+  |                  |                 |         | specifier | "{:V}" | "{:v}" | "{:K}" | "{:k}" | "{:R}" | "{:r}" |
+  |                  |                 |         | --------- | ------ + ------ | ------ + ------ | ------ + ------ |
+  |     Arma2 OA     |      AST        |         | recursive |  YES   |  YES   |  YES   |   NO   |  YES   |   NO   |
+  |     SQF type     |     traits      | index() | --------- | ------ + ------ | ------ + ------ | ------ + ------ |
+  |                  |                 |         | brackets* |   []   |   ()   |   ()   |   ()   |   ()   |   ()   |
+  |                  |                 |         | --------- | ------ + ------ | ------ + ------ | ------ + ------ |
+  |                  |                 |         | method    |     get_*()     |     kind()      |     repr()      |
+  | ---------------- + --------------- + ------- + --------- + --------------- + --------------- + --------------- |
+  | nil              | null_traits_t   |   0UZ   |           |      null       |       any       |        ?        |
+  | ---------------- + --------------- + ------- |           | --------------- + --------------- + --------------- |
+  | BOOLEAN          | bool_traits_t   |   1UZ   |           |   true / false  |       bool      |        b        |
+  | ---------------- + --------------- + ------- |           | --------------- + --------------- + --------------- |
+  | NUMBER/int       | int64_traits_t  |   2UZ   |           |     -10LL       |      int64      |        i        |
+  | ---------------- + --------------- + ------- |           | --------------- + --------------- + --------------- |
+  | NUMBER/int (big) | uint64_traits_t |   3UZ   |           |      10ULL      |      uint64     |        u        |
+  | ---------------- + --------------- + ------- |           | --------------- + --------------- + --------------- |
+  | NUMBER/float     | double_traits_t |   4UZ   |           |      0.53       |      double     |        f        |
+  | ---------------- + --------------- + ------- |           | --------------- + --------------- + --------------- |
+  | STRING           | str_traits_t    |   5UZ   |           |     "[...]"     |       str       |        s        |
+  | ---------------- + --------------- + ------- |           | ------ + ------ + ------ + ------ + ------ + ------ |
+  | ARRAY            | arr_traits_t    |   6UZ   |           |  [...] | (...)  |     () | arr    |     () | a      |
+  + -------------------------------------------------------------------------------------------------------------- +
+  |                                  * brackets : [] | SQF format | Arma2 OA 'call compile ...' | compatible for SQF
+  |                                               () | RPT format | Arma2 OA 'call compile ...' | compatible for RPT
+  |
+  |
+  |--input     ::= param                ast::arr_traits_t
+       | <-------------------------------------------------- + + ------------------------------------- +
+     param     ::= null                 ast::null_traits_t   | |                   |                   |
+                |= bool                 ast::bool_traits_t   | |                   |       cheap       |
+                |= signed   integer     ast::int64_traits_t  | |      trivial      |    construction   |
+                |= unsigned integer     ast::uint64_traits_t | |       types       |      / copy       |
+                |= double               ast::double_traits_t | |                   |                   |
+                   ----------------------------------------- | | ----------------- | ----------------- |
+                |= string               ast::str_traits_t    | |    non-trivial    | string_view       |
+                |= vector<param>        ast::arr_traits_t    | |       types       | span<const param> |
+                \--------------------------------------------+ + ------------------------------------- +
+
+
+  + ----------------------------------------------------------------------------------------------------------- +
+  |                                                  MAPPING                                                    |
+  |                                                MySQL -> C++                                                 |
+  | ----------------------------------------------------------------------------------------------------------- |
+  |      MySQL       |       c++        | sqf::param AST  |                   details                           |
+  + ----------------------------------------------------------------------------------------------------------- +
+  + ----------------------------------------------------------------------------------------------------------- +
+  | TINYINT          | std::int8_t      |                 | 1 byte (signed char)                                |
+  |                  |                  |                 | <-2^⁷, 2^⁷ - 1>                                     |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | SMALLINT         | std::int16_t     |                 | 2 bytes (short)                                     |
+  |                  |                  |                 | <-2^¹⁵, 2^¹⁵ - 1>                                   |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | MEDIUMINT*       | std::int32_t     |                 | 3 bytes (*compatible with int)                      |
+  |                  |                  |                 | <-2^²³, 2^²³ - 1>                                   |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | INT              | std::int32_t     |                 | 4 bytes (int)                                       |
+  |                  |                  |                 | <-2^³¹, 2^³¹ - 1>                                   |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | BIGINT           | std::int64_t     |                 | 8 bytes (long long)                                 |
+  |                  |                  | int64_traits_t  | <-2^⁶³, 2^⁶³ - 1>                                   |
+  + ----------------------------------------------------------------------------------------------------------- +
+  + ----------------------------------------------------------------------------------------------------------- +
+  | UNSIGNED         | std::uint8_t     |                 | 1 byte (unsigned char)                              |
+  | TINYINT          |                  |                 | <0, 2^⁸ - 1>                                        |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | UNSIGNED         | std::uint16_t    |                 | 2 bytes (unsigned short)                            |
+  | SMALLINT         |                  |                 | <0, 2^¹⁶ - 1>                                       |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | UNSIGNED*        | std::uint32_t    |                 | 3 bytes (*compatible with unsigned int)             |
+  | MEDIUMINT        |                  |                 | <0, 2^²⁴ - 1>                                       |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | UNSIGNED         | std::uint32_t    |                 | 4 bytes (unsigned int)                              |
+  | INT              |                  |                 | <0, 2^³² - 1>                                       |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | UNSIGNED         | std::uint64_t    |                 | 8 bytes (unsigned long long)                        |
+  | BIGINT           |                  | uint64_traits_t | <0, 2^⁶⁴ - 1>                                       |
+  + ----------------------------------------------------------------------------------------------------------- +
+  + ----------------------------------------------------------------------------------------------------------- +
+  | FLOAT            | float            |                 | 4 bytes                                             |
+  |                  |                  |                 | 3.4E +/- 38 (7 digits)                              |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | DOUBLE*          | double           |                 | 8 bytes (*Arma can't handle double, just for info)  |
+  |                  |                  | double_traits_t | 1.7E +/- 308 (15 digits)                            |
+  + ----------------------------------------------------------------------------------------------------------- +
+  + ----------------------------------------------------------------------------------------------------------- +
+  | DATE             | date             |                 | date                                                |
+  |                  |                  |                 |                                                     |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | DATETIME         | datetime         |                 | Time point type without time zone,                  |
+  |                  |                  |                 | with a resolution of one microsecond                |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | YEAR             | std::uint64_t    |                 | 1 byte integer type used to represent years         |
+  |                  |                  |                 | Zero is employed to represent invalid year values   |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | TIME             | time             |                 | Signed time duration, with a resolution             |
+  |                  |                  |                 | of one microsecond                                  |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | TIMESTAMP        | datetime         |                 | Time point type with a resolution                   |
+  |                  |                  | chrono          | of one microsecond                                  |
+  + ----------------------------------------------------------------------------------------------------------- +
+  + ----------------------------------------------------------------------------------------------------------- +
+  | CHAR             | std::string_view |                 | Fixed-size character string                         |
+  |                  | std::string      |                 |                                                     |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | VARCHAR          | std::string_view |                 | Variable size character string with a maximum size  |
+  |                  | std::string      |                 |                                                     |
+  | ---------------- + ---------------- |                 | --------------------------------------------------- |
+  | TEXT             | std::string_view |                 | Variable size character string                      |
+  | (all sizes)      | std::string      | str_traits_t    |                                                     |
+  + ----------------------------------------------------------------------------------------------------------- +
+  + ----------------------------------------------------------------------------------------------------------- +
+  | null             |                  | null_traits_t   | Any of the above, when they're NULL                 |
+  + ----------------------------------------------------------------------------------------------------------- +

@@ -1,0 +1,435 @@
+# -------------------------------------------------------- #
+# DHR hive logging executive summary                       #
+# Copyright (c) 2023, Vladimir Benes (iben)                #
+# -------------------------------------------------------- #
+
+
+Related specification:
+----------------------
+DHR200_hive_request_packet.txt
+DHR400_hive_response_packet.txt
+
+
+# [A] NAMING CONVENTION:
+# -------------------------------------------------------- |
+
+  LOG_TME : log record time stamp
+  LOG_SEV : log record severity level
+  LOG_TMK : log record trace marker
+  LOG_MSG : log record message
+
+
+
+# [B] LOGGER TYPE:
+# -------------------------------------------------------- |
+
+  [B1]  SYNC hive system control logger
+  [B2] ASYNC hive subsystem provider logger
+
+
+
+# [B1] LOGGER TYPE: DHR HIVE SYSTEM CONTROL LOGGER:
+# -------------------------------------------------------- |
+
+  + System level events (main thread)
+    Subsystem provider high importance events (from main / worker thread(s))
+
+    Rules:
+    ------
+    [R/2] System controller is the owner of the subsystem control object.
+    [R/1] Subsystem control object is the owner of the system sync logger.
+    [R/3] Each subsystem provider may use system sync logger strong reference
+          to (rarely) log high importance events into the system log file.
+
+
+
+# [B2] LOGGER TYPE: DHR HIVE SUBSYSTEM PROVIDER LOGGER:
+# -------------------------------------------------------- |
+
+  + Subsystem provider events (from worker thread(s) / main)
+
+  + Managing logging thread:
+    - subsystem control (owner)
+
+  + Dedicated worker threads:
+    - server  subsystem provider worker thread
+    - player  subsystem provider worker thread
+    - object  subsystem provider worker thread
+    - vehicle subsystem provider worker thread
+
+    Rules:
+    ------
+    [R/1] Subsystem control object is the manager handling logging worker thread lifetime
+          and async logger creation for each subsystem provider.
+    [R/2] Each subsystem provider is the owner of the dedicated async logger.
+    [R/3] Each subsystem provider logs from dedicated worker thread to logging thread.
+    [R/4] All subsystem providers shares the same log file.
+
+
+
+# [C] LOGGING: SEVERITY LEVELS
+# -------------------------------------------------------- |
+
+    trace   = 0,
+    debug   = 1,
+    info    = 2,
+    warning = 3,
+    error   = 4,
+    fatal   = 5,
+    off     = 6,
+
+    DEFAULT SEVERITY LEVELS:
+
+        - 'dhr_hive[_d].ini' configuration
+
+          [control]
+              # ---
+              # system logger is critical - severity/flush level always hardcoded to 'trace'
+              # ---
+
+              # ---
+              # default settings
+              # [server|player|object|vehicle] either use it | custom
+              # ---
+              log_severity_def = 3
+              log_flush_on_def = 3
+
+          [server]
+              log_severity = ${control.log_severity_def} | custom
+              log_flush_on = ${control.log_flush_on_def} | custom
+
+          [player]
+              log_severity = ${control.log_severity_def} | custom
+              log_flush_on = ${control.log_flush_on_def} | custom
+
+          [object]
+              log_severity = ${control.log_severity_def} | custom
+              log_flush_on = ${control.log_flush_on_def} | custom
+
+          [vehicle]
+              log_severity = ${control.log_severity_def} | custom
+              log_flush_on = ${control.log_flush_on_def} | custom
+
+
+          -------------------------------------------------
+        - DISCUSSION (should be discussed within 108 team):
+          -------------------------------------------------
+          Logging machinery is capable of:
+
+                -----------------------------------------------------
+            (a) Let server owner use 'log_*_def' defined in [control]
+                and use these values during game session.
+
+                These value become immutable constants and
+                can't be changes during game runtime session.
+
+                PROS:
+                  + log/flush severity getters/setters can be defined
+                    without synchronization overhead - there is a perf
+                    gain (currently set this way)
+
+                CONS:
+                  + server owner won't be able to dynamically change
+                    settings during game runtime session
+
+                -----------------------------------------------------
+            (b) Define 'log_*_def' defined in [control] at warning
+                level and use them everywhere.
+
+                These value become mutable and can be changed
+                during game runtime session (directly from live game).
+
+                PROS:
+                  + server owner starts server with minimum logging
+                    enabled and during game runtime session (directly
+                    within the game) may set values (via COM_EXID):
+                    - globally     (1 custom level for all)
+                    - individually (custom level for each subsystem)
+
+                  + devop process: developer making changes targeting
+                    build objects is able to turn everything off but
+                    [object] subsystem provider. This way, all noice
+                    is gone and only object related log records are
+                    present.
+
+                CONS:
+                  + log/flush severity getters/setters must be defined
+                    with synchronization overhead - there is a small
+                    perf loss (currently ready to be implemented).
+
+                    Worth to notice, that mentioned perf loss doesn't
+                    affect game runtime - this will affect only logging
+                    happening in the dedicating background thread.
+                    That means - this is CONS for perfectionalist.
+
+                    On the other hand - if this feature won't be used,
+                    overhead in worker thread is really waste of CPU cycles.
+
+
+
+# [D] LOGGING: LOGFILE: NAMES
+# -------------------------------------------------------- |
+
+  [B1]  SYNC hive system control logger:
+
+       - runtime  log file name : dhr_hive_system[_d].log
+       - archived log file name : dhr_hive_system[_d]_YYYYMMDD_HHMMSS.log
+
+  [B2] ASYNC hive subsystem provider logger:
+
+       - runtime  log file name : dhr_hive_subsystem[_d].log
+       - archived log file name : dhr_hive_subsystem[_d]_YYYYMMDD_HHMMSS.log
+
+
+  ARCHIVED LOG GILES STORAGE:
+  ---------------------------
+
+    - 'dhr_hive[_d].ini' configuration
+
+      [control]
+
+      # DHR hive working directory
+      #
+      # Path may be:
+      # ------------
+      # [1] relative (to arma server executable; . == exe root)
+      # [2] absolute (fully qualified path to target custom directory)
+      # [3] commented out/not present (value of '-profiles=<path>')
+      #     will be used
+      #
+      # When using custom directory path, make sure, this dir has R/W
+      # rights and no special requirements to avoid failure, when
+      # exension tries to read from/write to the directory.
+      #
+      cwd_hive     = .
+      log_archives = ${control.cwd_hive}/DHR_logs | custom
+
+
+
+# [D] LOGFILE: HEADER
+# -------------------------------------------------------- |
+
+    Pattern:
+    --------
+
+         + ---------------------------------------------------------------------------- +
+         |                         <<[B] LOGGER TYPE>> :: START                         |
+         + ---------------------------------------------------------------------------- +
+         |                       [ {:%A | %Y-%m-%d | %H:%M:%S} ]                        |
+         + ---------------------------------------------------------------------------- +
+
+    [B1] LOGGER TYPE: DHR HIVE SYSTEM CONTROL LOGGER:
+
+         + ---------------------------------------------------------------------------- +
+         |                       DHR HIVE SYSTEM CONTROL :: START                       |
+         + ---------------------------------------------------------------------------- +
+         |                    [ Wednesday | 2026-09-02 | 17:38:28 ]                     |
+         + ---------------------------------------------------------------------------- +
+
+
+    [B2] LOGGER TYPE: DHR HIVE SUBSYSTEM PROVIDER LOGGER:
+
+         + ---------------------------------------------------------------------------- +
+         |                    DHR HIVE SUBSYSTEM PROVIDERS :: START                     |
+         + ---------------------------------------------------------------------------- +
+         |                    [ Wednesday | 2026-09-02 | 17:38:28 ]                     |
+         + ---------------------------------------------------------------------------- +
+
+
+
+# [E] LOGFILE: FOOTER
+# -------------------------------------------------------- |
+
+    Pattern:
+    --------
+
+         + ---------------------------------------------------------------------------- +
+         |                       [ {:%A | %Y-%m-%d | %H:%M:%S} ]                        |
+         + ---------------------------------------------------------------------------- +
+         |                          <<[B] LOGGER TYPE>> :: END                          |
+         + ---------------------------------------------------------------------------- +
+
+    [B1] LOGGER TYPE: DHR HIVE SYSTEM CONTROL LOGGER:
+
+         + ---------------------------------------------------------------------------- +
+         |                    [ Wednesday | 2026-09-02 | 17:38:28 ]                     |
+         + ---------------------------------------------------------------------------- +
+         |                        DHR HIVE SYSTEM CONTROL :: END                        |
+         + ---------------------------------------------------------------------------- +
+
+
+    [B2] LOGGER TYPE: DHR HIVE SUBSYSTEM PROVIDER LOGGER:
+
+         + ---------------------------------------------------------------------------- +
+         |                    [ Wednesday | 2026-09-02 | 17:38:28 ]                     |
+         + ---------------------------------------------------------------------------- +
+         |                     DHR HIVE SUBSYSTEM PROVIDERS :: END                      |
+         + ---------------------------------------------------------------------------- +
+
+
+
+# [F] LOGFILE: BODY: LOG RECORD STRUCTURE:
+# -------------------------------------------------------- |
+
+  + ------------------------------------- +
+  |           HEADER            | PAYLOAD |
+  | --------------------------- + ------- |
+  |   [F1]  |   [F2]  |   [F3]  |   [F4]  |
+  | ------- + ------- + ------- + ------- |
+  | LOG_TME | LOG_SEV | LOG_TMK | LOG_MSG |
+  + ------------------------------------- +
+
+  Example:
+  --------
+
+       [F1]      [F2]         [F3]                                                    [F4]
+  |__________| |_____| |__________________| |_________________________________________________________________________________________|
+        |         |            |                                                       |
+  22:08:45.105 [ERROR] system  : E(   1   ) ERR: Bad COM_ARGV. Original REQ: (2101,1,('string',true)). Expected: (s,a). Received: (s,b)
+
+
+# [F/1] LOGFILE: BODY: LOG RECORD STRUCTURE: LOG_TMK:
+# -------------------------------------------------------- |
+
+  Trace marker should be used for fast search within the log file.
+
+  For example, we can quickly pair log records coming from async calls -
+  consider following filter allowing us to track vehicle async request
+  with specific promise ID = 5:
+
+                                LOG_TMK
+                       + -------------------- +
+  06:29:51.939 [Debug] | vehicle : P(   5   ) | REQ : ... (as received)
+  06:29:51.940 [Debug] | vehicle : P(   5   ) | RES : ... (on success)
+  06:29:51.940 [ERROR] | vehicle : P(   5   ) | ERR : ... (on failure)
+                       + -------------------- +
+
+
+  AVAILABLE TRACE MARKERS:
+  ------------------------ (COM_SUID == DHR200: COM_SUID)
+
+
+  -------------------------------------------------------- | new thread
+
+             + -- thread
+             |
+  [COM_SUID] T(   N   )
+                  |
+                  + -- thread ID
+
+  -------------------------------------------------------- | auth request
+
+             + -- com::type::auth
+             |
+  [COM_SUID] A(   N   )
+                  |
+                  + -- global execution ID value
+
+  -------------------------------------------------------- | sync execution request
+
+             + -- com::type::execute
+             |
+  [COM_SUID] E(   N   )
+                  |
+                  + -- global execution ID value
+
+  -------------------------------------------------------- | async execution request
+                                                             (promise-future communication channel)
+             + -- com::type::promise || com::type::future
+             |
+  [COM_SUID] P(   N   )
+                  |
+                  + -- subsystem provider specific promise ID value
+
+  -------------------------------------------------------- | invalid execution
+                                                             (handled, only for logging purposes)
+             + -- unknown (invalid) com::type::execute
+             |
+  [COM_SUID] ?(   N   )
+                  |
+                  + -- global execution ID value
+
+  -------------------------------------------------------- |
+
+
+
+# [G] LOGGING:
+# -------------------------------------------------------- |
+
+  [G/1] UNIFIED ON REQUEST RECEIVED MSG
+  [G/2] UNIFIED ON REQUEST MSG
+  [G/3] UNIFIED ON REQUEST (GENERIC) ERROR MSG
+  [G/4] UNIFIED ON REQUEST COM_SUID ERROR MSG
+  [G/5] UNIFIED ON REQUEST COM_TYPE ERROR MSG
+  [G/6] UNIFIED ON REQUEST COM_EXID ERROR MSG
+  [G/7] UNIFIED ON REQUEST COM_ARGV ERROR MSG
+
+
+# [G/1] LOGGING: UNIFIED ON REQUEST RECEIVED MSG:
+# -------------------------------------------------------- |
+
+  specifier      : "{          :i           }"
+  translates to  : "E|P(   N   ) REQ: [[...]]"
+  output example : @UPDATE: output live example
+
+
+
+# [G/2] LOGGING: UNIFIED ON REQUEST MSG:
+# -------------------------------------------------------- |
+
+  specifier      : "{      :o       } {  }"
+  translates to  : "E|P(   N   ) RES: {:V}" [:V = response.as_sqf_value_str()]
+  output example : @UPDATE: output live example
+
+
+
+# [G/3] LOGGING: UNIFIED ON REQUEST (GENERIC) ERROR MSG:
+# -------------------------------------------------------- |
+
+  specifier      : "{                      :e                      } {  }"
+  translates to  : "E|P(   N   ) ERR: Original REQ: [[...]]. Reason: {:v}" [:v = reason.as_rpt_value_str()]
+  output example : 22:08:45.105 [ERROR] system  : ERR: Original REQ: (1,1,1,(),true). Reason: Packet signature mismatch. Expected: (i,i,i,a). Received: (i,i,i,a,b)
+
+
+
+# [G/4] LOGGING: UNIFIED ON REQUEST COM_SUID ERROR MSG:
+# -------------------------------------------------------- |
+
+  specifier      : "{                         :s                         } Expected: {     }. Received: {     }"
+  translates to  : "E|P(   N   ) ERR: Bad COM_SUID. Original REQ: [[...]]. Expected: [[...]]. Received: [[...]]"
+  output example : 22:08:45.105 [ERROR] system  : A(   1   ) ERR: Bad COM_SUID. Original REQ: (7,1,1,()). Expected: <1,6>. Received: 7
+
+
+
+# [G/5] LOGGING: UNIFIED ON REQUEST COM_TYPE ERROR MSG:
+# -------------------------------------------------------- |
+
+  specifier      : "{                         :t                         } Expected: {     }. Received: {     }"
+  translates to  : "E|P(   N   ) ERR: Bad COM_TYPE. Original REQ: [[...]]. Expected: [[...]]. Received: [[...]]"
+  output example : 22:08:45.105 [ERROR] system  : ?(   1   ) ERR: Bad COM_TYPE. Original REQ: (1,0,1,()). Expected: <1,4>. Received: 0
+
+
+
+# [G/6] LOGGING: UNIFIED ON REQUEST COM_EXID ERROR MSG:
+# -------------------------------------------------------- |
+
+  specifier      : "{                         :x                         } COM_SUID '{}' doesn't support COM_EXID {}"
+  translates to  : "E|P(   N   ) ERR: Bad COM_EXID. Original REQ: [[...]]. COM_SUID '..' doesn't support COM_EXID .."
+  output example : 22:08:45.105 [ERROR] system  : E(   5   ) ERR: Bad COM_EXID. Original REQ: (6,1,10,()). COM_SUID 'controller' doesn't support COM_EXID 10
+
+
+
+# [G/7] LOGGING: UNIFIED ON REQUEST COM_ARGV ERROR MSG:
+# -------------------------------------------------------- |
+
+  specifier      : "{                         :a                         } Expected: {     }. Received: {     }"
+  translates to  : "E|P(   N   ) ERR: Bad COM_ARGV. Original REQ: [[...]]. Expected: [[...]]. Received: [[...]]"
+  output example : 22:08:45.105 [ERROR] system  : E(   5   ) ERR: Bad COM_ARGV. Original REQ: (6,1,5,(0.5,true)). Expected: (f,f). Received: (f,b)
+
+
+
+# [T] TIPS:
+# -------------------------------------------------------- |
+
+  [T/0] Always gracefully close DHR hive DLL extension;
+        when you kill arma process, buffered logs will be lost!

@@ -1,0 +1,90 @@
+# ---------------------------------------------------------------------------- #
+|                                   REQUEST                                    |
++ ---------------------------------------------------------------------------- +
+|               | [                                                            |
+| COM_SUID      |       1,               [0]  i                                |          com::suid::vehicle
+| COM_TYPE      |       2,               [1]  i                                |          com::type::execute
+| COM_EXID      |      25,               [2]  i                                | vehicle::com::exid::garage_in
+| COM_ARGV      |      [                 [3]  a                                |
+|               |           vh_identity,     [0]   i  0                        |
+|               |           vh_bank,         [1]   i  0                        |
+|               |           vh_fuel,         [2]   f  1.0                      |
+|               |           vh_damage,       [3]   f  0.0                      |
+|               |           vh_owner         [4]   s  '0'                      |
+|               |           vh_key,          [5]   s  '0'                      |
+|               |           vh_name,         [6]   s  'Mountain Bike'          |
+|               |           vh_class,        [7]   s  'MMT_Civ_DZE'            |
+|               |           vh_storage,      [8]   a  [0,0,0]                  |
+|               |           vh_colors,       [9]   a  []                       |
+|               |           vh_inventory,    [10]  a  []                       |
+|               |           vh_hitpoints,    [11]  a  []                       |
+|               |           vh_props,        [12]  a  []                       |
+|               |           vh_vid           [13]  i  0                        |
+|               |      ]                                                       |
+|               | ]                                                            |
+|               | ------------------------------------------------------------ |
+|          repr | "(i,i,i,(i,i,f,f,s,s,s,s,a,a,a,a,a,i))"                      | <-- expected types
+|               | ------------------------------------------------------------ |
+|        packet | "[1,2,25,[0,...,13]]"                                        | <-- example
+|               | ------------------------------------------------------------ |
+|          argv | [0]  int representing arr[24] of static identity properties  |
+|               | [1]  storage (bank) money                                    |
+|               | [2]  fuel                                                    | ! see "dze_TODO.txt/fuel/damage issue"
+|               | [3]  received damage                                         | ! see "dze_TODO.txt/fuel/damage issue"
+|               | [4]  vehicle owner (player UID)                              | @TODO: see "dze_TODO.txt/getPlayerUID/ph_gid
+|               | [5]  vehicle key ID                                          |
+|               | [6]  display name                                            |
+|               | [7]  classname                                               |
+|               | [8]  storage counts arr                                      |
+|               | [9]  colors arr                                              |
+|               | [10] inventory arr                                           |
+|               | [11] hitpoints arr                                           |
+|               | [12] arr of dynamic properties                               |
+|               | [13] vehicle ID (PK)                                         | see '`vh_vid` PK reuse' section below
++ ---------------------------------------------------------------------------- +
+
+
+
++ ---------------------------------------------------------------------------- +
+|                                   RESPONSE                                   |
++ ---------------------------------------------------------------------------- +
+| COM_EXID      |                                                              |
+| success       | [2,0,""]                                                     |
++ ------------- + ------------------------------------------------------------ +
+| COM_EXID      |                                                              |
+| failure       | [2,1,"failure message"]                                      |
++ ------------- + ------------------------------------------------------------ +
+| hive RESPONSE | [2,2,"err_INVALID"]                                          |
+| failure       | [2,2,"err_RESSIZE"]                                          |
++ ------------- + ------------------------------------------------------------ +
+| hive SYSTEM   | [2,3,"err_ABORTED"]                                          |
+| failure       | [2,3,"err_REVOKED"]                                          |
++ ---------------------------------------------------------------------------- +
+
+
+
+# NOTES:
+# ------
+
+  `vh_vid` PK reuse:
+  ------------------
+  Legacy virtual garage didn't reused existing database records of retrieved vehicles.
+  That means, if player retrieved vehicle from the garage, then returned it back -
+  still within the same game session time - new database record was created.
+
+  Now, we offer option to reuse already existing `vh_vid` and instead of `INSERT`
+  we rather `UPDATE` already existing record with status `vh_sid = 0`.
+
+  To make it work with SQF, each retrieved vehicle should store `vh_vid` variable with
+  3rd argument set to `false` or not specified (no broadcasting).
+
+  Original `vh_vid` may be reused as long as it happen within the same session time
+  (vehicle variable `vh_vid` will NOT be known to server after restart, which means,
+  status `vh_sid` remains `0` and will be removed from `th_table` on new session
+  start (scheduled cleanup)).
+
+  All this should be managed on arma server only. The only client requirement would be
+  to pass `vh_vid` variable value with default value `0` (getVariable ["vh_vid", 0]);
+
+  Also see : 'explain_th_select_reused_vh_vid.md'
+             'explain_th_update_reused_vh_vid.md'

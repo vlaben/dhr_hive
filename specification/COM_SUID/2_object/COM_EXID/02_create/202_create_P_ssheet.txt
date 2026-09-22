@@ -1,0 +1,58 @@
+# ---------------------------------------------------------------------------- #
+|                                   REQUEST                                    |
++ ---------------------------------------------------------------------------- +
+|               | [                                                            |
+| COM_SUID      |      2,                [0]  i                                |         com::suid::object
+| COM_TYPE      |      3,                [1]  i                                |         com::type::promise
+| COM_EXID      |      2,                [2]  i                                | object::com::exid::create
+| COM_ARGV      |      [                 [3]  a                                |
+|               |           ow_bid,          [0]   i  0                        |
+|               |           ow_identity,     [1]   i  0                        |
+|               |           ow_bank,         [2]   i  0                        |
+|               |           ow_damage,       [3]   f  0.0                      |
+|               |           ow_owner,        [4]   i  0                        |
+|               |           ow_key,          [5]   s  '0'                      |
+|               |           ow_class,        [6]   s  'Sign_sphere100cm_EP1'   |
+|               |           ow_position,     [7]   a  []                       |
+|               |           ow_vectors,      [8]   a  []                       |
+|               |           ow_friends,      [9]   a  []                       |
+|               |           ow_inventory,    [10]  a  []                       |
+|               |           ow_props         [11]  a  []                       |
+|               |      ]                                                       |
+|               | ]                                                            |
+|               | ------------------------------------------------------------ |
+|          repr | "(i,i,i,(i,i,i,f,i,s,s,a,a,a,a,a))"                          | <-- expected types
+|               | ------------------------------------------------------------ |
+|        packet | "[2,3,2,[0...11]]"                                           | <-- example
+|               | ------------------------------------------------------------ |
+|          argv | [0]  player base ID                                          |
+|               | [1]  int representing arr[24] of static identity properties  |
+|               | [2]  storage (bank) money                                    |
+|               | [3]  received damage                                         | ! see "dze_TODO.txt/fuel/damage issue"
+|               | [4]  player UID (ph_uid)                                     | @TODO: see "dze_TODO.txt/getPlayerUID/ph_gid
+|               | [5]  lockable combination key                                |
+|               | [6]  classname                                               |
+|               | [7]  position3D arr                                          |
+|               | [8]  vectors arr : [vectorDir,vectorUp]                      |
+|               | [9]  friends arr                                             |
+|               | [10] inventory arr                                           |
+|               | [11] arr of dynamic properties                               |
++ ---------------------------------------------------------------------------- +
+
+
+
++ ---------------------------------------------------------------------------- +
+|                                   RESPONSE                                   |
++ ---------------------------------------------------------------------------- +
+| COM_EXID      |                                                              |
+| success       | [3,0,PRID,""]                                                |
++ ------------- + ------------------------------------------------------------ +
+| COM_EXID      |                                                              |
+| failure       | [3,1,PRID,"failure message"]                                 |
++ ------------- + ------------------------------------------------------------ +
+| hive RESPONSE | [3,2,PRID,"err_INVALID"]                                     |
+| failure       | [3,2,PRID,"err_RESSIZE"]                                     |
++ ------------- + ------------------------------------------------------------ +
+| hive SYSTEM   | [3,3,PRID,"err_ABORTED"]                                     |
+| failure       | [3,3,PRID,"err_REVOKED"]                                     |
++ ---------------------------------------------------------------------------- +
