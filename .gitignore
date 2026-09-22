@@ -1,0 +1,12 @@
+.idea/
+.vs/
+.vscode/
+
+.venv/
+__pychache__
+
+.dep/
+.out/
+
+.private/
+.TODO/
