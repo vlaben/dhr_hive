@@ -2,14 +2,14 @@
 |                                   REQUEST                                    |
 + ---------------------------------------------------------------------------- +
 |               | [                                                            |
-| COM_SUID      |       3,           [0]  i                                    |         com::suid::player
-| COM_TYPE      |       2,           [1]  i                                    |         com::type::execute
-| COM_EXID      |      20,           [2]  i                                    | player::com::exid::sync_player_record
-| COM_ARGV      |      [             [3]  a                                    |
-|               |           ph_cash      [0]  i  0                             |
-|               |           ph_bank,     [1]  i  0                             |
-|               |           ph_score,    [2]  a  []                            |
-|               |           ph_uid       [3]  s  '0'                           |
+| COM_SUID      |       3,          [0]  i                                     |         com::suid::player
+| COM_TYPE      |       2,          [1]  i                                     |         com::type::execute
+| COM_EXID      |      20,          [2]  i                                     | player::com::exid::sync_player_record
+| COM_ARGV      |      [            [3]  a                                     |
+|               |           ph_cash     [0]  i  0                              |
+|               |           ph_bank,    [1]  i  0                              |
+|               |           ph_xp,      [2]  a  []                             |
+|               |           ph_uid      [3]  s  '0'                            |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
@@ -19,7 +19,7 @@
 |               | ------------------------------------------------------------ |
 |          argv | [0] cash money                                               |
 |               | [1] bank money                                               |
-|               | [2] player score stats                                       |
+|               | [2] player XP stats                                          |
 |               | [3] player UID                                               | @TODO: see "dze_TODO.txt/getPlayerUID/ph_gid
 + ---------------------------------------------------------------------------- +
 

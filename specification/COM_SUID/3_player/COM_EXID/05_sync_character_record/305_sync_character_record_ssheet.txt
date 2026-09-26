@@ -15,7 +15,7 @@
 |               |           pw_medical,       [6]   a  []                      |
 |               |           pw_inventory,     [7]   a  []                      |
 |               |           pw_backpack,      [8]   a  []                      |
-|               |           pw_score,         [9]   a  []                      |
+|               |           pw_xp,            [9]   a  []                      |
 |               |           pw_cid,           [10]  i  0                       |
 |               |      ]                                                       |
 |               | ]                                                            |
@@ -33,7 +33,7 @@
 |               | [6]  medical arr                                             |
 |               | [7]  inventory arr                                           |
 |               | [8]  backpack arr                                            |
-|               | [9]  character score stats                                   |
+|               | [9]  character XP stats                                      |
 |               | [10] character ID                                            |
 + ---------------------------------------------------------------------------- +
 

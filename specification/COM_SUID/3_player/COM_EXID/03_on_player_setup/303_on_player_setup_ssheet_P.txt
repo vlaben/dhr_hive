@@ -2,13 +2,13 @@
 |                                   REQUEST                                    |
 + ---------------------------------------------------------------------------- +
 |               | [                                                            |
-| COM_SUID      |      3,                   [0]  i                             |         com::suid::player
-| COM_TYPE      |      3,                   [1]  i                             |         com::type::promise
-| COM_EXID      |      3,                   [2]  i                             | player::com::exid::on_player_setup
-| COM_ARGV      |      [                    [3]  a                             |
-|               |           pw_cid,             [0]  i  0                      |
-|               |           humanity_def,       [1]  i  0                      |
-|               |           use_global_score    [2]  b  false                  |
+| COM_SUID      |      3,                [0]  i                                |         com::suid::player
+| COM_TYPE      |      3,                [1]  i                                |         com::type::promise
+| COM_EXID      |      3,                [2]  i                                | player::com::exid::on_player_setup
+| COM_ARGV      |      [                 [3]  a                                |
+|               |           pw_cid,          [0]  i  0                         |
+|               |           humanity_def,    [1]  i  0                         |
+|               |           use_global_xp    [2]  b  false                     |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
@@ -18,7 +18,7 @@
 |               | ------------------------------------------------------------ |
 |          argv | [0] player world character ID                                |
 |               | [1] default humanity value for a new character               |
-|               | [2] use player score (true) or character score (false) stats |
+|               | [2] use player XP (true) or character XP (false) stats       |
 + ---------------------------------------------------------------------------- +
 
 

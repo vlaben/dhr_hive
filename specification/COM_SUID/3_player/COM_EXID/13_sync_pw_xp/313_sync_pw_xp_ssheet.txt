@@ -2,21 +2,21 @@
 |                                   REQUEST                                    |
 + ---------------------------------------------------------------------------- +
 |               | [                                                            |
-| COM_SUID      |       3,           [0]  i                                    |         com::suid::player
-| COM_TYPE      |       2,           [1]  i                                    |         com::type::execute
-| COM_EXID      |      26,           [2]  i                                    | player::com::exid::sync_ph_score
-| COM_ARGV      |      [             [3]  a                                    |
-|               |           ph_score,    [0]  a  []                            |
-|               |           ph_uid       [1]  s  '0'                           |
+| COM_SUID      |       3,        [0]  i                                       |         com::suid::player
+| COM_TYPE      |       2,        [1]  i                                       |         com::type::execute
+| COM_EXID      |      13,        [2]  i                                       | player::com::exid::sync_pw_xp
+| COM_ARGV      |      [          [3]  a                                       |
+|               |           pw_xp,    [0]  a  []                               |
+|               |           pw_cid    [1]  i  0                                |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
-|          repr | "(i,i,i,(a,s))"                                              | <-- expected types
+|          repr | "(i,i,i,(a,i))"                                              | <-- expected types
 |               | ------------------------------------------------------------ |
-|        packet | "[3,2,26,[[...],\"76562295476658565\"]]"                     | <-- example
+|        packet | "[3,2,13,[[...],100]]"                                       | <-- example
 |               | ------------------------------------------------------------ |
-|          argv | [0] player score stats                                       |
-|               | [1] player UID                                               | @TODO: see "dze_TODO.txt/getPlayerUID/ph_gid
+|          argv | [0] character XP stats                                       |
+|               | [1] character ID                                             |
 + ---------------------------------------------------------------------------- +
 
 

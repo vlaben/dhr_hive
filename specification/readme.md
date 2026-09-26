@@ -120,7 +120,7 @@
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>10<sub/>      | <sub>[sync character worldspace][310]<sub/> | <sub>_DHR_f_plr_sync_pw_worldspace_<sub/>    | <sub>Update character direction and position<sub/>                      |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>11<sub/>      | <sub>[sync character medical][311]<sub/>    | <sub>_DHR_f_plr_sync_pw_medical_<sub/>       | <sub>Update current character state and medical data<sub/>              |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>12<sub/>      | <sub>[sync character gear][312]<sub/>       | <sub>_DHR_f_plr_sync_pw_gear_<sub/>          | <sub>Update character inventory and backpack<sub/>                      |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>13<sub/>      | <sub>[sync character score][313]<sub/>      | <sub>_DHR_f_plr_sync_pw_score_<sub/>         | <sub>Update character score stats<sub/>                                 |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>13<sub/>      | <sub>[sync character XP][313]<sub/>         | <sub>_DHR_f_plr_sync_pw_xp_<sub/>            | <sub>Update character eXPerience stats<sub/>                            |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>14<sub/>      | <sub>[sync character death][314]<sub/>      | <sub>_DHR_f_plr_sync_pw_death_<sub/>         | <sub>Mark character database record as void (`pw_sid = 1`)<sub/>        |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>20<sub/>      | <sub>[sync player record][320]<sub/>        | <sub>_DHR_f_plr_sync_player_record_<sub/>    | <sub>Update player database record<sub/>                                |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>21<sub/>      | <sub>[sync player name][321]<sub/>          | <sub>_DHR_f_plr_sync_ph_name_<sub/>          | <sub>Update player name<sub/>                                           |
@@ -128,7 +128,7 @@
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>23<sub/>      | <sub>[sync player bank][323]<sub/>          | <sub>_DHR_f_plr_sync_ph_bank_<sub/>          | <sub>Update player bank<sub/>                                           |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>24<sub/>      | <sub>[sync player money][324]<sub/>         | <sub>_DHR_f_plr_sync_ph_money_<sub/>         | <sub>Update player money (cash and bank)<sub/>                          |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>25<sub/>      | <sub>[sync player group][325]<sub/>         | <sub>_DHR_f_plr_sync_ph_group_<sub/>         | <sub>Update player group<sub/>                                          |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>26<sub/>      | <sub>[sync player score][326]<sub/>         | <sub>_DHR_f_plr_sync_ph_score_<sub/>         | <sub>Update player score stats<sub/>                                    |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>26<sub/>      | <sub>[sync player XP][326]<sub/>            | <sub>_DHR_f_plr_sync_ph_xp_<sub/>            | <sub>Update player eXPerience stats<sub/>                               |
 |      <sub>3<sub/>       |      <sub>3<sub/>       |      <sub>28<sub/>      | <sub>[*open mysql session (P)][3281]<sub/>  |                                              | <sub>Get an open MySQL session PROMISE<sub/>                            |
 |      <sub>3<sub/>       |      <sub>4<sub/>       |      <sub>28<sub/>      | <sub>[*open mysql session (F)][3282]<sub/>  |                                              | <sub>Retrieve open MySQL session FUTURE result<sub/>                    |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>29<sub/>      | <sub>[*cleanup mysql tw table][329]<sub/>   |                                              | <sub>Delete all records marked for scheduled removal (`pw_sid=0`)<sub/> |
@@ -386,7 +386,7 @@
 
 [312]: COM_SUID/3_player/COM_EXID/12_sync_pw_gear/312_sync_pw_gear_ssheet.txt
 
-[313]: COM_SUID/3_player/COM_EXID/13_sync_pw_score/313_sync_pw_score_ssheet.txt
+[313]: COM_SUID/3_player/COM_EXID/13_sync_pw_xp/313_sync_pw_xp_ssheet.txt
 
 [314]: COM_SUID/3_player/COM_EXID/14_sync_pw_death/314_sync_pw_death_ssheet.txt
 
@@ -402,7 +402,7 @@
 
 [325]: COM_SUID/3_player/COM_EXID/25_sync_ph_group/325_sync_ph_group_ssheet.txt
 
-[326]: COM_SUID/3_player/COM_EXID/26_sync_ph_score/326_sync_ph_score_ssheet.txt
+[326]: COM_SUID/3_player/COM_EXID/26_sync_ph_xp/326_sync_ph_xp_ssheet.txt
 
 [3281]: COM_SUID/3_player/COM_EXID/28_mysql_open_session/328_mysql_open_session_P_ssheet.txt
 
