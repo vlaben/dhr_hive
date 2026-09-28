@@ -6,35 +6,37 @@
 | COM_TYPE      |      2,                 [1]  i                               |         com::type::execute
 | COM_EXID      |      5,                 [2]  i                               | player::com::exid::sync_character_record
 | COM_ARGV      |      [                  [3]  a                               |
-|               |           pw_played         [0]   i  0                       |
-|               |           pw_humanity,      [1]   i  2'500                   |
-|               |           pw_cash,          [2]   i  0                       |
-|               |           pw_model,         [3]   s  'Survivor2_DZ'          |
-|               |           pw_worldspace,    [4]   a  []                      |
-|               |           pw_state,         [5]   a  []                      |
-|               |           pw_medical,       [6]   a  []                      |
-|               |           pw_inventory,     [7]   a  []                      |
-|               |           pw_backpack,      [8]   a  []                      |
-|               |           pw_xp,            [9]   a  []                      |
-|               |           pw_cid,           [10]  i  0                       |
+|               |           pw_faction,       [0]   i  1                       |
+|               |           pw_played,        [1]   i  0                       |
+|               |           pw_humanity,      [2]   i  2'500                   |
+|               |           pw_cash,          [3]   i  0                       |
+|               |           pw_model,         [4]   s  'Survivor2_DZ'          |
+|               |           pw_worldspace,    [5]   a  []                      |
+|               |           pw_state,         [6]   a  []                      |
+|               |           pw_medical,       [7]   a  []                      |
+|               |           pw_xp,            [8]   s  '[]'                    |  unchecked: must be a string
+|               |           pw_inventory,     [9]   a  []                      |
+|               |           pw_backpack,      [10]  a  []                      |
+|               |           pw_cid            [11]  i  0                       |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
-|          repr | "(i,i,i,(i,i,i,s,a,a,a,a,a,a,i))"                            | <-- expected types
+|          repr | "(i,i,i,(i,i,i,i,s,a,a,a,s,a,a,i))"                          | <-- expected types
 |               | ------------------------------------------------------------ |
-|        packet | "[3,2,5,[0,...,10]]"                                         | <-- example
+|        packet | "[3,2,5,[0,...,11]]"                                         | <-- example
 |               | ------------------------------------------------------------ |
-|          argv | [0]  time played (duration)                                  |
-|               | [1]  humanity                                                |
-|               | [2]  character cash money                                    |
-|               | [3]  character skin                                          |
-|               | [4]  worldspace arr                                          |
-|               | [5]  character anim state arr                                |
-|               | [6]  medical arr                                             |
-|               | [7]  inventory arr                                           |
-|               | [8]  backpack arr                                            |
-|               | [9]  character XP stats                                      |
-|               | [10] character ID                                            |
+|          argv | [0]  character faction ID in range <0, 127>                  |
+|               | [1]  time played (duration)                                  |
+|               | [2]  character humanity                                      |
+|               | [3]  character cash money                                    |
+|               | [4]  character skin                                          |
+|               | [5]  worldspace arr                                          |
+|               | [6]  character anim state arr                                |
+|               | [7]  medical arr                                             |
+|               | [8]  character XP stats                                      |
+|               | [9]  inventory arr                                           |
+|               | [10] backpack arr                                            |
+|               | [11] character ID                                            |
 + ---------------------------------------------------------------------------- +
 
 

@@ -6,21 +6,23 @@
 | COM_TYPE      |       2,          [1]  i                                     |         com::type::execute
 | COM_EXID      |      20,          [2]  i                                     | player::com::exid::sync_player_record
 | COM_ARGV      |      [            [3]  a                                     |
-|               |           ph_cash     [0]  i  0                              |
-|               |           ph_bank,    [1]  i  0                              |
-|               |           ph_xp,      [2]  a  []                             |
-|               |           ph_uid      [3]  s  '0'                            |
+|               |           ph_humanity,    [0]  i  2'500                      |
+|               |           ph_cash,        [1]  i  0                          |
+|               |           ph_bank,        [2]  i  0                          |
+|               |           ph_xp,          [3]  s  '[]'                       | unchecked: must be a string
+|               |           ph_uid          [4]  s  '0'                        |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
-|          repr | "(i,i,i,(i,i,a,s))"                                          | <-- expected types
+|          repr | "(i,i,i,(i,i,i,s,s))"                                        | <-- expected types
 |               | ------------------------------------------------------------ |
-|        packet | "[3,2,20,[1000,50000,[...],\"76562295476658565\"]]"          | <-- example
+|        packet | "[3,2,20,[1000,500,1000,"\[...]\",\"76562295476658565\"]]"   | <-- example
 |               | ------------------------------------------------------------ |
-|          argv | [0] cash money                                               |
-|               | [1] bank money                                               |
-|               | [2] player XP stats                                          |
-|               | [3] player UID                                               | @TODO: see "dze_TODO.txt/getPlayerUID/ph_gid
+|          argv | [0] player humanity                                          |
+|               | [1] cash money                                               |
+|               | [2] bank money                                               |
+|               | [3] player XP stats                                          |
+|               | [4] player UID                                               | @TODO: see "dze_TODO.txt/getPlayerUID/ph_gid
 + ---------------------------------------------------------------------------- +
 
 

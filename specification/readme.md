@@ -122,6 +122,7 @@
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>12<sub/>      | <sub>[sync character gear][312]<sub/>       | <sub>_DHR_f_plr_sync_pw_gear_<sub/>          | <sub>Update character inventory and backpack<sub/>                      |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>13<sub/>      | <sub>[sync character XP][313]<sub/>         | <sub>_DHR_f_plr_sync_pw_xp_<sub/>            | <sub>Update character eXPerience stats<sub/>                            |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>14<sub/>      | <sub>[sync character death][314]<sub/>      | <sub>_DHR_f_plr_sync_pw_death_<sub/>         | <sub>Mark character database record as void (`pw_sid = 1`)<sub/>        |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>15<sub/>      | <sub>[sync character faction][315]<sub/>    | <sub>_DHR_f_plr_sync_pw_faction_<sub/>       | <sub>Update character faction ID<sub/>                                  |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>20<sub/>      | <sub>[sync player record][320]<sub/>        | <sub>_DHR_f_plr_sync_player_record_<sub/>    | <sub>Update player database record<sub/>                                |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>21<sub/>      | <sub>[sync player name][321]<sub/>          | <sub>_DHR_f_plr_sync_ph_name_<sub/>          | <sub>Update player name<sub/>                                           |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>22<sub/>      | <sub>[sync player cash][322]<sub/>          | <sub>_DHR_f_plr_sync_ph_cash_<sub/>          | <sub>Update player cash<sub/>                                           |
@@ -129,6 +130,7 @@
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>24<sub/>      | <sub>[sync player money][324]<sub/>         | <sub>_DHR_f_plr_sync_ph_money_<sub/>         | <sub>Update player money (cash and bank)<sub/>                          |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>25<sub/>      | <sub>[sync player group][325]<sub/>         | <sub>_DHR_f_plr_sync_ph_group_<sub/>         | <sub>Update player group<sub/>                                          |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>26<sub/>      | <sub>[sync player XP][326]<sub/>            | <sub>_DHR_f_plr_sync_ph_xp_<sub/>            | <sub>Update player eXPerience stats<sub/>                               |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>27<sub/>      | <sub>[sync player humanity][327]<sub/>      | <sub>_DHR_f_plr_sync_ph_humanity_<sub/>      | <sub>Update player humanity<sub/>                                       |
 |      <sub>3<sub/>       |      <sub>3<sub/>       |      <sub>28<sub/>      | <sub>[*open mysql session (P)][3281]<sub/>  |                                              | <sub>Get an open MySQL session PROMISE<sub/>                            |
 |      <sub>3<sub/>       |      <sub>4<sub/>       |      <sub>28<sub/>      | <sub>[*open mysql session (F)][3282]<sub/>  |                                              | <sub>Retrieve open MySQL session FUTURE result<sub/>                    |
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>29<sub/>      | <sub>[*cleanup mysql tw table][329]<sub/>   |                                              | <sub>Delete all records marked for scheduled removal (`pw_sid=0`)<sub/> |
@@ -390,6 +392,8 @@
 
 [314]: COM_SUID/3_player/COM_EXID/14_sync_pw_death/314_sync_pw_death_ssheet.txt
 
+[315]: COM_SUID/3_player/COM_EXID/15_sync_pw_faction/315_sync_pw_faction_ssheet.txt
+
 [320]: COM_SUID/3_player/COM_EXID/20_sync_player_record/320_sync_player_record_ssheet.txt
 
 [321]: COM_SUID/3_player/COM_EXID/21_sync_ph_name/321_sync_ph_name_ssheet.txt
@@ -403,6 +407,8 @@
 [325]: COM_SUID/3_player/COM_EXID/25_sync_ph_group/325_sync_ph_group_ssheet.txt
 
 [326]: COM_SUID/3_player/COM_EXID/26_sync_ph_xp/326_sync_ph_xp_ssheet.txt
+
+[327]: COM_SUID/3_player/COM_EXID/27_sync_ph_humanity/327_sync_ph_humanity_ssheet.txt
 
 [3281]: COM_SUID/3_player/COM_EXID/28_mysql_open_session/328_mysql_open_session_P_ssheet.txt
 

@@ -6,14 +6,14 @@
 | COM_TYPE      |       2,        [1]  i                                       |         com::type::execute
 | COM_EXID      |      26,        [2]  i                                       | player::com::exid::sync_ph_xp
 | COM_ARGV      |      [          [3]  a                                       |
-|               |           ph_xp,    [0]  a  []                               |
+|               |           ph_xp,    [0]  s  '[]'                             |  unchecked: must be a string
 |               |           ph_uid    [1]  s  '0'                              |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
-|          repr | "(i,i,i,(a,s))"                                              | <-- expected types
+|          repr | "(i,i,i,(s,s))"                                              | <-- expected types
 |               | ------------------------------------------------------------ |
-|        packet | "[3,2,26,[[...],\"76562295476658565\"]]"                     | <-- example
+|        packet | "[3,2,26,["\[...]\",\"76562295476658565\"]]"                 | <-- example
 |               | ------------------------------------------------------------ |
 |          argv | [0] player XP stats                                          |
 |               | [1] player UID                                               | @TODO: see "dze_TODO.txt/getPlayerUID/ph_gid
