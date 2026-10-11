@@ -1,0 +1,221 @@
+
+
+# [?] MAPPING TO LEGACY FIELDS:
+# -------------------------------------------------------- |
+
+  + -------------------------------------------------- +
+  | Character_DATA                     | tw_*_plr      |
+  + ---------------------------------- + ------------- +
+  | CharacterID                        | pw_cid        |
+  | PlayerUID                          | ph_gid        |
+  | InstanceID                         |               | REMOVED
+  | Datestamp                          | pw_created    |
+  | LastLogin                          | pw_logged     |
+  | Inventory                          | pw_inventory  |
+  | Backpack                           | pw_backpack   |
+  | Worldspace                         | pw_worldspace |
+  | Medical                            | pw_medical    |
+  | Alive                              | pw_sid        |
+  | Generation                         |               | REMOVED
+  | LastAte                            |               | REMOVED
+  | LastDrank                          |               | REMOVED
+  | KillsZ                             | pw_xp         | merged --> pw_xp
+  | HeadshotsZ                         | pw_xp         | merged --> pw_xp
+  | DistanceFoot                       |               | REMOVED
+  | Duration                           | pw_played     |
+  | CurrentState                       | pw_state      |
+  | KillsH                             | pw_xp         | merged --> pw_xp
+  | Model                              | pw_model      |
+  | KillsB                             | pw_xp         | merged --> pw_xp
+  | Humanity                           | pw_humanity   |
+  | Infected                           | pw_infected   |
+  | Coins                              | pw_cash       |
+  |                                    | pw_slot       | NEW
+  |                                    | pw_xp         | NEW
+  |                                    | pw_props      | NEW
+  + -------------------------------------------------- +
+
+
+
+# [?] FIELD DESCRIPTION:
+# -------------------------------------------------------- |
+
+  Rules:
+  ------
+  [R/01] Each field is NOT NULL and defines default value;
+
+
+  + ------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
+  | FIELD         | TYPE          | DEFAULT VALUE     | STRICT  | REPR              | DESCRIPTION                                   | NOTES                             |
+  + ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_cid        | INT           | AUTO_INCREMENT    | YES     | (i)               | primary key (PK)                              |                                   |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | ph_gid        | INT           | 0                 | YES     | (i)               | player's global ID                            | 17 bytes playerUID string         |
+  |               |               |                   |         |                   |                                               |    "76562295476658565" is         |
+  |               |               |                   |         |                   |                                               |    replaced by:                   |
+  |               |               |                   |         |                   |                                               |                                   |
+  |               |               |                   |         |                   |                                               |  4 bytes AUTO_INCREMENT PK        |
+  |               |               |                   |         |                   |                                               |    integer enabling fast          |
+  |               |               |                   |         |                   |                                               |    const queries                  |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_sid        | TINYINT       | 2                 | YES     | (i)               | character's status ID                         |                                   |
+  |               |               |                   |         |                   |                                               |                                   |
+  |               |               |                   |         |                   | Acceptable values:                            |                                   |
+  |               |               |                   |         |                   | ------------------                            |                                   |
+  |               |               |                   |         |                   | 2 - alive (default)                           |                                   |
+  |               |               |                   |         |                   | 1 - dead  (most recent dead character)        |                                   |
+  |               |               |                   |         |                   | 0 - scheduled for removal                     |                                   |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_slot       | TINYINT       | 1                 | YES     | (i)               | character's selection slot ID                 |                                   |
+  |               |               |                   |         |                   | (multi-char system support)                   |                                   |
+  |               |               |                   |         |                   |                                               |                                   |
+  |               |               |                   |         |                   | Range:                                        |                                   |
+  |               |               |                   |         |                   | ------                                        |                                   |
+  |               |               |                   |         |                   | <0, 127>                                      |                                   |
+  |               |               |                   |         |                   |                                               |                                   |
+  |               |               |                   |         |                   | Acceptable values:                            |                                   |
+  |               |               |                   |         |                   | ------------------                            |                                   |
+  |               |               |                   |         |                   |   0 - no character selection                  |                                   |
+  |               |               |                   |         |                   |   1 - character selection 1 (default)         |                                   |
+  |               |               |                   |         |                   |   2 - character selection 2                   |                                   |
+  |               |               |                   |         |                   | ...                                           |                                   |
+  |               |               |                   |         |                   | 127 - character selection 127                 |                                   |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_faction    | TINYINT       | 1                 | YES     | (i)               | character's faction ID                        |                                   |
+  |               |               |                   |         |                   | (factions system support)                     |                                   |
+  |               |               |                   |         |                   |                                               |                                   |
+  |               |               |                   |         |                   | Range:                                        |                                   |
+  |               |               |                   |         |                   | ------                                        |                                   |
+  |               |               |                   |         |                   | <0, 127>                                      |                                   |
+  |               |               |                   |         |                   |                                               |                                   |
+  |               |               |                   |         |                   | Acceptable values:                            |                                   |
+  |               |               |                   |         |                   | ------------------                            |                                   |
+  |               |               |                   |         |                   |   0 - no faction selection                    |                                   |
+  |               |               |                   |         |                   |   1 - faction selection 1 (default)           |                                   |
+  |               |               |                   |         |                   |   2 - faction selection 2                     |                                   |
+  |               |               |                   |         |                   | ...                                           |                                   |
+  |               |               |                   |         |                   | 127 - faction selection 127                   |                                   |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_created    | DATETIME      | CURRENT_TIMESTAMP |         | internal          | character's record creation DATETIME          |                                   |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_logged     | DATETIME      | CURRENT_TIMESTAMP |         | internal          | character's last login DATETIME               |  TIMESTAMPDIFF(                   |
+  |               |               |                   |         |                   |                                               |      MINUTE,                      |
+  |               |               |                   |         |                   |                                               |      `pw_created`                 |
+  |               |               |                   |         |                   |                                               |      `pw_logged`                  |
+  |               |               |                   |         |                   |                                               |  ) AS pw_survival_time            |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_played     | INT           | 0                 | YES     | (i)               |                                               | server_playerDied.sqf:31          |
+  |               |               |                   |         |                   |                                               | player_death.sqf:89               |
+  |               |               |                   |         |                   |                                               | -------------------------         |
+  |               |               |                   |         |                   |                                               | duration hardcoded to 0!!!        |
+  |               |               |                   |         |                   |                                               |                                   |
+  |               |               |                   |         |                   |                                               | server_playerSync.sqf:213         |
+  |               |               |                   |         |                   |                                               | server_playerSync.sqf:110:        |
+  |               |               |                   |         |                   |                                               | --------------------------        |
+  |               |               |                   |         |                   |                                               | Assess how much time has passed,  |
+  |               |               |                   |         |                   |                                               | for recording total time on       |
+  |               |               |                   |         |                   |                                               | server - BUT:                     |
+  |               |               |                   |         |                   |                                               | Note "lastTime" is -1 after       |
+  |               |               |                   |         |                   |                                               | clothes change...                 |
+  |               |               |                   |         |                   |                                               | WHAT IS THE POINT???              |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_infected   | TINYINT       | 0                 | YES     | (i)               | character's infection status                  |                                   |
+  |               |               |                   |         |                   |                                               |                                   |
+  |               |               |                   |         |                   | Range:                                        |                                   |
+  |               |               |                   |         |                   | ------                                        |                                   |
+  |               |               |                   |         |                   | <0, 1>                                        |                                   |
+  |               |               |                   |         |                   |                                               |                                   |
+  |               |               |                   |         |                   | Acceptable values:                            |                                   |
+  |               |               |                   |         |                   | ------------------                            |                                   |
+  |               |               |                   |         |                   |   0 - not infected (default)                  |                                   |
+  |               |               |                   |         |                   |   1 - character died with infected status     |                                   |
+  |               |               |                   |         |                   |       (USEC_infected == true) and next        |                                   |
+  |               |               |                   |         |                   |       character may spawn as zombie           |                                   |
+  |               |               |                   |         |                   |       (DZE_PlayerZed == true)                 |                                   |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_humanity   | INT           | 0                 | YES     | (i)               | character's humanity value                    | custom def value supported (c++)  |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_cash       | BIGINT        | 0                 | YES     | (i)               | character's wallet money                      |                                   |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_model      | VARCHAR(64)   | 'Survivor2_DZ'    | YES     | (s)               | character's skin                              |                                   |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_worldspace | VARCHAR(128)  | '[]'              | YES     | (f,(f,f,f))       | character's world space data                  |                                   |
+  |               |               |                   |         |                   |                                               |                                   |
+  |               |               |                   |         |                   | [                                             |                                   |
+  |               |               |                   |         |                   |      direction,                               |                                   |
+  |               |               |                   |         |                   |      [                                        |                                   |
+  |               |               |                   |         |                   |           position X,                         |                                   |
+  |               |               |                   |         |                   |           position Y,                         |                                   |
+  |               |               |                   |         |                   |           position Z                          |                                   |
+  |               |               |                   |         |                   |      ]                                        |                                   |
+  |               |               |                   |         |                   | ]                                             |                                   |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_state      | VARCHAR(256)  | '[]'              | YES     | (s,s,i)           | character's current state data                | CHANGE    : flattened             |
+  |               |               |                   |         |                   |                                               | ORIGINALLY:                       |
+  |               |               |                   |         |                   | [                                             | [                                 |
+  |               |               |                   |         |                   |      weapon,                                  |      [                            |
+  |               |               |                   |         |                   |      animationState,                          |           weapon,                 |
+  |               |               |                   |         |                   |      temperature                              |           animationState,         |
+  |               |               |                   |         |                   | ]                                             |           temperature             |
+  |               |               |                   |         |                   |                                               |      ],                           |
+  |               |               |                   |         |                   |                                               |      []                           |
+  |               |               |                   |         |                   |                                               | ]                                 |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_medical    | VARCHAR(256)  | '[]'              | YES*    | (b,b,b,b,b,b,b,   | character's medical data                      | *TODO:                            |
+  |               |               |                   |         |  i,a,a,i,s,b,a,   |                                               |  if not stable, can't be STRICT,  |
+  |               |               |                   |         |  b)               | [                                             |  hence use repr: "(a)" to avoid   |
+  |               |               |                   |         |                   |      USEC_isDead,          b                  |  failure                          |
+  |               |               |                   |         |                   |      NORRN_unconscious,    b                  |                                   |
+  |               |               |                   |         |                   |      USEC_infected,        b                  |                                   |
+  |               |               |                   |         |                   |      USEC_injured,         b                  |                                   |
+  |               |               |                   |         |                   |      USEC_inPain,          b                  |                                   |
+  |               |               |                   |         |                   |      USEC_isCardiac,       b                  |                                   |
+  |               |               |                   |         |                   |      USEC_lowBlood,        b                  |                                   |
+  |               |               |                   |         |                   |      USEC_BloodQty,        i                  |                                   |
+  |               |               |                   |         |                   |      [                     a                  |                                   |
+  |               |               |                   |         |                   |          hit_*,            s,                 |                                   |
+  |               |               |                   |         |                   |          ...               ...                |                                   |
+  |               |               |                   |         |                   |      ],                                       |                                   |
+  |               |               |                   |         |                   |      [                     a                  |                                   |
+  |               |               |                   |         |                   |           hit_legs,            f              |                                   |
+  |               |               |                   |         |                   |           hit_arms             f              |                                   |
+  |               |               |                   |         |                   |      ],                                       |                                   |
+  |               |               |                   |         |                   |      unconsciousTime,      i                  |                                   |
+  |               |               |                   |         |                   |      blood_type,           s                  |                                   |
+  |               |               |                   |         |                   |      rh_factor,            b                  |                                   |
+  |               |               |                   |         |                   |      [                     a                  |                                   |
+  |               |               |                   |         |                   |          dayz_hunger,          f              |                                   |
+  |               |               |                   |         |                   |          dayz_thirst,          f              |                                   |
+  |               |               |                   |         |                   |          dayz_nutrition        f              |                                   |
+  |               |               |                   |         |                   |      ],                                       |                                   |
+  |               |               |                   |         |                   |      blood_testdone        b                  |                                   |
+  |               |               |                   |         |                   | ]                                             |                                   |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_xp         | VARCHAR(1024) | '[]'              | NO      | (s)               | character's experience support;               | It is up to server owner /        |
+  |               |               |                   |         |                   | NON-STRICT field; MUST be send as STRING      | mod author to define it as needed |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_props      | VARCHAR(2048) | '[]'              | NO      | (s)               | character's modding support                   | It is up to server owner /        |
+  |               |               |                   |         |                   | NON-STRICT field; MUST be send as STRING      | mod author to define it as needed |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_inventory  | MEDIUMTEXT    | _utf8mb4'[]'      | YES     | (a,a,s)           | character's gear data                         |                                   |
+  |               |               |                   |         |                   |                                               |                                   |
+  |               |               |                   |         |                   | [                                             |                                   |
+  |               |               |                   |         |                   |     [weapons...],      a                      |                                   |
+  |               |               |                   |         |                   |     [magazines...],    a                      |                                   |
+  |               |               |                   |         |                   |     dayz_onBack        s                      |                                   |
+  |               |               |                   |         |                   | ]                                             |                                   |
+  | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
+  | pw_backpack   | MEDIUMTEXT    | _utf8mb4'[]'      | YES     | (s,(a,a),(a,a))   | character's backpack data                     |                                   |
+  |               |               |                   |         |                   |                                               |                                   |
+  |               |               |                   |         |                   | [                                             |                                   |
+  |               |               |                   |         |                   |     backpack type,             s              |                                   |
+  |               |               |                   |         |                   |     [                          a              |                                   |
+  |               |               |                   |         |                   |         [weapon_type, ...],        a          |                                   |
+  |               |               |                   |         |                   |         [weapon_count,...]         a          |                                   |
+  |               |               |                   |         |                   |     ],                                        |                                   |
+  |               |               |                   |         |                   |     [                          a              |                                   |
+  |               |               |                   |         |                   |         [mag_type, ...],           a          |                                   |
+  |               |               |                   |         |                   |         [mag_count,...]            a          |                                   |
+  |               |               |                   |         |                   |     ]                                         |                                   |
+  |               |               |                   |         |                   | ]                                             |                                   |
+  + ------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
