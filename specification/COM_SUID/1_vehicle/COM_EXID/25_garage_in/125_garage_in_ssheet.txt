@@ -18,12 +18,12 @@
 |               |           vh_colors,       [9]   a  []                       |
 |               |           vh_inventory,    [10]  a  []                       |
 |               |           vh_hitpoints,    [11]  a  []                       |
-|               |           vh_props,        [12]  a  []                       |
+|               |           vh_props,        [12]  s  '[]'                     | unchecked: must be a string
 |               |           vh_vid           [13]  i  0                        |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
-|          repr | "(i,i,i,(i,i,f,f,s,s,s,s,a,a,a,a,a,i))"                      | <-- expected types
+|          repr | "(i,i,i,(i,i,f,f,s,s,s,s,a,a,a,a,s,i))"                      | <-- expected types
 |               | ------------------------------------------------------------ |
 |        packet | "[1,2,25,[0,...,13]]"                                        | <-- example
 |               | ------------------------------------------------------------ |
@@ -39,7 +39,7 @@
 |               | [9]  colors arr                                              |
 |               | [10] inventory arr                                           |
 |               | [11] hitpoints arr                                           |
-|               | [12] arr of dynamic properties                               |
+|               | [12] vehicle dynamic properties (for modders)                |
 |               | [13] vehicle ID (PK)                                         | see '`vh_vid` PK reuse' section below
 + ---------------------------------------------------------------------------- +
 

@@ -6,16 +6,16 @@
 | COM_TYPE      |       2,           [1]  i                                    |         com::type::execute
 | COM_EXID      |      20,           [2]  i                                    | object::com::exid::sync_ow_props
 | COM_ARGV      |      [             [3]  a                                    |
-|               |           ow_props,    [0]  a  []                            |
+|               |           ow_props,    [0]  s  '[]'                          | unchecked: must be a string
 |               |           ow_oid       [1]  i  0                             |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
-|          repr | "(i,i,i,(a,i))"                                              | <-- expected types
+|          repr | "(i,i,i,(s,i))"                                              | <-- expected types
 |               | ------------------------------------------------------------ |
-|        packet | "[2,2,20,[[...],100]]"                                       | <-- example
+|        packet | "[2,2,20,["\[...]\",100]]"                                   | <-- example
 |               | ------------------------------------------------------------ |
-|          argv | [0] arr of dynamic properties                                |
+|          argv | [0] object dynamic properties (for modders)                  |
 |               | [1] object ID (PK)                                           |
 + ---------------------------------------------------------------------------- +
 

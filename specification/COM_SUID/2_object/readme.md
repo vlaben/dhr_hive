@@ -53,7 +53,7 @@
 
 | <sub>**COM_SUID**<sub/> | <sub>**COM_TYPE**<sub/> | <sub>**COM_EXID**<sub/> | <sub>**specification sheet**<sub/>            | <sub>**SQF library function**<sub/>            | <sub>**short description**<sub/>                               |
 |:-----------------------:|:-----------------------:|:-----------------------:|:----------------------------------------------|:-----------------------------------------------|:---------------------------------------------------------------|
-|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>10<sub/>      | <sub>[sync object record][210]<sub/>          | <sub>_DHR_f_obj_sync_record_<sub/>             | <sub>Update object database record<sub/>                       |
+|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>10<sub/>      | <sub>[sync object record][210]<sub/>          | <sub>_DHR_f_obj_sync_ow_record_<sub/>          | <sub>Update object database record<sub/>                       |
 |      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>11<sub/>      | <sub>[sync identity][211]<sub/>               | <sub>_DHR_f_obj_sync_ow_identity_<sub/>        | <sub>Update STATIC properties<sub/>                            |
 |      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>12<sub/>      | <sub>[sync money][212]<sub/>                  | <sub>_DHR_f_obj_sync_ow_money_<sub/>           | <sub>Update storage money<sub/>                                |
 |      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>13<sub/>      | <sub>[sync damage][213]<sub/>                 | <sub>_DHR_f_obj_sync_ow_damage_<sub/>          | <sub>Update damage<sub/>                                       |
@@ -87,9 +87,9 @@
 
 [201]: COM_EXID/01_log_message/201_log_message_ssheet.txt
 
-[2021]: COM_EXID/02_create/202_create_P_ssheet.txt
+[2021]: COM_EXID/02_create_one/202_create_one_P_ssheet.txt
 
-[2022]: COM_EXID/02_create/202_create_F_ssheet.txt
+[2022]: COM_EXID/02_create_one/202_create_one_F_ssheet.txt
 
 [204]: COM_EXID/04_delete_one/204_delete_one_ssheet.txt
 
@@ -103,7 +103,7 @@
 
 [2082]: COM_EXID/08_maintain_all/208_maintain_all_F_ssheet.txt
 
-[210]: COM_EXID/10_sync_object_record/210_sync_object_record_ssheet.txt
+[210]: COM_EXID/10_sync_ow_record/210_sync_ow_record_ssheet.txt
 
 [211]: COM_EXID/11_sync_ow_identity/211_sync_ow_identity_ssheet.txt
 

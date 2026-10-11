@@ -6,16 +6,16 @@
 | COM_TYPE      |       2,           [1]  i                                    |          com::type::execute
 | COM_EXID      |      20,           [2]  i                                    | vehicle::com::exid::sync_vw_props
 | COM_ARGV      |      [             [3]  a                                    |
-|               |           vw_props,    [0]  a  []                            |
+|               |           vw_props,    [0]  s  '[]'                          | unchecked: must be a string
 |               |           vw_vid       [1]  i  0                             |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
-|          repr | "(i,i,i,(a,i))"                                              | <-- expected types
+|          repr | "(i,i,i,(s,i))"                                              | <-- expected types
 |               | ------------------------------------------------------------ |
 |        packet | "[1,2,20,[[...],100]]"                                       | <-- example
 |               | ------------------------------------------------------------ |
-|          argv | [0] arr of dynamic properties                                |
+|          argv | [0] vehicle dynamic properties (for modders)                 |
 |               | [1] vehicle ID (PK)                                          |
 + ---------------------------------------------------------------------------- +
 
