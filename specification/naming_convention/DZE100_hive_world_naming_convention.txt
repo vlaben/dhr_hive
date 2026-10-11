@@ -1,0 +1,71 @@
+# -------------------------------------------------------- #
+# DZE hive world / map naming convention                   #
+# Accepted 10/2026 on DZE-108 discord server by devop team #
+# -------------------------------------------------------- #
+
+
+# [A] World/Map naming convention:
+# --------------------------------
+
+  [A/1]
+  All names are lowercase.
+
+  [A/2]
+  Single digit world_id (dayZ_instance <1, 9>) used in string is padded by 0.
+  This will ensure proper ordering in OS / web directory.
+
+
+  [A/3]
+  Name suffix   : *_e       enhanced
+                  *_j       jungle
+                  *_s       summer
+                  *_w       winter
+                  *_x       wasteland
+
+
+  [A/4]
+  Name patterns :
+
+    + ------------------------------------------------------------------------------- +
+    |        TARGET         |             PATTERN             |        EXAMPLE        |
+    | --------------------- + ------------------------------- + --------------------- |
+    | world_id              | number <1, 63>                  | 2                     |
+    | --------------------- + ------------------------------- + --------------------- |
+    | MPMissions            | ##_dze.<worldname>_<suffix>     | 02_dze.chernarus_w    |
+    | --------------------- + ------------------------------- + --------------------- |
+    | DZE_Server_Config:    |                                                         |
+    |     command line      | ##_<worldname>_<suffix>.bat     | 02_chernarus_w.bat    |
+    |     cfg               | ##_<worldname>_<suffix>.cfg     | 02_chernarus_w.cfg    |
+    |     class Missions    | ##_dze.<worldname>_<suffix>     | 02_dze.chernarus_w    |
+    | --------------------- + ------------------------------- + --------------------- |
+    | MySQL                 | ##_<worldname>_<suffix>         | 02_chernarus_w        |
+    | --------------------- + ------------------------------- + --------------------- |
+    | hive                  | <worldname>_<suffix>            | chernarus_w = 1 << 2  |
+    + ------------------------------------------------------------------------------- +
+
+    # -------
+    # AFTER:
+    # -------
+
+    + ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
+    |     world_id       |       MPMissions       |   DZE_Server_Config    |   DZE_Server_Config    |   DZE_Server_Config    |         hive           |              MySQL               |
+    | [ dayZ_instance ]  |     [ directory ]      |        [ cfg ]         | [ cfg/class Missions ] |   [ command line ]     |    [ source code ]     | [ make_storage_obj_tables(...) ] |
+    | ------------------ + ---------------------- + ---------------------- + ---------------------- + ---------------------- + ---------------------- + -------------------------------- |
+    | 2                  | 02_dze.chernarus_w     | 02_chernarus_w.cfg     | 02_dze.chernarus_w     | 02_chernarus_w.bat     | chernarus_w            | 02_chernarus_w                   |
+    | ------------------ + ---------------------- + ---------------------- + ---------------------- + ---------------------- + ---------------------- + -------------------------------- |
+    | 11                 | 11_dze.chernarus_s     | 11_chernarus_s.cfg     | 11_dze.chernarus_s     | 11_chernarus_s.bat     | chernarus_s            | 11_chernarus                     |
+    + ------------------ + ---------------------- + ---------------------- + ---------------------- + ---------------------- + ---------------------- + -------------------------------- +
+
+
+    # -------
+    # BEFORE:
+    # -------
+
+    + --------------------------------------------------------------------------------------------------------------------------------------- +
+    |     world_id      |           MPMissions           |   DZE_Server_Config     |      DZE_Server_Config        |    DZE_Server_Config     |
+    | [ dayZ_instance ] |         [ directory ]          |         [ cfg ]         |   [ cfg / class Missions ]    |    [ command line ]      |
+    | ----------------- + ------------------------------ + ----------------------- + ----------------------------- + -----------------------  |
+    | 2                 | DayZ_Epoch_2.Chernarus_Winter  | 2_chernarus_winter.cfg  | DayZ_Epoch_2.Chernarus_Winter | 2_chernarus_winter.bat   |
+    | ----------------- + ------------------------------ + ----------------------- + ----------------------------- + -----------------------  |
+    | 11                | DayZ_Epoch_11.Chernarus        | 11_chernarus.cfg        | DayZ_Epoch_11.Chernarus       | 11_chernarus.bat         |
+    + --------------------------------------------------------------------------------------------------------------------------------------- +

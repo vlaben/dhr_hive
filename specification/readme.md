@@ -2,25 +2,36 @@
 
 <br/>
 
+## `Naming convention`
+
+
+| **naming convention**                    | **topic**                                         |
+|:-----------------------------------------|:--------------------------------------------------|
+| [DZE100_hive_world_naming_convention][1] | <sub>DZE hive world / map naming convention<sub/> |
+
+
+<br/>
+
+
 ## `System specifications (executive summary)`
 
 
 <br/>
 
 
-| **specification**                | **topic**                                                                   |
-|:---------------------------------|:----------------------------------------------------------------------------|
-| [DHR100_hive_system][1]          | <sub>**DHR hive system high level overview**<sub/>                          |
-| [DHR200_hive_request_packet][2]  | <sub>Arma2OA server  communication to DHR hive system<sub/>                 |
-| [DHR300_hive_persistence_layer]  | <sub>DHR hive system communication to MySQL server (ref 3 - phase II)<sub/> |
-| [DHR400_hive_response_packet][4] | <sub>DHR hive system communication to Arma2OA server<sub/>                  |
-| [DHR500_hive_logging][5]         | <sub>DHR hive system communication to server owner<sub/>                    |
+| **specification**                 | **topic**                                                                   |
+|:----------------------------------|:----------------------------------------------------------------------------|
+| [DHR100_hive_system][10]          | <sub>**DHR hive system high level overview**<sub/>                          |
+| [DHR200_hive_request_packet][20]  | <sub>Arma2OA server  communication to DHR hive system<sub/>                 |
+| [DHR300_hive_persistence_layer]   | <sub>DHR hive system communication to MySQL server (ref 3 - phase II)<sub/> |
+| [DHR400_hive_response_packet][40] | <sub>DHR hive system communication to Arma2OA server<sub/>                  |
+| [DHR500_hive_logging][50]         | <sub>DHR hive system communication to server owner<sub/>                    |
 
 
 <br/>
 
 
-> **Naming convention** `(as per DHR200: [A] NAMING CONVENTION)`:<br>
+> **Inline naming convention** `(as per DHR200: [A] NAMING CONVENTION)`:<br>
 > <br>
 > `COM_SUID : system element unique ID`<br>
 > `COM_TYPE : type of request (this overview sets recommended COM_TYPE, but user may change it)`<br>
@@ -105,35 +116,37 @@
 <br/>
 
 
-| <sub>**COM_SUID**<sub/> | <sub>**COM_TYPE**<sub/> | <sub>**COM_EXID**<sub/> | <sub>**specification sheet**<sub/>          | <sub>**SQF library function**<sub/>          | <sub>**short description**<sub/>                                        |
-|:-----------------------:|:-----------------------:|:-----------------------:|:--------------------------------------------|:---------------------------------------------|:------------------------------------------------------------------------|
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>1<sub/>       | <sub>[log player message][301]<sub/>        | <sub>_DHR_f_plr_log_message_<sub/>           | <sub>Log message with given severity<sub/>                              |
-|      <sub>3<sub/>       |      <sub>3<sub/>       |      <sub>2<sub/>       | <sub>[on player login (P)][3021]<sub/>      | <sub>_DHR_f_plr_on_player_login_P_<sub/>     | <sub>Get a data PROMISE for a logging in player<sub/>                   |
-|      <sub>3<sub/>       |      <sub>4<sub/>       |      <sub>2<sub/>       | <sub>[on player login (F)][3022]<sub/>      | <sub>_DHR_f_plr_on_player_login_F_<sub/>     | <sub>Retrieve FUTURE data for the logged in player<sub/>                |
-|      <sub>3<sub/>       |      <sub>3<sub/>       |      <sub>3<sub/>       | <sub>[on player setup (P)][3031]<sub/>      | <sub>_DHR_f_plr_on_player_setup_P_<sub/>     | <sub>Get a setup data PROMISE for a joining player<sub/>                |
-|      <sub>3<sub/>       |      <sub>4<sub/>       |      <sub>3<sub/>       | <sub>[on player setup (F)][3032]<sub/>      | <sub>_DHR_f_plr_on_player_setup_F_<sub/>     | <sub>Retrieve FUTURE setup data for the joined player<sub/>             |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>5<sub/>       | <sub>[sync character record][305]<sub/>     | <sub>_DHR_f_plr_sync_character_record_<sub/> | <sub>Update character database record<sub/>                             |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>6<sub/>       | <sub>[sync character logged][306]<sub/>     | <sub>_DHR_f_plr_sync_pw_logged_<sub/>        | <sub>Update character logged<sub/>                                      |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>7<sub/>       | <sub>[sync character humanity][307]<sub/>   | <sub>_DHR_f_plr_sync_pw_humanity_<sub/>      | <sub>Update character humanity<sub/>                                    |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>8<sub/>       | <sub>[sync character cash][308]<sub/>       | <sub>_DHR_f_plr_sync_pw_cash_<sub/>          | <sub>Update character cash<sub/>                                        |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>9<sub/>       | <sub>[sync character model][309]<sub/>      | <sub>_DHR_f_plr_sync_pw_model_<sub/>         | <sub>Update character skin<sub/>                                        |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>10<sub/>      | <sub>[sync character worldspace][310]<sub/> | <sub>_DHR_f_plr_sync_pw_worldspace_<sub/>    | <sub>Update character direction and position<sub/>                      |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>11<sub/>      | <sub>[sync character medical][311]<sub/>    | <sub>_DHR_f_plr_sync_pw_medical_<sub/>       | <sub>Update current character state and medical data<sub/>              |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>12<sub/>      | <sub>[sync character gear][312]<sub/>       | <sub>_DHR_f_plr_sync_pw_gear_<sub/>          | <sub>Update character inventory and backpack<sub/>                      |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>13<sub/>      | <sub>[sync character XP][313]<sub/>         | <sub>_DHR_f_plr_sync_pw_xp_<sub/>            | <sub>Update character eXPerience stats<sub/>                            |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>14<sub/>      | <sub>[sync character death][314]<sub/>      | <sub>_DHR_f_plr_sync_pw_death_<sub/>         | <sub>Mark character database record as void (`pw_sid = 1`)<sub/>        |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>15<sub/>      | <sub>[sync character faction][315]<sub/>    | <sub>_DHR_f_plr_sync_pw_faction_<sub/>       | <sub>Update character faction ID<sub/>                                  |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>20<sub/>      | <sub>[sync player record][320]<sub/>        | <sub>_DHR_f_plr_sync_player_record_<sub/>    | <sub>Update player database record<sub/>                                |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>21<sub/>      | <sub>[sync player name][321]<sub/>          | <sub>_DHR_f_plr_sync_ph_name_<sub/>          | <sub>Update player name<sub/>                                           |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>22<sub/>      | <sub>[sync player cash][322]<sub/>          | <sub>_DHR_f_plr_sync_ph_cash_<sub/>          | <sub>Update player cash<sub/>                                           |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>23<sub/>      | <sub>[sync player bank][323]<sub/>          | <sub>_DHR_f_plr_sync_ph_bank_<sub/>          | <sub>Update player bank<sub/>                                           |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>24<sub/>      | <sub>[sync player money][324]<sub/>         | <sub>_DHR_f_plr_sync_ph_money_<sub/>         | <sub>Update player money (cash and bank)<sub/>                          |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>25<sub/>      | <sub>[sync player group][325]<sub/>         | <sub>_DHR_f_plr_sync_ph_group_<sub/>         | <sub>Update player group<sub/>                                          |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>26<sub/>      | <sub>[sync player XP][326]<sub/>            | <sub>_DHR_f_plr_sync_ph_xp_<sub/>            | <sub>Update player eXPerience stats<sub/>                               |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>27<sub/>      | <sub>[sync player humanity][327]<sub/>      | <sub>_DHR_f_plr_sync_ph_humanity_<sub/>      | <sub>Update player humanity<sub/>                                       |
-|      <sub>3<sub/>       |      <sub>3<sub/>       |      <sub>28<sub/>      | <sub>[*open mysql session (P)][3281]<sub/>  |                                              | <sub>Get an open MySQL session PROMISE<sub/>                            |
-|      <sub>3<sub/>       |      <sub>4<sub/>       |      <sub>28<sub/>      | <sub>[*open mysql session (F)][3282]<sub/>  |                                              | <sub>Retrieve open MySQL session FUTURE result<sub/>                    |
-|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>29<sub/>      | <sub>[*cleanup mysql tw table][329]<sub/>   |                                              | <sub>Delete all records marked for scheduled removal (`pw_sid=0`)<sub/> |
+| <sub>**COM_SUID**<sub/> | <sub>**COM_TYPE**<sub/> | <sub>**COM_EXID**<sub/> | <sub>**specification sheet**<sub/>          | <sub>**SQF library function**<sub/>       | <sub>**short description**<sub/>                                        |
+|:-----------------------:|:-----------------------:|:-----------------------:|:--------------------------------------------|:------------------------------------------|:------------------------------------------------------------------------|
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>1<sub/>       | <sub>[log player message][301]<sub/>        | <sub>_DHR_f_plr_log_message_<sub/>        | <sub>Log message with given severity<sub/>                              |
+|      <sub>3<sub/>       |      <sub>3<sub/>       |      <sub>2<sub/>       | <sub>[on player login (P)][3021]<sub/>      | <sub>_DHR_f_plr_on_player_login_P_<sub/>  | <sub>Get a data PROMISE for a logging in player<sub/>                   |
+|      <sub>3<sub/>       |      <sub>4<sub/>       |      <sub>2<sub/>       | <sub>[on player login (F)][3022]<sub/>      | <sub>_DHR_f_plr_on_player_login_F_<sub/>  | <sub>Retrieve FUTURE data for the logged in player<sub/>                |
+|      <sub>3<sub/>       |      <sub>3<sub/>       |      <sub>3<sub/>       | <sub>[on player setup (P)][3031]<sub/>      | <sub>_DHR_f_plr_on_player_setup_P_<sub/>  | <sub>Get a setup data PROMISE for a joining player<sub/>                |
+|      <sub>3<sub/>       |      <sub>4<sub/>       |      <sub>3<sub/>       | <sub>[on player setup (F)][3032]<sub/>      | <sub>_DHR_f_plr_on_player_setup_F_<sub/>  | <sub>Retrieve FUTURE setup data for the joined player<sub/>             |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>5<sub/>       | <sub>[sync character record][305]<sub/>     | <sub>_DHR_f_plr_sync_pw_record_<sub/>     | <sub>Update character database record<sub/>                             |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>6<sub/>       | <sub>[sync character faction][306]<sub/>    | <sub>_DHR_f_plr_sync_pw_faction_<sub/>    | <sub>Update character faction ID<sub/>                                  |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>7<sub/>       | <sub>[sync character logged][307]<sub/>     | <sub>_DHR_f_plr_sync_pw_logged_<sub/>     | <sub>Update character logged<sub/>                                      |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>8<sub/>       | <sub>[sync character humanity][308]<sub/>   | <sub>_DHR_f_plr_sync_pw_humanity_<sub/>   | <sub>Update character humanity<sub/>                                    |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>9<sub/>       | <sub>[sync character cash][309]<sub/>       | <sub>_DHR_f_plr_sync_pw_cash_<sub/>       | <sub>Update character cash<sub/>                                        |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>10<sub/>      | <sub>[sync character model][310]<sub/>      | <sub>_DHR_f_plr_sync_pw_model_<sub/>      | <sub>Update character skin<sub/>                                        |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>11<sub/>      | <sub>[sync character worldspace][311]<sub/> | <sub>_DHR_f_plr_sync_pw_worldspace_<sub/> | <sub>Update character direction and position<sub/>                      |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>12<sub/>      | <sub>[sync character medical][312]<sub/>    | <sub>_DHR_f_plr_sync_pw_medical_<sub/>    | <sub>Update current character state and medical data<sub/>              |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>13<sub/>      | <sub>[sync character XP][313]<sub/>         | <sub>_DHR_f_plr_sync_pw_xp_<sub/>         | <sub>Update character eXPerience stats<sub/>                            |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>14<sub/>      | <sub>[sync character props][314]<sub/>      | <sub>_DHR_f_plr_sync_pw_props_<sub/>      | <sub>Update character DYNAMIC properties<sub/>                          |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>15<sub/>      | <sub>[sync character gear][315]<sub/>       | <sub>_DHR_f_plr_sync_pw_gear_<sub/>       | <sub>Update character inventory and backpack<sub/>                      |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>16<sub/>      | <sub>[sync character death][316]<sub/>      | <sub>_DHR_f_plr_sync_pw_death_<sub/>      | <sub>Mark character database record as void (`pw_sid = 1`)<sub/>        |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>18<sub/>      | <sub>[sync player record][318]<sub/>        | <sub>_DHR_f_plr_sync_ph_record_<sub/>     | <sub>Update player database record<sub/>                                |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>19<sub/>      | <sub>[sync player name][319]<sub/>          | <sub>_DHR_f_plr_sync_ph_name_<sub/>       | <sub>Update player name<sub/>                                           |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>20<sub/>      | <sub>[sync player humanity][320]<sub/>      | <sub>_DHR_f_plr_sync_ph_humanity_<sub/>   | <sub>Update player humanity<sub/>                                       |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>21<sub/>      | <sub>[sync player cash][321]<sub/>          | <sub>_DHR_f_plr_sync_ph_cash_<sub/>       | <sub>Update player cash<sub/>                                           |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>22<sub/>      | <sub>[sync player bank][322]<sub/>          | <sub>_DHR_f_plr_sync_ph_bank_<sub/>       | <sub>Update player bank<sub/>                                           |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>23<sub/>      | <sub>[sync player money][323]<sub/>         | <sub>_DHR_f_plr_sync_ph_money_<sub/>      | <sub>Update player money (cash and bank)<sub/>                          |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>24<sub/>      | <sub>[sync player XP][324]<sub/>            | <sub>_DHR_f_plr_sync_ph_xp_<sub/>         | <sub>Update player eXPerience stats<sub/>                               |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>25<sub/>      | <sub>[sync player group][325]<sub/>         | <sub>_DHR_f_plr_sync_ph_group_<sub/>      | <sub>Update player group<sub/>                                          |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>26<sub/>      | <sub>[sync player props][326]<sub/>         | <sub>_DHR_f_plr_sync_ph_props_<sub/>      | <sub>Update player DYNAMIC properties<sub/>                             |
+|      <sub>3<sub/>       |      <sub>3<sub/>       |      <sub>28<sub/>      | <sub>[*open mysql session (P)][3281]<sub/>  |                                           | <sub>Get an open MySQL session PROMISE<sub/>                            |
+|      <sub>3<sub/>       |      <sub>4<sub/>       |      <sub>28<sub/>      | <sub>[*open mysql session (F)][3282]<sub/>  |                                           | <sub>Retrieve open MySQL session FUTURE result<sub/>                    |
+|      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>29<sub/>      | <sub>[*cleanup mysql tw table][329]<sub/>   |                                           | <sub>Delete all records marked for scheduled removal (`pw_sid=0`)<sub/> |
 
 `* internal only`
 
@@ -166,18 +179,18 @@
 |      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>7<sub/>       | <sub>[maintain object][207]<sub/>             | <sub>_DHR_f_obj_maintain_one_<sub/>            | <sub>Maintain object record<sub/>                                       |
 |      <sub>2<sub/>       |      <sub>3<sub/>       |      <sub>8<sub/>       | <sub>[maintain player base (P)][2081]<sub/>   | <sub>_DHR_f_obj_maintain_all_P_<sub/>          | <sub>Get a PROMISE for a player base maintanance<sub/>                  |
 |      <sub>2<sub/>       |      <sub>4<sub/>       |      <sub>8<sub/>       | <sub>[maintain player base (F)][2082]<sub/>   | <sub>_DHR_f_obj_maintain_all_F_<sub/>          | <sub>Retrieve player base maintanance FUTURE result<sub/>               |
-|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>10<sub/>      | <sub>[sync object record][210]<sub/>          | <sub>_DHR_f_obj_sync_record_<sub/>             | <sub>Update object database record<sub/>                                |
-|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>11<sub/>      | <sub>[sync identity][211]<sub/>               | <sub>_DHR_f_obj_sync_identity_<sub/>           | <sub>Update STATIC properties<sub/>                                     |
-|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>12<sub/>      | <sub>[sync money][212]<sub/>                  | <sub>_DHR_f_obj_sync_money_<sub/>              | <sub>Update storage money<sub/>                                         |
-|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>13<sub/>      | <sub>[sync damage][213]<sub/>                 | <sub>_DHR_f_obj_sync_damage_<sub/>             | <sub>Update damage<sub/>                                                |
-|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>14<sub/>      | <sub>[sync owner][214]<sub/>                  | <sub>_DHR_f_obj_sync_owner_for_one_<sub/>      | <sub>Update owner for a single object<sub/>                             |
-|      <sub>2<sub/>       |      <sub>3<sub/>       |      <sub>15<sub/>      | <sub>[sync player base owner (P)][2151]<sub/> | <sub>_DHR_f_obj_sync_owner_for_all_P_<sub/>    | <sub>Get a PROMISE for a player base ownership change<sub/>             |
-|      <sub>2<sub/>       |      <sub>4<sub/>       |      <sub>15<sub/>      | <sub>[sync player base owner (F)][2152]<sub/> | <sub>_DHR_f_obj_sync_owner_for_all_F_<sub/>    | <sub>Retrieve player base ownership change FUTURE result<sub/>          |
-|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>16<sub/>      | <sub>[sync key][216]<sub/>                    | <sub>_DHR_f_obj_sync_key_<sub/>                | <sub>Update combination key<sub/>                                       |
-|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>17<sub/>      | <sub>[sync worldspace][217]<sub/>             | <sub>_DHR_f_obj_sync_worldspace_<sub/>         | <sub>Update position and vectors<sub/>                                  |
-|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>18<sub/>      | <sub>[sync friends][218]<sub/>                | <sub>_DHR_f_obj_sync_friends_<sub/>            | <sub>Update friends<sub/>                                               |
-|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>19<sub/>      | <sub>[sync inventory][219]<sub/>              | <sub>_DHR_f_obj_sync_inventory_<sub/>          | <sub>Update inventory<sub/>                                             |
-|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>20<sub/>      | <sub>[sync props][220]<sub/>                  | <sub>_DHR_f_obj_sync_props_<sub/>              | <sub>Update DYNAMIC properties<sub/>                                    |
+|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>10<sub/>      | <sub>[sync object record][210]<sub/>          | <sub>_DHR_f_obj_sync_ow_record_<sub/>          | <sub>Update object database record<sub/>                                |
+|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>11<sub/>      | <sub>[sync identity][211]<sub/>               | <sub>_DHR_f_obj_sync_ow_identity_<sub/>        | <sub>Update STATIC properties<sub/>                                     |
+|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>12<sub/>      | <sub>[sync money][212]<sub/>                  | <sub>_DHR_f_obj_sync_ow_money_<sub/>           | <sub>Update storage money<sub/>                                         |
+|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>13<sub/>      | <sub>[sync damage][213]<sub/>                 | <sub>_DHR_f_obj_sync_ow_damage_<sub/>          | <sub>Update damage<sub/>                                                |
+|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>14<sub/>      | <sub>[sync owner][214]<sub/>                  | <sub>_DHR_f_obj_sync_ow_owner_for_one_<sub/>   | <sub>Update owner for a single object<sub/>                             |
+|      <sub>2<sub/>       |      <sub>3<sub/>       |      <sub>15<sub/>      | <sub>[sync player base owner (P)][2151]<sub/> | <sub>_DHR_f_obj_sync_ow_owner_for_all_P_<sub/> | <sub>Get a PROMISE for a player base ownership change<sub/>             |
+|      <sub>2<sub/>       |      <sub>4<sub/>       |      <sub>15<sub/>      | <sub>[sync player base owner (F)][2152]<sub/> | <sub>_DHR_f_obj_sync_ow_owner_for_all_F_<sub/> | <sub>Retrieve player base ownership change FUTURE result<sub/>          |
+|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>16<sub/>      | <sub>[sync key][216]<sub/>                    | <sub>_DHR_f_obj_sync_ow_key_<sub/>             | <sub>Update combination key<sub/>                                       |
+|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>17<sub/>      | <sub>[sync worldspace][217]<sub/>             | <sub>_DHR_f_obj_sync_ow_worldspace_<sub/>      | <sub>Update position and vectors<sub/>                                  |
+|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>18<sub/>      | <sub>[sync friends][218]<sub/>                | <sub>_DHR_f_obj_sync_ow_friends_<sub/>         | <sub>Update friends<sub/>                                               |
+|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>19<sub/>      | <sub>[sync inventory][219]<sub/>              | <sub>_DHR_f_obj_sync_ow_inventory_<sub/>       | <sub>Update inventory<sub/>                                             |
+|      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>20<sub/>      | <sub>[sync props][220]<sub/>                  | <sub>_DHR_f_obj_sync_ow_props_<sub/>           | <sub>Update DYNAMIC properties<sub/>                                    |
 |      <sub>2<sub/>       |      <sub>3<sub/>       |      <sub>28<sub/>      | <sub>[*open mysql session (P)][2281]<sub/>    |                                                | <sub>Get an open MySQL session PROMISE<sub/>                            |
 |      <sub>2<sub/>       |      <sub>4<sub/>       |      <sub>28<sub/>      | <sub>[*open mysql session (F)][2282]<sub/>    |                                                | <sub>Retrieve open MySQL session FUTURE result<sub/>                    |
 |      <sub>2<sub/>       |      <sub>2<sub/>       |      <sub>29<sub/>      | <sub>[*cleanup mysql tw table][229]<sub/>     |                                                | <sub>Delete all records marked for scheduled removal (`ow_sid=0`)<sub/> |
@@ -211,15 +224,15 @@
 |      <sub>1<sub/>       |      <sub>3<sub/>       |      <sub>2<sub/>       | <sub>[create new vehicle (P)][1021]<sub/>     | <sub>_DHR_f_veh_create_P_<sub/>                | <sub>Get a PROMISE for a new vehicle record<sub/>                       |
 |      <sub>1<sub/>       |      <sub>4<sub/>       |      <sub>2<sub/>       | <sub>[create new vehicle (F)][1022]<sub/>     | <sub>_DHR_f_veh_create_F_<sub/>                | <sub>Retrieve FUTURE vehicle record<sub/>                               |
 |      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>4<sub/>       | <sub>[delete vehicle][104]<sub/>              | <sub>_DHR_f_veh_delete_<sub/>                  | <sub>Mark vehicle record for scheduled removal<sub/>                    |
-|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>10<sub/>      | <sub>[sync vehicle record][110]<sub/>         | <sub>_DHR_f_veh_sync_record_<sub/>             | <sub>Update vehicle database record<sub/>                               |
-|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>11<sub/>      | <sub>[sync identity][111]<sub/>               | <sub>_DHR_f_veh_sync_identity_<sub/>           | <sub>Update STATIC properties<sub/>                                     |
-|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>12<sub/>      | <sub>[sync money][112]<sub/>                  | <sub>_DHR_f_veh_sync_money_<sub/>              | <sub>Update storage money<sub/>                                         |
-|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>13<sub/>      | <sub>[sync damage][113]<sub/>                 | <sub>_DHR_f_veh_sync_damage_<sub/>             | <sub>Update damage and hitpoints<sub/>                                  |
-|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>16<sub/>      | <sub>[sync key][116]<sub/>                    | <sub>_DHR_f_veh_sync_key_<sub/>                | <sub>Update vehicle key<sub/>                                           |
-|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>17<sub/>      | <sub>[sync worldspace][117]<sub/>             | <sub>_DHR_f_veh_sync_worldspace_<sub/>         | <sub>Update fuel, position and vectors<sub/>                            |
-|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>18<sub/>      | <sub>[sync colors][118]<sub/>                 | <sub>_DHR_f_veh_sync_colors_<sub/>             | <sub>Update colors<sub/>                                                |
-|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>19<sub/>      | <sub>[sync inventory][119]<sub/>              | <sub>_DHR_f_veh_sync_inventory_<sub/>          | <sub>Update inventory<sub/>                                             |
-|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>20<sub/>      | <sub>[sync props][120]<sub/>                  | <sub>_DHR_f_veh_sync_props_<sub/>              | <sub>Update DYNAMIC properties<sub/>                                    |
+|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>10<sub/>      | <sub>[sync vehicle record][110]<sub/>         | <sub>_DHR_f_veh_sync_vw_record_<sub/>          | <sub>Update vehicle database record<sub/>                               |
+|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>11<sub/>      | <sub>[sync identity][111]<sub/>               | <sub>_DHR_f_veh_sync_vw_identity_<sub/>        | <sub>Update STATIC properties<sub/>                                     |
+|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>12<sub/>      | <sub>[sync money][112]<sub/>                  | <sub>_DHR_f_veh_sync_vw_money_<sub/>           | <sub>Update storage money<sub/>                                         |
+|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>13<sub/>      | <sub>[sync damage][113]<sub/>                 | <sub>_DHR_f_veh_sync_vw_damage_<sub/>          | <sub>Update damage and hitpoints<sub/>                                  |
+|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>16<sub/>      | <sub>[sync key][116]<sub/>                    | <sub>_DHR_f_veh_sync_vw_key_<sub/>             | <sub>Update vehicle key<sub/>                                           |
+|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>17<sub/>      | <sub>[sync worldspace][117]<sub/>             | <sub>_DHR_f_veh_sync_vw_worldspace_<sub/>      | <sub>Update fuel, position and vectors<sub/>                            |
+|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>18<sub/>      | <sub>[sync colors][118]<sub/>                 | <sub>_DHR_f_veh_sync_vw_colors_<sub/>          | <sub>Update colors<sub/>                                                |
+|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>19<sub/>      | <sub>[sync inventory][119]<sub/>              | <sub>_DHR_f_veh_sync_vw_inventory_<sub/>       | <sub>Update inventory<sub/>                                             |
+|      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>20<sub/>      | <sub>[sync props][120]<sub/>                  | <sub>_DHR_f_veh_sync_vw_props_<sub/>           | <sub>Update DYNAMIC properties<sub/>                                    |
 |      <sub>1<sub/>       |      <sub>3<sub/>       |      <sub>24<sub/>      | <sub>[garage info (P)][1241]<sub/>            | <sub>_DHR_f_veh_garage_info_P_<sub/>           | <sub>Get an garage info data PROMISE<sub/>                              |
 |      <sub>1<sub/>       |      <sub>4<sub/>       |      <sub>24<sub/>      | <sub>[garage info (F)][1242]<sub/>            | <sub>_DHR_f_veh_garage_info_F_<sub/>           | <sub>Retrieve garage info data FUTURE result<sub/>                      |
 |      <sub>1<sub/>       |      <sub>2<sub/>       |      <sub>25<sub/>      | <sub>[garage in][125]<sub/>                   | <sub>_DHR_f_veh_garage_in_<sub/>               | <sub>Park vehicle in the garage<sub/>                                   |
@@ -239,28 +252,31 @@
 
 [//]: # (Link references)
 
-[1]: executive_summary/DHR100_hive_system.txt
+[1]: naming_convention/DZE100_hive_world_naming_convention.txt
 
-[2]: executive_summary/DHR200_hive_request_packet.txt
 
-[3]: executive_summary/DHR300_hive_persistence_layer.txt
+[10]: executive_summary/DHR100_hive_system.txt
 
-[4]: executive_summary/DHR400_hive_response_packet.txt
+[20]: executive_summary/DHR200_hive_request_packet.txt
 
-[5]: executive_summary/DHR500_hive_logging.txt
+[30]: executive_summary/DHR300_hive_persistence_layer.txt
+
+[40]: executive_summary/DHR400_hive_response_packet.txt
+
+[50]: executive_summary/DHR500_hive_logging.txt
 
 
 [100]: COM_SUID/1_vehicle/readme.md
 
 [101]: COM_SUID/1_vehicle/COM_EXID/01_log_message/101_log_message_ssheet.txt
 
-[1021]: COM_SUID/1_vehicle/COM_EXID/02_create/102_create_P_ssheet.txt
+[1021]: COM_SUID/1_vehicle/COM_EXID/02_create_one/102_create_one_P_ssheet.txt
 
-[1022]: COM_SUID/1_vehicle/COM_EXID/02_create/102_create_F_ssheet.txt
+[1022]: COM_SUID/1_vehicle/COM_EXID/02_create_one/102_create_one_F_ssheet.txt
 
 [104]: COM_SUID/1_vehicle/COM_EXID/04_delete_one/104_delete_one_ssheet.txt
 
-[110]: COM_SUID/1_vehicle/COM_EXID/10_sync_vehicle_record/110_sync_vehicle_record_ssheet.txt
+[110]: COM_SUID/1_vehicle/COM_EXID/10_sync_vw_record/110_sync_vw_record_ssheet.txt
 
 [111]: COM_SUID/1_vehicle/COM_EXID/11_sync_vw_identity/111_sync_vw_identity_ssheet.txt
 
@@ -309,9 +325,9 @@
 
 [201]: COM_SUID/2_object/COM_EXID/01_log_message/201_log_message_ssheet.txt
 
-[2021]: COM_SUID/2_object/COM_EXID/02_create/202_create_P_ssheet.txt
+[2021]: COM_SUID/2_object/COM_EXID/02_create_one/202_create_one_P_ssheet.txt
 
-[2022]: COM_SUID/2_object/COM_EXID/02_create/202_create_F_ssheet.txt
+[2022]: COM_SUID/2_object/COM_EXID/02_create_one/202_create_one_F_ssheet.txt
 
 [204]: COM_SUID/2_object/COM_EXID/04_delete_one/204_delete_one_ssheet.txt
 
@@ -325,7 +341,7 @@
 
 [2082]: COM_SUID/2_object/COM_EXID/08_maintain_all/208_maintain_all_F_ssheet.txt
 
-[210]: COM_SUID/2_object/COM_EXID/10_sync_object_record/210_sync_object_record_ssheet.txt
+[210]: COM_SUID/2_object/COM_EXID/10_sync_ow_record/210_sync_ow_record_ssheet.txt
 
 [211]: COM_SUID/2_object/COM_EXID/11_sync_ow_identity/211_sync_ow_identity_ssheet.txt
 
@@ -372,43 +388,47 @@
 
 [3032]: COM_SUID/3_player/COM_EXID/03_on_player_setup/303_on_player_setup_ssheet_F.txt
 
-[305]: COM_SUID/3_player/COM_EXID/05_sync_character_record/305_sync_character_record_ssheet.txt
+[305]: COM_SUID/3_player/COM_EXID/05_sync_pw_record/305_sync_pw_record_ssheet.txt
 
-[306]: COM_SUID/3_player/COM_EXID/06_sync_pw_logged/306_sync_pw_logged_ssheet.txt
+[306]: COM_SUID/3_player/COM_EXID/06_sync_pw_faction/306_sync_pw_faction_ssheet.txt
 
-[307]: COM_SUID/3_player/COM_EXID/07_sync_pw_humanity/307_sync_pw_humanity_ssheet.txt
+[307]: COM_SUID/3_player/COM_EXID/07_sync_pw_logged/307_sync_pw_logged_ssheet.txt
 
-[308]: COM_SUID/3_player/COM_EXID/08_sync_pw_cash/308_sync_pw_cash_ssheet.txt
+[308]: COM_SUID/3_player/COM_EXID/08_sync_pw_humanity/308_sync_pw_humanity_ssheet.txt
 
-[309]: COM_SUID/3_player/COM_EXID/09_sync_pw_model/309_sync_pw_model_ssheet.txt
+[309]: COM_SUID/3_player/COM_EXID/09_sync_pw_cash/309_sync_pw_cash_ssheet.txt
 
-[310]: COM_SUID/3_player/COM_EXID/10_sync_pw_worldspace/310_sync_pw_worldspace_ssheet.txt
+[310]: COM_SUID/3_player/COM_EXID/10_sync_pw_model/310_sync_pw_model_ssheet.txt
 
-[311]: COM_SUID/3_player/COM_EXID/11_sync_pw_medical/311_sync_pw_medical_ssheet.txt
+[311]: COM_SUID/3_player/COM_EXID/11_sync_pw_worldspace/311_sync_pw_worldspace_ssheet.txt
 
-[312]: COM_SUID/3_player/COM_EXID/12_sync_pw_gear/312_sync_pw_gear_ssheet.txt
+[312]: COM_SUID/3_player/COM_EXID/12_sync_pw_medical/312_sync_pw_medical_ssheet.txt
 
 [313]: COM_SUID/3_player/COM_EXID/13_sync_pw_xp/313_sync_pw_xp_ssheet.txt
 
-[314]: COM_SUID/3_player/COM_EXID/14_sync_pw_death/314_sync_pw_death_ssheet.txt
+[314]: COM_SUID/3_player/COM_EXID/14_sync_pw_props/314_sync_pw_props_ssheet.txt
 
-[315]: COM_SUID/3_player/COM_EXID/15_sync_pw_faction/315_sync_pw_faction_ssheet.txt
+[315]: COM_SUID/3_player/COM_EXID/15_sync_pw_gear/315_sync_pw_gear_ssheet.txt
 
-[320]: COM_SUID/3_player/COM_EXID/20_sync_player_record/320_sync_player_record_ssheet.txt
+[316]: COM_SUID/3_player/COM_EXID/16_sync_pw_death/316_sync_pw_death_ssheet.txt
 
-[321]: COM_SUID/3_player/COM_EXID/21_sync_ph_name/321_sync_ph_name_ssheet.txt
+[318]: COM_SUID/3_player/COM_EXID/18_sync_ph_record/318_sync_ph_record_ssheet.txt
 
-[322]: COM_SUID/3_player/COM_EXID/22_sync_ph_cash/322_sync_ph_cash_ssheet.txt
+[319]: COM_SUID/3_player/COM_EXID/19_sync_ph_name/319_sync_ph_name_ssheet.txt
 
-[323]: COM_SUID/3_player/COM_EXID/23_sync_ph_bank/323_sync_ph_bank_ssheet.txt
+[320]: COM_SUID/3_player/COM_EXID/20_sync_ph_humanity/320_sync_ph_humanity_ssheet.txt
 
-[324]: COM_SUID/3_player/COM_EXID/24_sync_ph_money/324_sync_ph_money_ssheet.txt
+[321]: COM_SUID/3_player/COM_EXID/21_sync_ph_cash/321_sync_ph_cash_ssheet.txt
+
+[322]: COM_SUID/3_player/COM_EXID/22_sync_ph_bank/322_sync_ph_bank_ssheet.txt
+
+[323]: COM_SUID/3_player/COM_EXID/23_sync_ph_money/323_sync_ph_money_ssheet.txt
+
+[324]: COM_SUID/3_player/COM_EXID/24_sync_ph_xp/324_sync_ph_xp_ssheet.txt
 
 [325]: COM_SUID/3_player/COM_EXID/25_sync_ph_group/325_sync_ph_group_ssheet.txt
 
-[326]: COM_SUID/3_player/COM_EXID/26_sync_ph_xp/326_sync_ph_xp_ssheet.txt
-
-[327]: COM_SUID/3_player/COM_EXID/27_sync_ph_humanity/327_sync_ph_humanity_ssheet.txt
+[326]: COM_SUID/3_player/COM_EXID/26_sync_ph_props/326_sync_ph_props_ssheet.txt
 
 [3281]: COM_SUID/3_player/COM_EXID/28_mysql_open_session/328_mysql_open_session_P_ssheet.txt
 
