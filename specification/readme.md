@@ -83,6 +83,16 @@
 
 <br/>
 
+
+| <sub>**MySQL table**<sub/>                 | <sub>**[DZE100: [A/4] Name patterns][1]**<sub/> | <sub>**specification sheet**<sub/> | <sub>**DDL**<sub/> |
+|:-------------------------------------------|:------------------------------------------------|:-----------------------------------|:-------------------|
+| <sub>**cross-worlds** (shared) table<sub/> | `th_srv_quest.ibd`                              | <sub>[*TODO]<sub/>                 | <sub>[*TODO]<sub/> |
+
+`* TODO: Most likely server quest - will require ``world_id`` field (per-world table is not neccessary?)`
+
+
+<br/>
+
 | <sub>**COM_SUID**<sub/> | <sub>**COM_TYPE**<sub/> | <sub>**COM_EXID**<sub/> | <sub>**specification sheet**<sub/>          | <sub>**SQF library function**<sub/>              | <sub>**short description**<sub/>                                          |
 |:-----------------------:|:-----------------------:|:-----------------------:|:--------------------------------------------|:-------------------------------------------------|:--------------------------------------------------------------------------|
 |      <sub>4<sub/>       |      <sub>2<sub/>       |      <sub>1<sub/>       | <sub>[log server message][401]<sub/>        | <sub>_DHR_f_srv_log_message_<sub/>               | <sub>Log message with given severity<sub/>                                |
@@ -107,10 +117,10 @@
 <br/>
 
 
-| <sub>**MySQL Tables**<sub/>                 | <sub>**name / pattern**<sub/>            |
-|:--------------------------------------------|:-----------------------------------------|
-| <sub>Shared Table Hive (cross-worlds)<sub/> | `th_plr.ibd`                             |
-| <sub>Unique Table World (per-world)<sub/>   | `tw_##_<worldname>_<suffix>_plr.ibd`<br> |
+| <sub>**MySQL table**<sub/>                 | <sub>**[DZE100: [A/4] Name patterns][1]**<sub/> | <sub>**specification sheet**<sub/>        | <sub>**DDL**<sub/>                 |
+|:-------------------------------------------|:------------------------------------------------|:------------------------------------------|:-----------------------------------|
+| <sub>**per-world** (unique) table<sub/>    | `tw_##_<worldname>_<suffix>_plr.ibd`<br>        | <sub>[331_tw_plr_ssheet.txt][33101]<sub/> | <sub>[331_tw_plr.sql][33102]<sub/> |
+| <sub>**cross-worlds** (shared) table<sub/> | `th_plr.ibd`                                    | <sub>[332_th_plr_ssheet.txt][33201]<sub/> | <sub>[332_th_plr.sql][33202]<sub/> |
 
 
 <br/>
@@ -160,9 +170,9 @@
 <br/>
 
 
-| <sub>**MySQL Tables**<sub/>               | <sub>**name / pattern**<sub/>            |
-|:------------------------------------------|:-----------------------------------------|
-| <sub>Unique Table World (per-world)<sub/> | `tw_##_<worldname>_<suffix>_obj.ibd`<br> |
+| <sub>**MySQL table**<sub/>              | <sub>**[DZE100: [A/4] Name patterns][1]**<sub/> | <sub>**specification sheet**<sub/>        | <sub>**DDL**<sub/>                 |
+|:----------------------------------------|:------------------------------------------------|:------------------------------------------|:-----------------------------------|
+| <sub>**per-world** (unique) table<sub/> | `tw_##_<worldname>_<suffix>_obj.ibd`<br>        | <sub>[321_tw_obj_ssheet.txt][32101]<sub/> | <sub>[321_tw_obj.sql][32102]<sub/> |
 
 
 <br/>
@@ -209,10 +219,10 @@
 <br/>
 
 
-| <sub>**MySQL Tables**<sub/>                 | <sub>**name / pattern**<sub/>            |
-|:--------------------------------------------|:-----------------------------------------|
-| <sub>Shared Table Hive (cross-worlds)<sub/> | `th_veh.ibd`                             |
-| <sub>Unique Table World (per-world)<sub/>   | `tw_##_<worldname>_<suffix>_veh.ibd`<br> |
+| <sub>**MySQL table**<sub/>                 | <sub>**[DZE100: [A/4] Name patterns][1]**<sub/> | <sub>**specification sheet**<sub/>        | <sub>**DDL**<sub/>                 |
+|:-------------------------------------------|:------------------------------------------------|:------------------------------------------|:-----------------------------------|
+| <sub>**per-world** (unique) table<sub/>    | `tw_##_<worldname>_<suffix>_veh.ibd`<br>        | <sub>[311_tw_veh_ssheet.txt][31101]<sub/> | <sub>[311_tw_veh.sql][31102]<sub/> |
+| <sub>**cross-worlds** (shared) table<sub/> | `th_veh.ibd`                                    | <sub>[312_th_veh_ssheet.txt][31201]<sub/> | <sub>[312_th_veh.sql][31202]<sub/> |
 
 
 <br/>
@@ -320,6 +330,14 @@
 
 [131]: COM_SUID/1_vehicle/COM_EXID/31_mysql_cleanup_th/131_mysql_cleanup_th_ssheet.txt
 
+[31101]: COM_SUID/1_vehicle/MySQL/01_tw/311_tw_veh_ssheet.txt
+
+[31102]: COM_SUID/1_vehicle/MySQL/01_tw/311_tw_veh.sql
+
+[31201]: COM_SUID/1_vehicle/MySQL/02_th/312_th_veh_ssheet.txt
+
+[31202]: COM_SUID/1_vehicle/MySQL/02_th/312_th_veh.sql
+
 
 [200]: COM_SUID/2_object/readme.md
 
@@ -374,6 +392,10 @@
 [2301]: COM_SUID/2_object/COM_EXID/30_mysql_export_tw/230_mysql_export_tw_P_ssheet.txt
 
 [2302]: COM_SUID/2_object/COM_EXID/30_mysql_export_tw/230_mysql_export_tw_F_ssheet.txt
+
+[32101]: COM_SUID/2_object/MySQL/01_tw/321_tw_obj_ssheet.txt
+
+[32102]: COM_SUID/2_object/MySQL/01_tw/321_tw_obj.sql
 
 
 [300]: COM_SUID/3_player/readme.md
@@ -435,6 +457,14 @@
 [3282]: COM_SUID/3_player/COM_EXID/28_mysql_open_session/328_mysql_open_session_F_ssheet.txt
 
 [329]: COM_SUID/3_player/COM_EXID/29_mysql_cleanup_tw/329_mysql_cleanup_tw_ssheet.txt
+
+[33101]: COM_SUID/3_player/MySQL/01_tw/331_tw_plr_ssheet.txt
+
+[33102]: COM_SUID/3_player/MySQL/01_tw/331_tw_plr.sql
+
+[33201]: COM_SUID/3_player/MySQL/02_th/332_th_plr_ssheet.txt
+
+[33202]: COM_SUID/3_player/MySQL/02_th/332_th_plr.sql
 
 
 [400]: COM_SUID/4_server/readme.md

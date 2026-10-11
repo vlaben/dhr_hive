@@ -23,13 +23,21 @@
 |      <sub>4<sub/>       |      <sub>2<sub/>       |      <sub>3<sub/>       | <sub>[rcon send private message][403]<sub/> | <sub>_DHR_f_srv_rcon_send_private_message_<sub/> | <sub>Send a PRIVATE Battleye message to a specific player<sub/>           |
 |      <sub>4<sub/>       |      <sub>2<sub/>       |      <sub>4<sub/>       | <sub>[rcon reload scripts][404]<sub/>       | <sub>_DHR_f_srv_rcon_reload_scripts_<sub/>       | <sub>Reload the script execution filters specified in "scripts.txt"<sub/> |
 |      <sub>4<sub/>       |      <sub>2<sub/>       |      <sub>5<sub/>       | <sub>[rcon reload events][405]<sub/>        | <sub>_DHR_f_srv_rcon_reload_events_<sub/>        | <sub>Reload all network filters such as "createVehicle.txt", ...<sub/>    |
-|      <sub>4<sub/>       |      <sub>2<sub/>       |      <sub>6<sub/>       | <sub>[rcon set max ping][406]<sub/>         | <sub>_DHR_f_srv_rcon_set_max_ping_<sub/>         | <sub>Set the maximum acceptable ping for players (ms)<sub/>               |
+|      <sub>4<sub/>       |      <sub>2<sub/>       |      <sub>6<sub/>       | <sub>[rcon set max ping][406]<sub/>         | <sub>_DHR_f_srv_rcon_set_max_ping_<sub/>         | <sub>Set the maximum acceptable ping for players (in ms)<sub/>            |
 |      <sub>4<sub/>       |      <sub>2<sub/>       |      <sub>7<sub/>       | <sub>[rcon lock server][407]<sub/>          | <sub>_DHR_f_srv_rcon_lock_server_<sub/>          | <sub>Lock the Arma 2 OA server, prevent new clients from joining<sub/>    |
 |      <sub>4<sub/>       |      <sub>2<sub/>       |      <sub>8<sub/>       | <sub>[rcon unlock server][408]<sub/>        | <sub>_DHR_f_srv_rcon_unlock_server_<sub/>        | <sub>Unlock the Arma 2 OA server, allow new clients to join<sub/>         |
 
 <br/>
 
 ## MySQL
+
+<br/>
+
+| <sub>**MySQL table**<sub/>                 | <sub>**[DZE100: [A/4] Name patterns][1]**<sub/> | <sub>**specification sheet**<sub/> | <sub>**DDL**<sub/> |
+|:-------------------------------------------|:------------------------------------------------|:-----------------------------------|:-------------------|
+| <sub>**cross-worlds** (shared) table<sub/> | `th_srv_quest.ibd`                              | <sub>[*TODO]<sub/>                 | <sub>[*TODO]<sub/> |
+
+`* TODO: Most likely server quest - will require ``world_id`` field (per-world table is not neccessary?)`
 
 <br/>
 
@@ -42,6 +50,8 @@
 
 
 [//]: # (Link references)
+
+[1]: ../../naming_convention/DZE100_hive_world_naming_convention.txt
 
 [401]: COM_EXID/01_log_message/401_log_message_ssheet.txt
 

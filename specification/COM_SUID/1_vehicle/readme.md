@@ -71,6 +71,13 @@
 
 <br/>
 
+| <sub>**MySQL table**<sub/>                 | <sub>**[DZE100: [A/4] Name patterns][1]**<sub/> | <sub>**specification sheet**<sub/>        | <sub>**DDL**<sub/>                 |
+|:-------------------------------------------|:------------------------------------------------|:------------------------------------------|:-----------------------------------|
+| <sub>**per-world** (unique) table<sub/>    | `tw_##_<worldname>_<suffix>_veh.ibd`<br>        | <sub>[311_tw_veh_ssheet.txt][31101]<sub/> | <sub>[311_tw_veh.sql][31102]<sub/> |
+| <sub>**cross-worlds** (shared) table<sub/> | `th_veh.ibd`                                    | <sub>[312_th_veh_ssheet.txt][31201]<sub/> | <sub>[312_th_veh.sql][31202]<sub/> |
+
+<br/>
+
 | <sub>**COM_SUID**<sub/> | <sub>**COM_TYPE**<sub/> | <sub>**COM_EXID**<sub/> | <sub>**specification sheet**<sub/>            | <sub>**SQF library function**<sub/>            | <sub>**short description**<sub/>                                        |
 |:-----------------------:|:-----------------------:|:-----------------------:|:----------------------------------------------|:-----------------------------------------------|:------------------------------------------------------------------------|
 |      <sub>1<sub/>       |      <sub>3<sub/>       |      <sub>28<sub/>      | <sub>[*open mysql session (P)][1281]<sub/>    |                                                | <sub>Get an open MySQL session PROMISE<sub/>                            |
@@ -84,6 +91,8 @@
 
 
 [//]: # (Link references)
+
+[1]: ../../naming_convention/DZE100_hive_world_naming_convention.txt
 
 [101]: COM_EXID/01_log_message/101_log_message_ssheet.txt
 
@@ -136,3 +145,11 @@
 [1302]: COM_EXID/30_mysql_export_tw/130_mysql_export_tw_F_ssheet.txt
 
 [131]: COM_EXID/31_mysql_cleanup_th/131_mysql_cleanup_th_ssheet.txt
+
+[31101]: MySQL/01_tw/311_tw_veh_ssheet.txt
+
+[31102]: MySQL/01_tw/311_tw_veh.sql
+
+[31201]: MySQL/02_th/312_th_veh_ssheet.txt
+
+[31202]: MySQL/02_th/312_th_veh.sql

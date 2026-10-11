@@ -72,6 +72,12 @@
 
 <br/>
 
+| <sub>**MySQL table**<sub/>              | <sub>**[DZE100: [A/4] Name patterns][1]**<sub/> | <sub>**specification sheet**<sub/>        | <sub>**DDL**<sub/>                 |
+|:----------------------------------------|:------------------------------------------------|:------------------------------------------|:-----------------------------------|
+| <sub>**per-world** (unique) table<sub/> | `tw_##_<worldname>_<suffix>_obj.ibd`<br>        | <sub>[321_tw_obj_ssheet.txt][32101]<sub/> | <sub>[321_tw_obj.sql][32102]<sub/> |
+
+<br/>
+
 | <sub>**COM_SUID**<sub/> | <sub>**COM_TYPE**<sub/> | <sub>**COM_EXID**<sub/> | <sub>**specification sheet**<sub/>           | <sub>**SQF library function**<sub/>            | <sub>**short description**<sub/>                                        |
 |:-----------------------:|:-----------------------:|:-----------------------:|:---------------------------------------------|:-----------------------------------------------|:------------------------------------------------------------------------|
 |      <sub>2<sub/>       |      <sub>3<sub/>       |      <sub>28<sub/>      | <sub>[*open mysql session (P)][2281]<sub/>   |                                                | <sub>Get an open MySQL session PROMISE<sub/>                            |
@@ -84,6 +90,8 @@
 
 
 [//]: # (Link references)
+
+[1]: ../../naming_convention/DZE100_hive_world_naming_convention.txt
 
 [201]: COM_EXID/01_log_message/201_log_message_ssheet.txt
 
@@ -136,3 +144,7 @@
 [2301]: COM_EXID/30_mysql_export_tw/230_mysql_export_tw_P_ssheet.txt
 
 [2302]: COM_EXID/30_mysql_export_tw/230_mysql_export_tw_F_ssheet.txt
+
+[32101]: MySQL/01_tw/321_tw_obj_ssheet.txt
+
+[32102]: MySQL/01_tw/321_tw_obj.sql

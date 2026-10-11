@@ -16,13 +16,6 @@
 
 <br/>
 
-| <sub>**MySQL Tables**<sub/>                 | <sub>**name / pattern**<sub/>            |
-|:--------------------------------------------|:-----------------------------------------|
-| <sub>Shared Table Hive (cross-worlds)<sub/> | `th_plr.ibd`                             |
-| <sub>Unique Table World (per-world)<sub/>   | `tw_##_<worldname>_<suffix>_plr.ibd`<br> |
-
-<br/>
-
 | <sub>**COM_SUID**<sub/> | <sub>**COM_TYPE**<sub/> | <sub>**COM_EXID**<sub/> | <sub>**specification sheet**<sub/>     | <sub>**SQF library function**<sub/>      | <sub>**short description**<sub/>                            |
 |:-----------------------:|:-----------------------:|:-----------------------:|:---------------------------------------|:-----------------------------------------|:------------------------------------------------------------|
 |      <sub>3<sub/>       |      <sub>3<sub/>       |      <sub>2<sub/>       | <sub>[on player login (P)][3021]<sub/> | <sub>_DHR_f_plr_on_player_login_P_<sub/> | <sub>Get a data PROMISE for a logging in player<sub/>       |
@@ -33,12 +26,6 @@
 <br/>
 
 ## sync (per-world)
-
-<br/>
-
-| <sub>**MySQL Tables**<sub/>               | <sub>**name / pattern**<sub/>            |
-|:------------------------------------------|:-----------------------------------------|
-| <sub>Unique Table World (per-world)<sub/> | `tw_##_<worldname>_<suffix>_plr.ibd`<br> |
 
 <br/>
 
@@ -63,12 +50,6 @@
 
 <br/>
 
-| <sub>**MySQL Tables**<sub/>                 | <sub>**name / pattern**<sub/> |
-|:--------------------------------------------|:------------------------------|
-| <sub>Shared Table Hive (cross-worlds)<sub/> | `th_plr.ibd`                  |
-
-<br/>
-
 | <sub>**COM_SUID**<sub/> | <sub>**COM_TYPE**<sub/> | <sub>**COM_EXID**<sub/> | <sub>**specification sheet**<sub/>     | <sub>**SQF library function**<sub/>     | <sub>**short description**<sub/>               |
 |:-----------------------:|:-----------------------:|:-----------------------:|:---------------------------------------|:----------------------------------------|:-----------------------------------------------|
 |      <sub>3<sub/>       |      <sub>2<sub/>       |      <sub>18<sub/>      | <sub>[sync player record][318]<sub/>   | <sub>_DHR_f_plr_sync_ph_record_<sub/>   | <sub>Update player database record<sub/>       |
@@ -87,6 +68,13 @@
 
 <br/>
 
+| <sub>**MySQL table**<sub/>                 | <sub>**[DZE100: [A/4] Name patterns][1]**<sub/> | <sub>**specification sheet**<sub/>        | <sub>**DDL**<sub/>                 |
+|:-------------------------------------------|:------------------------------------------------|:------------------------------------------|:-----------------------------------|
+| <sub>**per-world** (unique) table<sub/>    | `tw_##_<worldname>_<suffix>_plr.ibd`<br>        | <sub>[331_tw_plr_ssheet.txt][33101]<sub/> | <sub>[331_tw_plr.sql][33102]<sub/> |
+| <sub>**cross-worlds** (shared) table<sub/> | `th_plr.ibd`                                    | <sub>[332_th_plr_ssheet.txt][33201]<sub/> | <sub>[332_th_plr.sql][33202]<sub/> |
+
+<br/>
+
 | <sub>**COM_SUID**<sub/> | <sub>**COM_TYPE**<sub/> | <sub>**COM_EXID**<sub/> | <sub>**specification sheet**<sub/>         | <sub>**SQF library function**<sub/> | <sub>**short description**<sub/>                                        |
 |:-----------------------:|:-----------------------:|:-----------------------:|:-------------------------------------------|:------------------------------------|:------------------------------------------------------------------------|
 |      <sub>3<sub/>       |      <sub>3<sub/>       |      <sub>28<sub/>      | <sub>[*open mysql session (P)][3281]<sub/> |                                     | <sub>Get an open MySQL session PROMISE<sub/>                            |
@@ -97,6 +85,8 @@
 
 
 [//]: # (Link references)
+
+[1]: ../../naming_convention/DZE100_hive_world_naming_convention.txt
 
 [301]: COM_EXID/01_log_message/301_log_message_ssheet.txt
 
@@ -155,3 +145,11 @@
 [3282]: COM_EXID/28_mysql_open_session/328_mysql_open_session_F_ssheet.txt
 
 [329]: COM_EXID/29_mysql_cleanup_tw/329_mysql_cleanup_tw_ssheet.txt
+
+[33101]: MySQL/01_tw/331_tw_plr_ssheet.txt
+
+[33102]: MySQL/01_tw/331_tw_plr.sql
+
+[33201]: MySQL/02_th/332_th_plr_ssheet.txt
+
+[33202]: MySQL/02_th/332_th_plr.sql

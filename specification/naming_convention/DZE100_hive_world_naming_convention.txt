@@ -4,8 +4,8 @@
 # -------------------------------------------------------- #
 
 
-# [A] World/Map naming convention:
-# --------------------------------
+# [A] world / map naming convention:
+# ----------------------------------
 
   [A/1]
   All names are lowercase.
@@ -26,22 +26,22 @@
   [A/4]
   Name patterns :
 
-    + ------------------------------------------------------------------------------- +
-    |        TARGET         |             PATTERN             |        EXAMPLE        |
-    | --------------------- + ------------------------------- + --------------------- |
-    | world_id              | number <1, 63>                  | 2                     |
-    | --------------------- + ------------------------------- + --------------------- |
-    | MPMissions            | ##_dze.<worldname>_<suffix>     | 02_dze.chernarus_w    |
-    | --------------------- + ------------------------------- + --------------------- |
-    | DZE_Server_Config:    |                                                         |
-    |     command line      | ##_<worldname>_<suffix>.bat     | 02_chernarus_w.bat    |
-    |     cfg               | ##_<worldname>_<suffix>.cfg     | 02_chernarus_w.cfg    |
-    |     class Missions    | ##_dze.<worldname>_<suffix>     | 02_dze.chernarus_w    |
-    | --------------------- + ------------------------------- + --------------------- |
-    | MySQL                 | ##_<worldname>_<suffix>         | 02_chernarus_w        |
-    | --------------------- + ------------------------------- + --------------------- |
-    | hive                  | <worldname>_<suffix>            | chernarus_w = 1 << 2  |
-    + ------------------------------------------------------------------------------- +
+    + ------------------------------------------------------------------------------------------ +
+    |        TARGET         |                  PATTERN                   |        EXAMPLE        |
+    | --------------------- + ------------------------------------------ + --------------------- |
+    | world_id              | number <1, 63>                             | 2                     |
+    | --------------------- + ------------------------------------------ + --------------------- |
+    | MPMissions            | ##_dze.<worldname>_<suffix>                | 02_dze.chernarus_w    |
+    | --------------------- + ------------------------------------------ + --------------------- |
+    | DZE_Server_Config:    |                                            |                       |
+    |     command line      | ##_<worldname>_<suffix>.bat                | 02_chernarus_w.bat    |
+    |     cfg               | ##_<worldname>_<suffix>.cfg                | 02_chernarus_w.cfg    |
+    |     class Missions    | ##_dze.<worldname>_<suffix>                | 02_dze.chernarus_w    |
+    | --------------------- + ------------------------------------------ + --------------------- |
+    | MySQL                 | tw_##_<worldname>_<suffix>_<COM_SUID>.ibd  | tw_02_chernarus_w_plr |
+    | --------------------- + ------------------------------------------ + --------------------- |
+    | hive                  | <worldname>_<suffix>                       | chernarus_w = 1 << 2  |
+    + ------------------------------------------------------------------------------------------ +
 
     # -------
     # AFTER:
@@ -51,9 +51,9 @@
     |     world_id       |       MPMissions       |   DZE_Server_Config    |   DZE_Server_Config    |   DZE_Server_Config    |         hive           |              MySQL               |
     | [ dayZ_instance ]  |     [ directory ]      |        [ cfg ]         | [ cfg/class Missions ] |   [ command line ]     |    [ source code ]     | [ make_storage_obj_tables(...) ] |
     | ------------------ + ---------------------- + ---------------------- + ---------------------- + ---------------------- + ---------------------- + -------------------------------- |
-    | 2                  | 02_dze.chernarus_w     | 02_chernarus_w.cfg     | 02_dze.chernarus_w     | 02_chernarus_w.bat     | chernarus_w            | 02_chernarus_w                   |
+    | 2                  | 02_dze.chernarus_w     | 02_chernarus_w.cfg     | 02_dze.chernarus_w     | 02_chernarus_w.bat     | chernarus_w            | tw_02_chernarus_w_plr            |
     | ------------------ + ---------------------- + ---------------------- + ---------------------- + ---------------------- + ---------------------- + -------------------------------- |
-    | 11                 | 11_dze.chernarus_s     | 11_chernarus_s.cfg     | 11_dze.chernarus_s     | 11_chernarus_s.bat     | chernarus_s            | 11_chernarus                     |
+    | 11                 | 11_dze.chernarus_s     | 11_chernarus_s.cfg     | 11_dze.chernarus_s     | 11_chernarus_s.bat     | chernarus_s            | tw_11_chernarus_s_plr            |
     + ------------------ + ---------------------- + ---------------------- + ---------------------- + ---------------------- + ---------------------- + -------------------------------- +
 
 

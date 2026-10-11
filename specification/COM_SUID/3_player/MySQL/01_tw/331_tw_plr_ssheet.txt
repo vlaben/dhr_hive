@@ -44,6 +44,10 @@
   ------
   [R/01] Each field is NOT NULL and defines default value;
 
+  TODO: ph_gid - player's global ID
+        - treat it similary to ow_bid
+        - monitor asks for all ph_gid before first join - then use it / updates as needed ?
+
 
   + ------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
   | FIELD         | TYPE          | DEFAULT VALUE     | STRICT  | REPR              | DESCRIPTION                                   | NOTES                             |
@@ -60,11 +64,15 @@
   | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
   | pw_sid        | TINYINT       | 2                 | YES     | (i)               | character's status ID                         |                                   |
   |               |               |                   |         |                   |                                               |                                   |
+  |               |               |                   |         |                   | Range:                                        |                                   |
+  |               |               |                   |         |                   | ------                                        |                                   |
+  |               |               |                   |         |                   | <0, 2>                                        |                                   |
+  |               |               |                   |         |                   |                                               |                                   |
   |               |               |                   |         |                   | Acceptable values:                            |                                   |
   |               |               |                   |         |                   | ------------------                            |                                   |
-  |               |               |                   |         |                   | 2 - alive (default)                           |                                   |
-  |               |               |                   |         |                   | 1 - dead  (most recent dead character)        |                                   |
   |               |               |                   |         |                   | 0 - scheduled for removal                     |                                   |
+  |               |               |                   |         |                   | 1 - dead  (most recent dead character)        |                                   |
+  |               |               |                   |         |                   | 2 - alive (default)                           |                                   |
   | ------------- + ------------- + ----------------- + ------- + ----------------- + --------------------------------------------- + --------------------------------- |
   | pw_slot       | TINYINT       | 1                 | YES     | (i)               | character's selection slot ID                 |                                   |
   |               |               |                   |         |                   | (multi-char system support)                   |                                   |
