@@ -1,6 +1,26 @@
+# -------------------------------------------------------- #
+# MySQL table: player per-world character                  #
+# -------------------------------------------------------- #
 
 
-# [?] MAPPING TO LEGACY FIELDS:
+# [A] OVERVIEW:
+# -------------------------------------------------------- |
+
+  Related specification:
+  ----------------------
+  DZE100_hive_world_naming_convention.txt
+  DHR100_hive_system.txt
+
+  DESCRIPTION : per-world unique table
+  SCOPE       : subsystem player provider thread
+  NAME        : tw_##_<worldname>_<suffix>_plr
+
+                example : tw_02_chernarus_w_plr
+                          tw_11_chernarus_s_plr
+
+
+
+# [B] MAPPING TO LEGACY FIELDS:
 # -------------------------------------------------------- |
 
   + -------------------------------------------------- +
@@ -37,16 +57,12 @@
 
 
 
-# [?] FIELD DESCRIPTION:
+# [C] FIELD DESCRIPTION:
 # -------------------------------------------------------- |
 
   Rules:
   ------
   [R/01] Each field is NOT NULL and defines default value;
-
-  TODO: ph_gid - player's global ID
-        - treat it similary to ow_bid
-        - monitor asks for all ph_gid before first join - then use it / updates as needed ?
 
 
   + ------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
