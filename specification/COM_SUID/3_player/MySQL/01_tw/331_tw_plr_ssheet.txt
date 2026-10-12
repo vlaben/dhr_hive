@@ -25,7 +25,7 @@
 |               | parameter types cannot be defined at compile time — must     |
 |               | be sent as a string:                                         |
 |               | BAD : "[1,true]"      --> (i,b) --> expected: (s)            |
-|               | GOOG: "\"[1,true]\""  --> (s)   --> expected: (s)            |
+|               | GOOD: "\"[1,true]\""  --> (s)   --> expected: (s)            |
 + ---------------------------------------------------------------------------- +
 
 
