@@ -16,7 +16,16 @@
 |               | tw_02_chernarus_w_plr                                        |
 |               | tw_11_chernarus_s_plr                                        |
 |               | ------------------------------------------------------------ |
-|         rules | [R/01] Each field is NOT NULL and defines default value;     |
+|         rules | [R/01]                                                       |
+|               | Each field is NOT NULL and defines default value;            |
+|               |                                                              |
+|               | [R/02]                                                       |
+|               | Any non-restricted VARCHAR field whose definition depends    |
+|               | on the server owner — and for which, consequently, exact     |
+|               | parameter types cannot be defined at compile time — must     |
+|               | be sent as a string:                                         |
+|               | BAD : "[1,true]"      --> (i,b) --> expected: (s)            |
+|               | GOOG: "\"[1,true]\""  --> (s)   --> expected: (s)            |
 + ---------------------------------------------------------------------------- +
 
 
@@ -215,10 +224,10 @@
 |                   |                   |                   |                  |        | ]                                             |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | pw_xp             | VARCHAR(1024)     | '[]'              | (s)              | NO     | character's experience support;               | It is up to server owner /        |
-|                   |                   |                   |                  |        | NON-STRICT field; MUST be send as STRING      | mod author to define it as needed |
+|                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | mod author to define it as needed |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | pw_props          | VARCHAR(2048)     | '[]'              | (s)              | NO     | character's modding support                   | It is up to server owner /        |
-|                   |                   |                   |                  |        | NON-STRICT field; MUST be send as STRING      | mod author to define it as needed |
+|                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | mod author to define it as needed |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | pw_inventory      | MEDIUMTEXT        | _utf8mb4'[]'      | (a,a,s)          | YES    | character's gear data                         |                                   |
 |                   |                   |                   |                  |        |                                               |                                   |
