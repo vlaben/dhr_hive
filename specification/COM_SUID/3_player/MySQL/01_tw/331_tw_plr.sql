@@ -3,7 +3,7 @@
 -- ----------------------------------------------
 
 
-CREATE TABLE IF NOT EXISTS `tw_plr` -- DHR_f_plr_sync_pw_record
+CREATE TABLE IF NOT EXISTS `hive_storage`.`tw_plr` -- DHR_f_plr_sync_pw_record
 (
     `pw_cid`        INT           NOT NULL AUTO_INCREMENT,
     `ph_gid`        INT           NOT NULL DEFAULT 0,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `tw_plr` -- DHR_f_plr_sync_pw_record
     `pw_props`      VARCHAR(2048) NOT NULL DEFAULT '[]',              -- DHR_f_plr_sync_pw_props      | th_plr counterpart: ph_props
     `pw_inventory`  MEDIUMTEXT    NOT NULL DEFAULT (_utf8mb4'[]'),    -- DHR_f_plr_sync_pw_gear
     `pw_backpack`   MEDIUMTEXT    NOT NULL DEFAULT (_utf8mb4'[]'),    -- DHR_f_plr_sync_pw_gear
-    PRIMARY KEY (`pw_cid`)                                            -- @TODO: add and test indexes
+    PRIMARY KEY (`pw_cid`)                                            -- @TODO: add and debug indexes
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARSET = 'utf8mb4'
