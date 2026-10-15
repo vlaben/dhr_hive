@@ -165,9 +165,15 @@
 |                   |                   |                   |                  |        |       character may spawn as zombie           |                                   |
 |                   |                   |                   |                  |        |       (DZE_PlayerZed == true)                 |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| pw_humanity       | INT               | 0                 | (i)              | YES    | character's humanity value                    | custom def value supported (c++)  |
+| pw_humanity       | INT               | 0                 | (i)              | YES    | character's humanity value                    | custom def value supported (c++); |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | cross-worlds alternative:         |
+|                   |                   |                   |                  |        |                                               | -------------------------         |
+|                   |                   |                   |                  |        |                                               | `th_plr`.`ph_humanity`            |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| pw_cash           | BIGINT            | 0                 | (i)              | YES    | character's wallet money                      |                                   |
+| pw_cash           | BIGINT            | 0                 | (i)              | YES    | character's wallet money                      | cross-worlds alternative:         |
+|                   |                   |                   |                  |        |                                               | -------------------------         |
+|                   |                   |                   |                  |        |                                               | `th_plr`.`ph_cash`                |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | pw_model          | VARCHAR(64)       | 'Survivor2_DZ'    | (s)              | YES    | character's skin                              |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
@@ -225,9 +231,17 @@
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | pw_xp             | VARCHAR(1024)     | '[]'              | (s)              | NO     | character's experience support;               | It is up to server owner /        |
 |                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | mod author to define it as needed |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | cross-worlds alternative:         |
+|                   |                   |                   |                  |        |                                               | -------------------------         |
+|                   |                   |                   |                  |        |                                               | `th_plr`.`ph_xp`                  |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | pw_props          | VARCHAR(2048)     | '[]'              | (s)              | NO     | character's modding support                   | It is up to server owner /        |
 |                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | mod author to define it as needed |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | cross-worlds alternative:         |
+|                   |                   |                   |                  |        |                                               | -------------------------         |
+|                   |                   |                   |                  |        |                                               | `th_plr`.`ph_props`               |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | pw_inventory      | MEDIUMTEXT        | _utf8mb4'[]'      | (a,a,s)          | YES    | character's gear data                         |                                   |
 |                   |                   |                   |                  |        |                                               |                                   |
