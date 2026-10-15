@@ -72,7 +72,8 @@
 |                   |                   |                   |                  |        |                                               | (similary to objects/vehicle      |
 |                   |                   |                   |                  |        |                                               | exports) and cache the result:    |
 |                   |                   |                   |                  |        |                                               |                                   |
-|                   |                   |                   |                  |        |                                               | gvar = [                          |
+|                   |                   |                   |                  |        |                                               | gvar =                            |
+|                   |                   |                   |                  |        |                                               | [                                 |
 |                   |                   |                   |                  |        |                                               |           ["ph_uid",...],         |
 |                   |                   |                   |                  |        |                                               |           ["ph_gid",...]          |
 |                   |                   |                   |                  |        |                                               | ];                                |
@@ -81,10 +82,10 @@
 |                   |                   |                   |                  |        |                                               | avoiding query to figure out      |
 |                   |                   |                   |                  |        |                                               | `ph_gid`.                         |
 |                   |                   |                   |                  |        |                                               |                                   |
-|                   |                   |                   |                  |        |                                               | The variable "gvar" is update     |
+|                   |                   |                   |                  |        |                                               | The variable "gvar" is updated    |
 |                   |                   |                   |                  |        |                                               | only when a new unique player     |
-|                   |                   |                   |                  |        |                                               | joins the server                  |
-|                   |                   |                   |                  |        |                                               | (query to update + "gvar" update) |
+|                   |                   |                   |                  |        |                                               | joins the server (make new        |
+|                   |                   |                   |                  |        |                                               | `th_plr` record + "gvar" sync).   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | ph_name           | VARCHAR(32)       | 'no_name'         | (s)              | YES    | player's in-game name                         | Obtained by 'name player'         |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
