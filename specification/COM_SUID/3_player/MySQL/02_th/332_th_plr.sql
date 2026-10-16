@@ -1,5 +1,5 @@
 -- ----------------------------------------------
--- cross-worlds table for `th_plr`
+-- cross-worlds table `th_plr`
 -- ----------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `hive_storage`.`th_plr` -- DHR_f_plr_sync_ph_record
