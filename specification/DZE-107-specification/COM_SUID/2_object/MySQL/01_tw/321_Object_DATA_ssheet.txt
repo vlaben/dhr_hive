@@ -1,0 +1,106 @@
+# ---------------------------------------------------------------------------- #
+|                      MySQL: PER-WORLD OBJECT DATA TABLE                      |
++ ---------------------------------------------------------------------------- +
+| related specs | DHR100_hive_system.txt                                       |
+|               | DHR200_hive_request_packet.txt                               |
+|               | ------------------------------------------------------------ |
+|   description | per-world object data table                                  |
+|               | ------------------------------------------------------------ |
+|         scope | subsystem object provider thread                             | com::suid::object
+|               | ------------------------------------------------------------ |
+|          name | `Object_DATA`                                                |
+|               | ------------------------------------------------------------ |
+|         rules | [R/01]                                                       |
+|               | Each field is NOT NULL and defines default value;            |
+|               |                                                              |
+|               | [R/02]                                                       |
+|               | Any non-restricted VARCHAR field whose definition depends    |
+|               | on the server owner — and for which, consequently, exact     |
+|               | parameter types cannot be defined at compile time — must     |
+|               | be sent as a string:                                         |
+|               | BAD : "[1,true]"      --> (i,b) --> expected: (s)            |
+|               | GOOD: "\"[1,true]\""  --> (s)   --> expected: (s)            |
++ ---------------------------------------------------------------------------- +
+
+
+
++ ---------------------------------------------------------------------------- +
+|                              REFACTORED FIELDS                               |
++ ---------------------------------------------------------------------------- +
+                                       |||
+                                       |||
++ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
+| FIELD             | TYPE              | DEFAULT VALUE     | REPR             | STRICT | DESCRIPTION                                   | NOTES                             |
++ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
+| ObjectID          | INT               | AUTO_INCREMENT    | (i)              | YES    | primary key (PK)                              |                                   |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| ObjectUID         | INT               | 0                 | (i)              | YES    | object's type identifier                      | No longer serves as workaround    |
+|                   |                   |                   |                  |        |                                               | for missing ability of legacy     |
+|                   |                   |                   |                  |        | Range:                                        | HiveExt.dll to get last inserted  |
+|                   |                   |                   |                  |        | ------                                        | ID within single call to MySQL.   |
+|                   |                   |                   |                  |        | <0, 2>                                        |                                   |
+|                   |                   |                   |                  |        |                                               | Now, it serves as object type     |
+|                   |                   |                   |                  |        | Acceptable values:                            | identifier, so we can compensate  |
+|                   |                   |                   |                  |        | ------------------                            | for mixing obj and veh within     |
+|                   |                   |                   |                  |        | 0 - unknown (default)                         | the same table and apply more     |
+|                   |                   |                   |                  |        | 1 - object                                    | efficient methods in server       |
+|                   |                   |                   |                  |        | 2 - vehicle                                   | monitor.                          |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | It is improvement, but because    |
+|                   |                   |                   |                  |        |                                               | we must keep 1071 compability,    |
+|                   |                   |                   |                  |        |                                               | we can't split this table to      |
+|                   |                   |                   |                  |        |                                               | obj and veh tables - that is      |
+|                   |                   |                   |                  |        |                                               | possible only for 108 release.    |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| Instance          | INT               | 0                 | (i)              | YES    | dayZ_instance                                 |                                   |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| Classname         | VARCHAR(64)       | 'Sign_sphere      | (s)              | YES    | object's className                            |                                   |
+|                   |                   |  100cm_EP1'       |                  |        |                                               |                                   |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| Datestamp         | DATETIME          | CURRENT_TIMESTAMP | internal         |        | object's record creation DATETIME             |                                   |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| LastUpdated       | DATETIME          | CURRENT_TIMESTAMP | internal         |        | object's record update DATETIME               | ON UPDATE CURRENT_TIMESTAMP       |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | Changed from TIMESTAMP            |
+|                   |                   |                   |                  |        |                                               |           to DATETIME             |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | Since MySQL 8.0.19, time zone     |
+|                   |                   |                   |                  |        |                                               | offsets are also supported for    |
+|                   |                   |                   |                  |        |                                               | inserted DATETIME values;         |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | TIMESTAMP upper year boundary     |
+|                   |                   |                   |                  |        |                                               | is limited to 2038, etc.          |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| CharacterID       | VARCHAR(32)       | '0'               | (s)              | YES    | lockable object's combination key             | MUST always be handled as STRING. |
+|                   |                   |                   |                  |        | or vehicle key                                |                                   |
+|                   |                   |                   |                  |        |                                               | Changed from BIGINT               |
+|                   |                   |                   |                  |        |                                               |           to VARCHAR(32)          |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | Field represents lockables key    |
+|                   |                   |                   |                  |        |                                               | which can:                        |
+|                   |                   |                   |                  |        |                                               | 1. contain leading zeroes         |
+|                   |                   |                   |                  |        |                                               |    ('0012')                       |
+|                   |                   |                   |                  |        |                                               | 2. or is not an integer           |
+|                   |                   |                   |                  |        |                                               |    (RED123)                       |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | This way, we can avoid checks     |
+|                   |                   |                   |                  |        |                                               | within 'server_monitor.sqf'.      |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | Also, vehicle key can be now      |
+|                   |                   |                   |                  |        |                                               | stored as full key, not just num. |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| Worldspace        | VARCHAR(128)      | '[]'              | (s)              | NO     | character's world space data                  | Can't be STRICT - Worldspace has  |
+|                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | multiple patterns!                |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| Inventory         | MEDIUMTEXT        | _utf8mb4'[]'      | (s)              | NO     | object's inventory data                       | Can't be STRICT - Inventory has   |
+|                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | multiple patterns!                |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| Hitpoints         | MEDIUMTEXT        | _utf8mb4'[]'      | (s)              | NO     | object's hitpoints data                       |                                   |
+|                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         |                                   |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| Fuel              | DOUBLE            | 1.0               | (f)              | YES    | object's fuel value                           |                                   |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| Damage            | DOUBLE            | 0.0               | (f)              | YES    | object's damage value                         |                                   |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| StorageCoins      | BIGINT            | 0                 | (i)              | YES    | object's storage money                        |                                   |
++ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +

@@ -1,0 +1,50 @@
+# ---------------------------------------------------------------------------- #
+|                                   REQUEST                                    |
++ ---------------------------------------------------------------------------- +
+|               | [                                                            |
+| COM_SUID      |      2,                 [0]  i                               |         com::suid::object
+| COM_TYPE      |      3,                 [1]  i                               |         com::type::promise
+| COM_EXID      |      2,                 [2]  i                               | object::com::exid::create_one
+| COM_ARGV      |      [                  [3]  a                               |
+|               |           ow_class,         [0]  s  'Sign_sphere100cm_EP1'   | SIGNATURE CHANGE: 'dayZ_instance' ARG removed from CHILD:308 signature
+|               |           ow_damage,        [1]  f  0.0                      |
+|               |           ow_cid,           [2]  s  '0'                      |
+|               |           ow_worldspace,    [3]  s  '[]'                     |
+|               |           ow_inventory,     [4]  s  '[]'                     |
+|               |           ow_hitpoints,     [5]  s  '[]'                     |
+|               |           ow_fuel,          [6]  f  1.0                      |
+|               |           ow_uid            [7]  i  0                        |
+|               |      ]                                                       |
+|               | ]                                                            |
+|               | ------------------------------------------------------------ |
+|          repr | "(i,i,i,(s,f,s,s,s,s,f,i))"                                  | <-- expected types
+|               | ------------------------------------------------------------ |
+|        packet | "[2,3,2,[0...7]]"                                            | <-- example
+|               | ------------------------------------------------------------ |
+|          argv | [0] classname                                                |                                            |
+|               | [1] received damage                                          | ! see "dze_TODO.txt/fuel/damage issue"
+|               | [2] character ID (lockable combintaion key / vehicle key)    |
+|               | [3] worldspace   (strigified arr)                            |
+|               | [4] inventory    (strigified arr)                            |
+|               | [5] hitpoints    (strigified arr)                            |
+|               | [6] fuel left                                                | ! see "dze_TODO.txt/fuel/damage issue"
+|               | [7] object type  (former ObjectUID)                          | ! see "321_Object_DATA_ssheet.txt" / ObjectUID
++ ---------------------------------------------------------------------------- +
+
+
+
++ ---------------------------------------------------------------------------- +
+|                                   RESPONSE                                   |
++ ---------------------------------------------------------------------------- +
+| COM_EXID      |                                                              |
+| success       | [3,0,PRID,""]                                                |
++ ------------- + ------------------------------------------------------------ +
+| COM_EXID      |                                                              |
+| failure       | [3,1,PRID,"failure message"]                                 |
++ ------------- + ------------------------------------------------------------ +
+| hive RESPONSE | [3,2,PRID,"err_INVALID"]                                     |
+| failure       | [3,2,PRID,"err_RESSIZE"]                                     |
++ ------------- + ------------------------------------------------------------ +
+| hive SYSTEM   | [3,3,PRID,"err_ABORTED"]                                     |
+| failure       | [3,3,PRID,"err_REVOKED"]                                     |
++ ---------------------------------------------------------------------------- +

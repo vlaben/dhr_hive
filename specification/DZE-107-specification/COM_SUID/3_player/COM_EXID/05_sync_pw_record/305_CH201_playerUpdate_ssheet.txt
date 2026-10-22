@@ -1,0 +1,70 @@
+# ---------------------------------------------------------------------------- #
+|                                   REQUEST                                    |
++ ---------------------------------------------------------------------------- +
+|               | [                                                            |
+| COM_SUID      |      3,                 [0]  i                               |         com::suid::player
+| COM_TYPE      |      2,                 [1]  i                               |         com::type::execute
+| COM_EXID      |      5,                 [2]  i                               | player::com::exid::sync_pw_record
+| COM_ARGV      |      [                  [3]  a                               |
+|               |           pw_cid            [0]   i  0                       |
+|               |           pw_worldspace,    [1]   s  '[]'                    |
+|               |           pw_inventory,     [2]   a  []                      | (a,a,s)
+|               |           pw_backpack,      [3]   a  []                      | (s,(a,a),(a,a))
+|               |           pw_medical,       [4]   a  []                      | (b,b,b,b,b,b,b,i,a,a,i,s,b,a,b)
+|               |           pw_just_ate,      [5]   b  false                   |
+|               |           pw_just_drank,    [6]   b  false                   |
+|               |           pw_kills_z,       [7]   i  0                       |
+|               |           pw_headshots_z,   [8]   i  0                       |
+|               |           pw_distance,      [9]   i  0                       |
+|               |           pw_played,        [10]  i  0                       |
+|               |           pw_state,         [11]  a  []                      | ((s,s,f),a)
+|               |           pw_kills_h,       [12]  i  0                       |
+|               |           pw_kills_b,       [13]  i  0                       |
+|               |           pw_model,         [14]  s  'Survivor2_DZ'          |
+|               |           pw_humanity,      [15]  i  2'500                   |
+|               |           pw_cash           [16]  i  0                       |
+|               |      ]                                                       |
+|               | ]                                                            |
+|               | ------------------------------------------------------------ |
+|          repr | "(i,i,i,(i,s,(a,a,s),(s,(a,a),(a,a)),                        | <-- expected types
+|               |          (b,b,b,b,b,b,b,i,a,a,i,s,b,a,b),                    |
+|               |          b,b,i,i,i,i,a,i,i,s,i,i))"                          |
+|               | ------------------------------------------------------------ |
+|        packet | "[3,2,5,[0,...,16]]"                                         | <-- example
+|               | ------------------------------------------------------------ |
+|          argv | [0]  character ID                                            |
+|               | [1]  worldspace arr                                          |
+|               | [2]  inventory arr                                           |
+|               | [3]  backpack arr                                            |
+|               | [4]  medical arr                                             |
+|               | [5]  character's last meal                                   |
+|               | [6]  character's last drink                                  |
+|               | [7]  num of zed's killed                                     |
+|               | [8]  num of zed's headshot kills                             |
+|               | [9]  character's walk distance                               |
+|               | [10] time played (duration)                                  |
+|               | [11] character curr state arr                                |
+|               | [12] num of player's hero kills                              |
+|               | [13] num of player's bandit kills                            |
+|               | [14] character's skin                                        |
+|               | [15] character's humanity                                    |
+|               | [16] character's cash money                                  |
++ ---------------------------------------------------------------------------- +
+
+
+
++ ---------------------------------------------------------------------------- +
+|                                   RESPONSE                                   |
++ ---------------------------------------------------------------------------- +
+| COM_EXID      |                                                              |
+| success       | [2,0,""]                                                     |
++ ------------- + ------------------------------------------------------------ +
+| COM_EXID      |                                                              |
+| failure       | [2,1,"failure message"]                                      |
++ ------------- + ------------------------------------------------------------ +
+| hive RESPONSE | [2,2,"err_INVALID"]                                          |
+| failure       | [2,2,"err_RESSIZE"]                                          |
++ ------------- + ------------------------------------------------------------ +
+| hive SYSTEM   | [2,3,"err_ABORTED"]                                          |
+| failure       | [2,3,"err_REVOKED"]                                          |
++ ---------------------------------------------------------------------------- +

@@ -1,0 +1,126 @@
+# ---------------------------------------------------------------------------- #
+|                        MySQL: CROSS-WORLD DATA TABLE                         |
++ ---------------------------------------------------------------------------- +
+| related specs | DZE100_hive_world_naming_convention.txt                      |
+|               | DHR100_hive_system.txt                                       |
+|               | DHR200_hive_request_packet.txt                               |
+|               | DHR300_hive_persistence_layer.txt                            |
+|               | ------------------------------------------------------------ |
+|   description | cross-world shared table                                     |
+|               | ------------------------------------------------------------ |
+|         scope | subsystem player provider thread                             | com::suid::player
+|               | ------------------------------------------------------------ |
+|          name | th_plr                                                       |
+|               | ------------------------------------------------------------ |
+|         rules | [R/01]                                                       |
+|               | Each field is NOT NULL and defines default value;            |
+|               |                                                              |
+|               | [R/02]                                                       |
+|               | Any non-restricted VARCHAR field whose definition depends    |
+|               | on the server owner — and for which, consequently, exact     |
+|               | parameter types cannot be defined at compile time — must     |
+|               | be sent as a string:                                         |
+|               | BAD : "[1,true]"      --> (i,b) --> expected: (s)            |
+|               | GOOD: "\"[1,true]\""  --> (s)   --> expected: (s)            |
++ ---------------------------------------------------------------------------- +
+
+
+
++ ---------------------------------------------------------------------------- +
+|                           MAPPING TO LEGACY FIELDS                           |
++ ---------------------------------------------------------------------------- +
+                                       |||
+                                       |||
++ ---------------------------------------------------------------------------- +
+| Player_DATA                        | th_plr        | NOTES                   |
++ ---------------------------------------------------------------------------- +
+| PlayerUID                          | ph_uid        |                         |
+| PlayerName                         | ph_name       |                         |
+| PlayerMorality                     |               | REMOVED                 |
+| PlayerSex                          |               | REMOVED                 |
+| playerGroup                        | ph_group      |                         |
+| PlayerCoins                        | ph_cash       |                         |
+| BankCoins                          | ph_bank       |                         |
+|                                    | ph_gid        | NEW                     |
+|                                    | ph_humanity   | NEW                     |
+|                                    | ph_xp         | NEW                     |
+|                                    | ph_props      | NEW                     |
++ ---------------------------------------------------------------------------- +
+                                       |||
+                                       |||
++ ---------------------------------------------------------------------------- +
+|                              REFACTORED FIELDS                               |
++ ---------------------------------------------------------------------------- +
+                                       |||
+                                       |||
++ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
+| FIELD             | TYPE              | DEFAULT VALUE     | REPR             | STRICT | DESCRIPTION                                   | NOTES                             |
++ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
+| ph_gid            | INT               | AUTO_INCREMENT    | (i)              | YES    | player's global ID                            | 17 bytes playerUID string         |
+|                   |                   |                   |                  |        |                                               |    "76562295476658565" is         |
+|                   |                   |                   |                  |        |                                               |    replaced by:                   |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               |  4 bytes AUTO_INCREMENT PK        |
+|                   |                   |                   |                  |        |                                               |    integer enabling fast          |
+|                   |                   |                   |                  |        |                                               |    const queries                  |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| ph_uid            | VARCHAR(32)       | '0'               | (s)              | YES    | player's in-game unique ID                    | Obtained by 'getPlayerUID player' |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | Arma2OA server should get all     |
+|                   |                   |                   |                  |        |                                               | `ph_uid` and `ph_gid` early -     |
+|                   |                   |                   |                  |        |                                               | within server monitor right       |
+|                   |                   |                   |                  |        |                                               | after hive system START           |
+|                   |                   |                   |                  |        |                                               | (similary to objects/vehicle      |
+|                   |                   |                   |                  |        |                                               | exports) and cache the result:    |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | gvar =                            |
+|                   |                   |                   |                  |        |                                               | [                                 |
+|                   |                   |                   |                  |        |                                               |           ["ph_uid",...],         |
+|                   |                   |                   |                  |        |                                               |           ["ph_gid",...]          |
+|                   |                   |                   |                  |        |                                               | ];                                |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | This will speed up SQF code by    |
+|                   |                   |                   |                  |        |                                               | avoiding query to figure out      |
+|                   |                   |                   |                  |        |                                               | `ph_gid`.                         |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | The variable "gvar" is updated    |
+|                   |                   |                   |                  |        |                                               | only when a new unique player     |
+|                   |                   |                   |                  |        |                                               | joins the server (make new        |
+|                   |                   |                   |                  |        |                                               | `th_plr` record + "gvar" sync).   |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| ph_name           | VARCHAR(32)       | 'no_name'         | (s)              | YES    | player's in-game name                         | Obtained by 'name player'         |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| ph_humanity       | INT               | 0                 | (i)              | YES    | player's humanity value                       | custom def value supported (c++); |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | per-world alternative:            |
+|                   |                   |                   |                  |        |                                               | ----------------------            |
+|                   |                   |                   |                  |        |                                               | `tw_*_plr`.`pw_humanity`          |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| ph_cash           | BIGINT            | 0                 | (i)              | YES    | player's wallet money                         | per-worlds alternative:           |
+|                   |                   |                   |                  |        |                                               | -----------------------           |
+|                   |                   |                   |                  |        |                                               | `tw_*_plr`.`pw_cash`              |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| ph_bank           | BIGINT            | 0                 | (i)              | YES    | player's bank money                           |                                   |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| ph_xp             | VARCHAR(1024)     | '[]'              | (s)              | NO     | player's experience support;                  | It is up to server owner /        |
+|                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | mod author to define it as needed |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | per-worlds alternative:           |
+|                   |                   |                   |                  |        |                                               | -----------------------           |
+|                   |                   |                   |                  |        |                                               | `tw_*_plr`.`pw_xp`                |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| ph_group          | VARCHAR(2048)     | '[]'              | (s)              | NO     | player's group membership                     | @TODO: change to [ph_gid,...]?    |
+|                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         |                                   |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        | [                                             |                                   |
+|                   |                   |                   |                  |        |     "playerUID",    s                         |                                   |
+|                   |                   |                   |                  |        |     ...,            s...                      |                                   |
+|                   |                   |                   |                  |        | ]                                             |                                   |
+| ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
+| ph_props          | VARCHAR(2048)     | '[]'              | (s)              | NO     | player's modding support                      | It is up to server owner /        |
+|                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | mod author to define it as needed |
+|                   |                   |                   |                  |        |                                               |                                   |
+|                   |                   |                   |                  |        |                                               | per-worlds alternative:           |
+|                   |                   |                   |                  |        |                                               | -----------------------           |
+|                   |                   |                   |                  |        |                                               | `tw_*_plr`.`pw_props`             |
++ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +

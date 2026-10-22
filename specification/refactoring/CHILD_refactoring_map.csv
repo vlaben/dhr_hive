@@ -1,0 +1,36 @@
+COM_SUID,CHILD,COM_EXID,COM_TYPE,table,legacy hive API fname,legacy hive db source fname,SQF
+[ player ],101,[ on_player_login ],[ promise/future ],Player_DATA,loadPlayer,fetchCharacterInitial,server_playerLogin
+[ player ],102,[ on_player_setup ],[ promise/future ],Character_DATA,loadCharacterDetails,fetchCharacterDetails,server_playerSetup
+[ player ],103,[ on_record_login ],[ execute ],Player_LOGIN,recordCharacterLogin,recordLogin,server_functions
+[ player ],201,[ sync_pw_record ],[ execute ],Character_DATA,playerUpdate,updateCharacter,server_playerSync
+[ player ],202,[ sync_pw_death ],[ execute ],Character_DATA,playerDeath,killCharacter,server_playerDied
+[ player ],203,[ sync_pw_gear ],[ execute ],Character_DATA,playerInit,initCharacter,server_playerLogin
+[ player ],204,[ sync_ph_group ],[ execute ],Player_DATA,updateGroup,updateCharacterGroup,server_updateGroup
+[ player ],205,[ sync_ph_money ],[ execute ],Player_DATA,updateGlobalCoins,updatePlayerCoins,server_playerSync
+[ object ],302,[ mysql_export_obj ],[ promise/future ],Object_Data,streamObjects (obj),populateObjects,server_monitor
+[ object ],302,[ mysql_export_veh ],[ promise/future ],Object_Data,streamObjects (veh),populateObjects,server_monitor
+[ object ],303,[ sync_ow_inventory ],[ execute ],Object_Data,objectInventory (by id),updateObjectInventory / WCoinsupdateObjectInventory,updateObject_functions / server_changeFriends + [merged CH:309]: server_changeCode / server_upgradeObject
+[ object ],304,[ delete_one ],[ execute ],Object_Data,objectDelete (by id),deleteObject,"server_deleteObj / server_deleteObjDirect + [merged CH:310]: updateObject_functions / server_publishVehicle[3,3_vkc]"
+[ object ],305,[ sync_ow_worldspace ],[ execute ],Object_Data,vehicleMoved,updateVehicleMovement,updateObject_functions
+[ object ],306,[ sync_ow_damage ],[ execute ],Object_Data,vehicleDamaged,updateVehicleStatus,updateObject_functions
+[ controller ],307,,,no_table,getDateTime,no_db_fnc,sched_event
+[ object ],308,[ create_one ],[ promise/future ],Object_Data,objectPublish,createObject,"server_publishVehicle[2,3,3_vkc] / server_buildObject / server_changeCode / server_upgradeObject / server_eh_mpKilled_object"
+[ object ],309,[ REMOVED ],[ REMOVED ],Object_Data,objectInventory (by uid),updateObjectInventory / WCoinsupdateObjectInventory,updateObject_functions / server_changeFriends / server_changeCode / server_upgradeObject
+[ object ],310,[ REMOVED ],[ REMOVED ],Object_Data,objectDelete (by uid),deleteObject,"server_deleteObj / server_deleteObjDirect / updateObject_functions / server_publishVehicle[3,3_vkc]"
+[ object ],388,[ REMOVED ],[ REMOVED ],Object_Data,objectReturnId,CALL retObjID,"server_spawnVehicle / server_publishVehicle[2,3,3_vkc]"
+[ object ],396,[ maintain_one ],[ execute ],Object_Data,datestampObjectUpdate (by id),updateDatestampObject,server_maintainArea
+[ object ],397,[ REMOVED ],[ REMOVED ],Object_Data,datestampObjectUpdate (by uid),updateDatestampObject,server_maintainArea
+[ controller ],400,,,no_table,serverShutdown,no_db_fnc,server_monitor
+[ vehicle ],800,,,garage,VGQueryVeh,GetMyVGVehs,server_queryVehicle
+[ vehicle ],801,,,garage,VGSpawnVeh,VgSelectSpawn / VehcreateObject / DeleteMyVGVeh,server_spawnVehicle
+[ vehicle ],802,,,garage,VGStoreVeh,UpdateVGStoreVeh,server_storeVehicle
+[ vehicle ],803,,,garage,VGMaintainVeh,MaintainMyVGVeh,server_maintainVehicles
+[ REMOVED ],398,[ REMOVED ],[ REMOVED ],[ REMOVED ],tradeObject,fetchTraderObject,UNUSED
+[ REMOVED ],399,[ REMOVED ],[ REMOVED ],[ REMOVED ],loadTraderDetails,populateTraderObjects,UNUSED
+[ REMOVED ],500,[ REMOVED ],[ REMOVED ],[ REMOVED ],changeTableAccess,TableVisitor / getAllowedTables / VerifyTable / removeAllowedTable,UNUSED
+[ REMOVED ],501,[ REMOVED ],[ REMOVED ],[ REMOVED ],dataRequest (custom tb perms),dataRequest,UNUSED
+[ REMOVED ],502,[ REMOVED ],[ REMOVED ],[ REMOVED ],dataRequest (async),dataRequest,UNUSED
+[ REMOVED ],503,[ REMOVED ],[ REMOVED ],[ REMOVED ],dataStatus,FetchToken / requestStatus,UNUSED
+[ REMOVED ],504,[ REMOVED ],[ REMOVED ],[ REMOVED ],dataFetchRow,FetchToken / getRowData,UNUSED
+[ REMOVED ],505,[ REMOVED ],[ REMOVED ],[ REMOVED ],dataClose,FetchToken / closeRequest,UNUSED
+[ REMOVED ],777,[ REMOVED ],[ REMOVED ],[ REMOVED ],dataClose,BEConf / md5,UNUSED
