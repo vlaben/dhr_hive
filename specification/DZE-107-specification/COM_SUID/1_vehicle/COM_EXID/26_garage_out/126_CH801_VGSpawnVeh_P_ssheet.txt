@@ -3,20 +3,24 @@
 + ---------------------------------------------------------------------------- +
 |               | [                                                            |
 | COM_SUID      |       1,             [0]  i                                  |          com::suid::vehicle
-| COM_TYPE      |       2,             [1]  i                                  |          com::type::execute
-| COM_EXID      |      19,             [2]  i                                  | vehicle::com::exid::sync_vw_inventory
+| COM_TYPE      |       3,             [1]  i                                  |          com::type::promise
+| COM_EXID      |      26,             [2]  i                                  | vehicle::com::exid::garage_out
 | COM_ARGV      |      [               [3]  a                                  |
-|               |           vw_inventory,  [0]  a  []                          |
-|               |           vw_vid         [1]  i  0                           |
+|               |           vh_id,           [0]  i  0                         | SIGNATURE CHANGE: '_uid' ARG removed from CHILD:801 signature
+|               |           ow_worldspace    [1]  a  [0.0,[50.0,50.0,0.0]]     |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
-|          repr | "(i,i,i,(a,i))"                                              | <-- expected types
+|          repr | "(i,i,i,(i,(f,(f,f,f))))"                                    | <-- expected types
 |               | ------------------------------------------------------------ |
-|        packet | "[1,2,19,[[[...],[...]],100]]"                               | <-- example
+|        packet | "[1,3,26,[100,[150.0,[2500.255,5500.451,0.1]]]]"             | <-- example
 |               | ------------------------------------------------------------ |
-|          argv | [0] inventory arr                                            |
-|               | [1] vehicle ID (PK)                                          |
+|          argv | [0] vehicle ID (PK)                                          |
+|               | [1] arr of direction and position3D arr (new spawn position) |
+|               | ------------------------------------------------------------ |
+|               | ow_worldspace:                                               |
+|               | Here we require STRICT REPR to avoid malformed data          |
+|               | (no multiple patterns like in object table).                 |
 + ---------------------------------------------------------------------------- +
 
 
@@ -25,14 +29,14 @@
 |                                   RESPONSE                                   |
 + ---------------------------------------------------------------------------- +
 | COM_EXID      |                                                              |
-| success       | [2,0,""]                                                     |
+| success       | [3,0,PRID,""]                                                |
 + ------------- + ------------------------------------------------------------ +
 | COM_EXID      |                                                              |
-| failure       | [2,1,"failure message"]                                      |
+| failure       | [3,1,PRID,"failure message"]                                 |
 + ------------- + ------------------------------------------------------------ +
-| hive RESPONSE | [2,2,"err_INVALID"]                                          |
-| failure       | [2,2,"err_RESSIZE"]                                          |
+| hive RESPONSE | [3,2,PRID,"err_INVALID"]                                     |
+| failure       | [3,2,PRID,"err_RESSIZE"]                                     |
 + ------------- + ------------------------------------------------------------ +
-| hive SYSTEM   | [2,3,"err_ABORTED"]                                          |
-| failure       | [2,3,"err_REVOKED"]                                          |
+| hive SYSTEM   | [3,3,PRID,"err_ABORTED"]                                     |
+| failure       | [3,3,PRID,"err_REVOKED"]                                     |
 + ---------------------------------------------------------------------------- +

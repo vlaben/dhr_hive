@@ -4,7 +4,7 @@
 |               | [                                                            |
 | COM_SUID      |       1,      [0]  i                                         |          com::suid::vehicle
 | COM_TYPE      |       4,      [1]  i                                         |          com::type::future
-| COM_EXID      |      30,      [2]  i                                         | vehicle::com::exid::mysql_export_tw
+| COM_EXID      |      24,      [2]  i                                         | vehicle::com::exid::garage_info
 | COM_ARGV      |      [        [3]  a                                         |
 |               |           PRID    [0]  i                                     |
 |               |      ]                                                       |
@@ -12,10 +12,10 @@
 |               | ------------------------------------------------------------ |
 |          repr | "(i,i,i,(i))"                                                | <-- expected types
 |               | ------------------------------------------------------------ |
-|        packet | "[1,4,30,[1]]"                                               | <-- example
+|        packet | "[1,4,24,[5]]"                                               | <-- example
 |               | ------------------------------------------------------------ |
 |          argv | [0] promise ID as received                                   |
-|               |     from 130_mysql_export_tw_P_ssheet.txt                    |
+|               |     from 124_CH800_VGQueryVeh_P_ssheet.txt                   |
 + ---------------------------------------------------------------------------- +
 
 
@@ -25,10 +25,10 @@
 + ---------------------------------------------------------------------------- +
 |               | result not available yet | [4,-1,PRID,0,""]                  |
 |               | ------------------------ + --------------------------------- |
-|               | single packet result     | [4,0,PRID,0,"DATA_0"]             | expected "DATA_0": "[export_info, export_filename]"
+|               | single packet result     | [4,0,PRID,0,"DATA_0"]             |
 | COM_EXID      | ------------------------ + --------------------------------- |
-| success       |                          | [4,0,PRID,2,"DATA_0"]             |
-|               | multi packet result:     | [4,0,PRID,1,"DATA_1"]             |
+| success       |                          | [4,0,PRID,2,"DATA_0"]             | multi may be triggered
+|               | multi packet result:     | [4,0,PRID,1,"DATA_1"]             | when garage is big
 |               |                          | [4,0,PRID,0,"DATA_2"]             |
 + ------------- + ------------------------------------------------------------ +
 | COM_EXID      | execution failure        | [4,1,PRID,0,"failure message"]    |
@@ -41,15 +41,3 @@
 | hive SYSTEM   | [4,3,PRID,0,"err_ABORTED"]                                   |
 | failure       | [4,3,PRID,0,"err_REVOKED"]                                   |
 + ---------------------------------------------------------------------------- +
-
-
-# NOTES:
-# ------
-  export_info (example):
-  ----------------------
-  "10002 database records (4181.37 KB) successfully exported.
-   Perf - parse: 82.1618 ms | write: 0.9085 ms"
-
-  export_filename (example):
-  --------------------------
-  "tw_11_chernarus_veh.sqf"

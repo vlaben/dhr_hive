@@ -21,10 +21,10 @@ COM_SUID,CHILD,COM_EXID,COM_TYPE,table,legacy hive API fname,legacy hive db sour
 [ object ],396,[ maintain_one ],[ execute ],Object_Data,datestampObjectUpdate (by id),updateDatestampObject,server_maintainArea
 [ object ],397,[ REMOVED ],[ REMOVED ],Object_Data,datestampObjectUpdate (by uid),updateDatestampObject,server_maintainArea
 [ controller ],400,,,no_table,serverShutdown,no_db_fnc,server_monitor
-[ vehicle ],800,,,garage,VGQueryVeh,GetMyVGVehs,server_queryVehicle
-[ vehicle ],801,,,garage,VGSpawnVeh,VgSelectSpawn / VehcreateObject / DeleteMyVGVeh,server_spawnVehicle
-[ vehicle ],802,,,garage,VGStoreVeh,UpdateVGStoreVeh,server_storeVehicle
-[ vehicle ],803,,,garage,VGMaintainVeh,MaintainMyVGVeh,server_maintainVehicles
+[ vehicle ],800,[ garage_info ],[ promise/future ],garage,VGQueryVeh,GetMyVGVehs,server_queryVehicle
+[ vehicle ],801,[ garage_out ],[ promise/future ],garage,VGSpawnVeh,VgSelectSpawnVeh / createObject / DeleteMyVGVeh,server_spawnVehicle
+[ vehicle ],802,[ garage_in ],[ execute ],garage,VGStoreVeh,UpdateVGStoreVeh,server_storeVehicle
+[ vehicle ],803,[ garage_maintain ],[ promise/future ],garage,VGMaintainVeh,MaintainMyVGVeh,server_maintainVehicles
 [ REMOVED ],398,[ REMOVED ],[ REMOVED ],[ REMOVED ],tradeObject,fetchTraderObject,UNUSED
 [ REMOVED ],399,[ REMOVED ],[ REMOVED ],[ REMOVED ],loadTraderDetails,populateTraderObjects,UNUSED
 [ REMOVED ],500,[ REMOVED ],[ REMOVED ],[ REMOVED ],changeTableAccess,TableVisitor / getAllowedTables / VerifyTable / removeAllowedTable,UNUSED
