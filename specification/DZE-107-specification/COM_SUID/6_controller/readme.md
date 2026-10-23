@@ -27,4 +27,4 @@
 
 [605]: COM_EXID/05_shutdown/605_shutdown_ssheet.txt
 
-[610]: COM_EXID/10_get_datetime/610_CH307_getDateTime_ssheet.txt.txt
+[610]: COM_EXID/10_get_datetime/610_CH307_getDateTime_ssheet.txt
