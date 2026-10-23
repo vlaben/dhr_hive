@@ -2,21 +2,21 @@
 |                                   REQUEST                                    |
 + ---------------------------------------------------------------------------- +
 |               | [                                                            |
-| COM_SUID      |      4,          [0]  i                                      |         com::suid::server
-| COM_TYPE      |      2,          [1]  i                                      |         com::type::execute
-| COM_EXID      |      2,          [2]  i                                      | server::com::exid::rcon_send_global_message
-| COM_ARGV      |      [           [3]  a                                      |
-|               |           admin,     [0]  s                                  |
-|               |           message    [1]  s                                  |
+| COM_SUID      |      4,           [0]  i                                     |         com::suid::server
+| COM_TYPE      |      2,           [1]  i                                     |         com::type::execute
+| COM_EXID      |      7,           [2]  i                                     | server::com::exid::rcon_set_max_ping
+| COM_ARGV      |      [            [3]  a                                     |
+|               |           admin,      [0]  s                                 |
+|               |           max_ping    [1]  i                                 |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
-|          repr | "(i,i,i,(s,s))"                                              | <-- expected types
+|          repr | "(i,i,i,(s,i))"                                              | <-- expected types
 |               | ------------------------------------------------------------ |
-|        packet | "[4,2,2,[\"iben\",\"This is global Rcon message\"]]"         | <-- example
+|        packet | "[4,2,7,[\"iben\",250]]"                                     | <-- example
 |               | ------------------------------------------------------------ |
-|          argv | [0] admin name (sender)                                      |
-|               | [1] message to broadcast globally                            |
+|          argv | [0] admin name (executor)                                    |
+|               | [1] new MaxPing value in milliseconds                        |
 + ---------------------------------------------------------------------------- +
 
 

@@ -2,19 +2,21 @@
 |                                   REQUEST                                    |
 + ---------------------------------------------------------------------------- +
 |               | [                                                            |
-| COM_SUID      |      4,         [0]  i                                       |         com::suid::server
-| COM_TYPE      |      2,         [1]  i                                       |         com::type::execute
-| COM_EXID      |      5,         [2]  i                                       | server::com::exid::rcon_reload_events
-| COM_ARGV      |      [          [3]  a                                       |
-|               |           admin     [0]  s                                   |
+| COM_SUID      |      4,          [0]  i                                      |         com::suid::server
+| COM_TYPE      |      2,          [1]  i                                      |         com::type::execute
+| COM_EXID      |      3,          [2]  i                                      | server::com::exid::rcon_send_global_message
+| COM_ARGV      |      [           [3]  a                                      |
+|               |           admin,     [0]  s                                  |
+|               |           message    [1]  s                                  |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
-|          repr | "(i,i,i,(s))"                                                | <-- expected types
+|          repr | "(i,i,i,(s,s))"                                              | <-- expected types
 |               | ------------------------------------------------------------ |
-|        packet | "[4,2,5,[\"iben\"]]"                                         | <-- example
+|        packet | "[4,2,3,[\"iben\",\"This is global Rcon message\"]]"         | <-- example
 |               | ------------------------------------------------------------ |
-|          argv | [0] admin name (executor)                                    |
+|          argv | [0] admin name (sender)                                      |
+|               | [1] message to broadcast globally                            |
 + ---------------------------------------------------------------------------- +
 
 

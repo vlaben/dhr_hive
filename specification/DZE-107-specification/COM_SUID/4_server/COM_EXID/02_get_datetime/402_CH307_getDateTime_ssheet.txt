@@ -2,19 +2,17 @@
 |                                   REQUEST                                    |
 + ---------------------------------------------------------------------------- +
 |               | [                                                            |
-| COM_SUID      |      4,          [0]  i                                      |         com::suid::server
-| COM_TYPE      |      2,          [1]  i                                      |         com::type::execute
-| COM_EXID      |      7,          [2]  i                                      | server::com::exid::rcon_lock_server
-| COM_ARGV      |      [           [3]  a                                      |
-|               |           admin      [0]  s                                  |
-|               |      ]                                                       |
+| COM_SUID      |      4,    [0]  i                                            |         com::suid::server
+| COM_TYPE      |      2,    [1]  i                                            |         com::type::execute
+| COM_EXID      |      2,    [2]  i                                            | server::com::exid::get_datetime
+| COM_ARGV      |      []                                                      |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
-|          repr | "(i,i,i,(s))"                                                | <-- expected types
+|          repr | "(i,i,i,())"                                                 | <-- expected types
 |               | ------------------------------------------------------------ |
-|        packet | "[4,2,7,[\"iben\"]]"                                         | <-- example
+|        packet | "[4,2,2,[]]"                                                 | <-- example
 |               | ------------------------------------------------------------ |
-|          argv | [0] admin name (executor)                                    |
+|          argv | No arguments expected.                                       |
 + ---------------------------------------------------------------------------- +
 
 
@@ -22,8 +20,8 @@
 + ---------------------------------------------------------------------------- +
 |                                   RESPONSE                                   |
 + ---------------------------------------------------------------------------- +
-| COM_EXID      |                                                              |
-| success       | [2,0,""]                                                     |
+| COM_EXID      |                                                              | where "success message" is datetime string
+| success       | [2,0,"success message"]                                      | in format "[2026,10,23,18,7]" (year,month,day,hours,minutes)
 + ------------- + ------------------------------------------------------------ +
 | COM_EXID      |                                                              |
 | failure       | [2,1,"failure message"]                                      |

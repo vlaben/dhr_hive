@@ -2,17 +2,17 @@
 |                                   REQUEST                                    |
 + ---------------------------------------------------------------------------- +
 |               | [                                                            |
-| COM_SUID      |      4,         [0]  i                                       |         com::suid::server
-| COM_TYPE      |      2,         [1]  i                                       |         com::type::execute
-| COM_EXID      |      4,         [2]  i                                       | server::com::exid::rcon_reload_scripts
-| COM_ARGV      |      [          [3]  a                                       |
-|               |           admin     [0]  s                                   |
+| COM_SUID      |      4,          [0]  i                                      |         com::suid::server
+| COM_TYPE      |      2,          [1]  i                                      |         com::type::execute
+| COM_EXID      |      9,          [2]  i                                      | server::com::exid::rcon_unlock_server
+| COM_ARGV      |      [           [3]  a                                      |
+|               |           admin      [0]  s                                  |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
 |          repr | "(i,i,i,(s))"                                                | <-- expected types
 |               | ------------------------------------------------------------ |
-|        packet | "[4,2,4,[\"iben\"]]"                                         | <-- example
+|        packet | "[4,2,9,[\"iben\"]]"                                         | <-- example
 |               | ------------------------------------------------------------ |
 |          argv | [0] admin name (executor)                                    |
 + ---------------------------------------------------------------------------- +

@@ -4,17 +4,33 @@
 |               | [                                                            |
 | COM_SUID      |      4,          [0]  i                                      |         com::suid::server
 | COM_TYPE      |      2,          [1]  i                                      |         com::type::execute
-| COM_EXID      |      8,          [2]  i                                      | server::com::exid::rcon_unlock_server
+| COM_EXID      |      4,          [2]  i                                      | server::com::exid::rcon_send_private_message
 | COM_ARGV      |      [           [3]  a                                      |
-|               |           admin      [0]  s                                  |
+|               |           ph_uid,    [0]  s                                  |
+|               |           ph_name,   [1]  s                                  |
+|               |           admin,     [2]  s                                  |
+|               |           message    [3]  s                                  |
 |               |      ]                                                       |
 |               | ]                                                            |
 |               | ------------------------------------------------------------ |
-|          repr | "(i,i,i,(s))"                                                | <-- expected types
+|          repr | "(i,i,i,(s,s,s,s))"                                          | <-- expected types
 |               | ------------------------------------------------------------ |
-|        packet | "[4,2,8,[\"iben\"]]"                                         | <-- example
+|        packet | "[                                                           | <-- example
+|               |      4,                                                      |
+|               |      2,                                                      |
+|               |      4,                                                      |
+|               |      [                                                       |
+|               |          \"76562295476658565\",                              |
+|               |          \"hero\",                                           |
+|               |          \"iben\",                                           |
+|               |          \"This is private Rcon message\"                    |
+|               |      ]                                                       |
+|               | ]"                                                           |
 |               | ------------------------------------------------------------ |
-|          argv | [0] admin name (executor)                                    |
+|          argv | [0] player UID     (receiver)                                |
+|               | [1] player name    (receiver)                                |
+|               | [2] admin name     (sender)                                  |
+|               | [3] message to broadcast privately                           |
 + ---------------------------------------------------------------------------- +
 
 

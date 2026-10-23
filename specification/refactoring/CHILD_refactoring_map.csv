@@ -13,7 +13,7 @@ COM_SUID,CHILD,COM_EXID,COM_TYPE,table,legacy hive API fname,legacy hive db sour
 [ object ],304,[ delete_one ],[ execute ],Object_Data,objectDelete (by id),deleteObject,"server_deleteObj / server_deleteObjDirect + [merged CH:310]: updateObject_functions / server_publishVehicle[3,3_vkc]"
 [ object ],305,[ sync_ow_worldspace ],[ execute ],Object_Data,vehicleMoved,updateVehicleMovement,updateObject_functions
 [ object ],306,[ sync_ow_damage ],[ execute ],Object_Data,vehicleDamaged,updateVehicleStatus,updateObject_functions
-[ controller ],307,[ get_datetime ],[ execute ],no_table,getDateTime,no_db_fnc,sched_event
+[ server ],307,[ get_datetime ],[ execute ],no_table,getDateTime,no_db_fnc,sched_event
 [ object ],308,[ create_one ],[ promise/future ],Object_Data,objectPublish,createObject,"server_publishVehicle[2,3,3_vkc] / server_buildObject / server_changeCode / server_upgradeObject / server_eh_mpKilled_object"
 [ object ],309,[ REMOVED ],[ REMOVED ],Object_Data,objectInventory (by uid),updateObjectInventory / WCoinsupdateObjectInventory,updateObject_functions / server_changeFriends / server_changeCode / server_upgradeObject
 [ object ],310,[ REMOVED ],[ REMOVED ],Object_Data,objectDelete (by uid),deleteObject,"server_deleteObj / server_deleteObjDirect / updateObject_functions / server_publishVehicle[3,3_vkc]"
