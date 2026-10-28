@@ -49,6 +49,9 @@
   |                 |       )                         |           ]
   |                 |   )                             |
   + ------------------------------------------------- +
+    Note: for more details about 'i', 'a', 'b', ...
+          repr symbols read section:
+          [B2/2] PAYLOAD: COM_ARGV: VALUE, REPR, KIND
 
 
 
@@ -194,49 +197,157 @@
 # [B2] PAYLOAD: COM_ARGV[ARG1,[...,]ARGN]:
 # -------------------------------------------------------- |
 
+
+
+# [B2/1] PAYLOAD: COM_ARGV: MAPPING SQF TYPES TO C++
+# -------------------------------------------------------- |
+
   + --------------------------------------------------------------------------------------------------------------------------------------------- +
   |                                                                    MAPPING                                                                    |
   |                                                           ARMA 2OA SQF TYPES -> C++                                                           |
   + --------------------------------------------------------------------------------------------------------------------------------------------- +
-  |                               |                                                c++ sqf::param                                                 |
+  |                               |                                                  sqf::param                                                   |
   |                               | ------------------------------------------------------------------------------------------------------------- |
-  |           Arma2 OA            |                 |         | specifier | "{:V}" | "{:v}" | "{:K}" | "{:k}" | "{:R}" | "{:r}" | "{:N}" | "{:n}" |
-  |              SQF              |                 |         | --------- | ------ + ------ | ------ + ------ | ------ + ------ | ------ + ------ |
-  |                               |   AST traits    | index() | recursive |  YES   |  YES   |  YES   |   NO   |  YES   |   NO   |  YES   |   NO   |
-  | ----------------------------- |                 |         | --------- | ------ + ------ | ------ + ------ | ------ + ------ | ------ + ------ |
-  | Type    |      typeName       |                 |         | brackets* |   []   |   ()   |   ()   |   ()   |   ()   |   ()   |   ()   |   ()   |
-  | ------- + ------------------- + --------------- + ------- + --------- + --------------- + --------------- + --------------- + --------------- |
-  | nil     | UNDEFINED           | null_traits_t   |   0UZ   |           |      null       |       any       |        ?        |        ?        |
-  | ------- + ------------------- + --------------- + ------- |           | --------------- + --------------- + --------------- + --------------- |
-  | Boolean | "BOOL"              | bool_traits_t   |   1UZ   |           |   true / false  |       bool      |        b        |        b        |
-  | --------+ ------------------- + --------------- + ------- |           | --------------- + --------------- + --------------- + --------------- |
-  |         |           | int     | int64_traits_t  |   2UZ   |           |     -10LL       |      int64      |        i        |                 |
-  |         |           | ------- | --------------- + ------- |           | --------------- + --------------- + --------------- |                 |
-  | Number* | "SCALAR"  | big int | uint64_traits_t |   3UZ   |           |      10ULL      |      uint64     |        u        |        n        |
-  |         |           |-------- | --------------- + ------- |           | --------------- + --------------- + --------------- |                 |
-  |         |           | float   | double_traits_t |   4UZ   |           |      0.53       |      double     |        f        |                 |
-  | ------- + ------------------- + --------------- + ------- |           | --------------- + --------------- + --------------- + --------------- |
-  | String  | "STRING"            | str_traits_t    |   5UZ   |           |     "[...]"     |       str       |        s        |        s        |
-  | ------- + ------------------- + --------------- + ------- |           | ------ + ------ + ------ + ------ + ------ + ------ + ------ + ------ |
-  | Array   | "ARRAY"             | arr_traits_t    |   6UZ   |           |  [...] | (...)  |     () | arr    |     () | a      |     () | a      |
-  + --------------------------------------------------------------------------------------------------------------------------------------------- +
-  |                                                              *  SQF      : Single precision floating-point number
-  |                                                              ** brackets : [] | SQF format | Arma2 OA 'call compile ...' | compatible for SQF
-  |                                                                            () | RPT format | Arma2 OA 'call compile ...' | compatible for RPT
-  |
-  |
-  |--input     ::= param                ast::arr_traits_t
-       | <-------------------------------------------------- + + ------------------------------------- +
-     param     ::= null                 ast::null_traits_t   | |                   |                   |
-                |= bool                 ast::bool_traits_t   | |                   |       cheap       |
-                |= signed   integer     ast::int64_traits_t  | |      trivial      |    construction   |
-                |= unsigned integer     ast::uint64_traits_t | |       types       |      / copy       |
-                |= double               ast::double_traits_t | |                   |                   |
-                   ----------------------------------------- | | ----------------- | ----------------- |
-                |= string               ast::str_traits_t    | |    non-trivial    | string_view       |
-                |= vector<param>        ast::arr_traits_t    | |       types       | span<const param> |
-                \--------------------------------------------+ + ------------------------------------- +
+  |           Arma2 OA            |                 |         | specifier | "{:V}" | "{:v}" | "{:K}" | "{:k}" | "{:R}" | "{:r}" | "{:N}" | "{:n}" |--- +
+  |              SQF              |                 |         | --------- | ------ + ------ | ------ + ------ | ------ + ------ | ------ + ------ |    |
+  |                               |   AST traits    | index() | recursive |  YES   |  YES   |  YES   |   NO   |  YES   |   NO   |  YES   |   NO   |    |
+  | ----------------------------- |                 |         | --------- | ------ + ------ | ------ + ------ | ------ + ------ | ------ + ------ |    |
+  | Type    |      typeName       |                 |         | brackets* |   []   |   ()   |   ()   |   ()   |   ()   |   ()   |   ()   |   ()   |    |
+  | ------- + ------------------- + --------------- + ------- + --------- + --------------- + --------------- + --------------- + --------------- |    |
+  | nil     | UNDEFINED           | null_traits_t   |   0UZ   |           |      null       |       any       |        ?        |        ?        |    |
+  | ------- + ------------------- + --------------- + ------- |           | --------------- + --------------- + --------------- + --------------- |    |
+  | Boolean | "BOOL"              | bool_traits_t   |   1UZ   |           |   true / false  |       bool      |        b        |        b        |    |
+  | --------+ ------------------- + --------------- + ------- |           | --------------- + --------------- + --------------- + --------------- |    |
+  |         |           | int     | int64_traits_t  |   2UZ   |           |     -10LL       |      int64      |        i        |                 |    |
+  | **      |           | ------- | --------------- + ------- |           | --------------- + --------------- + --------------- |                 |    |
+  | Number  | "SCALAR"  | big int | uint64_traits_t |   3UZ   |           |      10ULL      |      uint64     |        u        |        n        |    |
+  |         |           |-------- | --------------- + ------- |           | --------------- + --------------- + --------------- |                 |    |
+  |         |           | float   | double_traits_t |   4UZ   |           |      0.53       |      double     |        f        |                 |    |
+  | ------- + ------------------- + --------------- + ------- |           | --------------- + --------------- + --------------- + --------------- |    |
+  | String  | "STRING"            | str_traits_t    |   5UZ   |           |     "[...]"     |       str       |        s        |        s        |    |
+  | ------- + ------------------- + --------------- + ------- |           | ------ + ------ + ------ + ------ + ------ + ------ + ------ + ------ |    |
+  | Array   | "ARRAY"             | arr_traits_t    |   6UZ   |           |  [...] | (...)  |     () | arr    |     () | a      |     () | a      |    |
+  + --------------------------------------------------------------------------------------------------------------------------------------------- +    |
+  |                                                            *  brackets   : [] | SQF format | Arma2 OA 'call compile ...' | compatible for SQF      |
+  |                                                                            () | RPT format | Arma2 OA 'call compile ...' | compatible for RPT      |
+  |                                                            ** SQF Number : single precision floating-point number                                  |
+  |                                                                                                                                                    |
+  |                                                                                                                                                    |
+  |--input     ::= param                ast::arr_traits_t                                                                                              |
+       | <-------------------------------------------------- + + ------------------------------------- +                                               |
+     param     ::= null                 ast::null_traits_t   | |                   |                   |                                               |
+                |= bool                 ast::bool_traits_t   | |                   |       cheap       |                                               |
+                |= signed   integer     ast::int64_traits_t  | |      trivial      |    construction   |                                               |
+                |= unsigned integer     ast::uint64_traits_t | |       types       |      / copy       |                                               |
+                |= double               ast::double_traits_t | |                   |                   |                                               |
+                   ----------------------------------------- | | ----------------- | ----------------- |                                               |
+                |= string               ast::str_traits_t    | |    non-trivial    | string_view       |                                               |
+                |= vector<param>        ast::arr_traits_t    | |       types       | span<const param> |                                               |
+                \--------------------------------------------+ + ------------------------------------- +                                               |
+                                                                                                                                                       |
+                                                                                                                                                       |
+                                                                                                                                                       |
+# [B2/2] PAYLOAD: COM_ARGV: VALUE, REPR, KIND                                                                                                          |
+# -------------------------------------------------------- |                                                                                           |
+                                                                                                                                                       |
+   # Overview of sqf::param value abstraction and textual repr:                                                                                        |
+   # --------- + ------------------------------------------------- + <-------------------------------------------------------------------------------- +
+               |          method           | specifier | brackets  |
+               + ------------------------- + --------- + --------- |
+           (1) | as_sqf_value_str          |  "{:V}"   |    []     |
+           (1) | as_rpt_value_str          |  "{:v}"   |    ()     |
+               | ------------------------- + --------- + --------- |
+               | as_recursive_cpp_repr_str |  "{:R}"   |    ()     |
+           (2) | as_flattened_cpp_repr_str |  "{:r}"   |    ()     |
+               | ------------------------- + --------- + --------- |
+               | as_recursive_sqf_repr_str |  "{:N}"   |    ()     |
+           (2) | as_flattened_sqf_repr_str |  "{:n}"   |    ()     |
+               | ------------------------- + --------- + --------- |
+           (3) | as_recursive_kind_str     |  "{:K}"   |    ()     |
+           (3) | as_flattened_kind_str     |  "{:k}"   |    ()     |
+               + ------------------------------------------------- +
 
+         ---------------------------
+     (1) "{:V}": as_sqf_value_str()
+         "{:v}": as_rpt_value_str():
+         ---------------------------
+         If the underlying value is of type `ast::str_traits::value_t`,
+         the resulting value is enclosed in quotes, and special characters
+         are escaped: "my_text" -> "{:V}" -> "\"my_text\""
+                                   "{:v}" ->  "'my_text'"
+
+
+         ------------------------------------
+     (2) "{:r}": as_flattened_cpp_repr_str()
+         "{:n}": as_flattened_sqf_repr_str():
+         ------------------------------------
+         Disables recursive analysis.
+         This is useful when you cannot define the `repr` signature at compile time.
+         For example, certain fields, such as a player's inventory, are only known
+         at runtime. Therefore, the expected requirement must be "flattened".
+
+         You can still enforce constraints on the top-level array type by defining
+         an expected signature (e.g., knowing that the inventory is an array), but
+         the validation of all nested types must be deferred to runtime,
+         if necessary.
+
+              --------------------------------
+         (2A) CPP target example:
+              --------------------------------
+             "{:R}": as_recursive_cpp_repr_str() : "(i,f,((s,s,s),(i,i,i)))"
+             "{:r}": as_flattened_cpp_repr_str() : "(i,f,        a        )"                         // compile time
+                                                                 |
+                                                                arr[2UZ].as_recursive_cpp_repr_str() // runtime
+
+              --------------------------------
+         (2B) SQF target example:
+              --------------------------------
+              If you are working directly with a request received from
+              an Arma2 OA server containing SQF data, this is how you
+              would handle an Arma `Number` type (typename "SCALAR")
+              during the validation of the request signature*:
+
+              "{:N}": as_recursive_sqf_repr_str() : "(n,n,((s,s,s),(n,n,n)))"
+              "{:n}": as_flattened_sqf_repr_str() : "(n,n,        a        )"                         // compile time
+                                                                  |
+                                                                 arr[2UZ].as_recursive_sqf_repr_str() // runtime
+
+
+              * To implement strict type validation for arguments received from an Arma2 OA server,
+                it is necessary to relax the requirements for the Arma `Number` data type
+                (`typeName "SCALAR"`), which the parser may identify as a signed/unsigned integer
+                or a floating-point number.
+
+                Specifically, this involves merging the C++ representation types `i`, `u`, and `f`
+                into a single representation type `n`, which corresponds to the `SQF` `Number` type.
+
+                Without this step, most requests from an Arma2 OA server would fail validation;
+                an outcome we wish to avoid.
+
+                Typical examples where this occurs include `position3D`, `vector3D`,
+                `damage`, `fuel`, and `direction` (where a value expected as type `f`
+                might be sent as type `i` — e.g., `1` vs. `1.0`).
+
+                This solution is optimal because, while the underlying deserialization
+                of data types is preserved and used internally, it introduces a new
+                validation mechanism based on a more permissive representation that
+                accounts for the specific characteristics of SQF.
+
+
+         ---------------------------------
+     (3) "{:K}": as_recursive_kind_str()
+         "{:k}": as_flattened_kind_str() :
+         ---------------------------------
+         Both produce the same output, unless the underlying type is
+         ast::arr_traits::value_t; in that case, the value is processed
+         in a manner similar to as_recursive_cpp_repr_str,
+         or as_flattened_cpp_repr_str - with the difference value textual
+         representation.
+
+
+
+# [B2/3] PAYLOAD: COM_ARGV: MAPPING MySQL TYPES TO C++
+# -------------------------------------------------------- |
 
   + ----------------------------------------------------------------------------------------------------------- +
   |                                                  MAPPING                                                    |
