@@ -65,7 +65,7 @@
 
 [//]: # (Link references)
 
-[1]: specification/naming_convention/DZE100_hive_world_naming_convention.txt
+[1]: specification/DZE_conventions/DZE100_hive_world_naming_convention.txt
 
 [2]: specification/DZE-107-specification/readme.md
 

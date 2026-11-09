@@ -1,0 +1,249 @@
+# -------------------------------------------------------- #
+# DZE Unicode scope convention                             #
+# Accepted XX/2026 on DZE-108 discord server by devop team #
+# -------------------------------------------------------- #
+
+
+# [A] Unicode support scope:
+# --------------------------
+
+  Only Basic Latin Unicode Block is supported*;
+  0x0000-0x007F | 0-127 (standard ASCII character set)**.
+
+  *  https://www.unicode.org/Public/UCD/latest/ucd/Blocks.txt
+  ** https://www.unicode.org/Public/UCD/latest/charts/PDF/U0000.pdf
+
+
+
+# [B] DZE char filter groups:
+# ---------------------------
+
+  related: 'DZE200/DZE200_unicode_scope_convention_table.csv'
+           'DZE200/DZE200_unicode_scope_convention_test.sqf'
+
+  [B/0] DZE200 forbidden chars
+  [B/1] DZE200_strict_char_filter
+  [B/2] DZE200_number_char_filter
+
+  + ------------------------------------------------------------------------------------------------ +
+  |                               |       |                        |     | allow |                   |
+  | group                         | char  | name                   | dec | ----- | DZE filter group  |
+  |                               |       |                        |     | Y | N |                   |
+  + ------------------------------------------------------------------------------------------------ +
+  | C0 Control                    |       |                        |     |   | x | [B/0]             |
+  | ------------------------------------------------------------------------------------------------ |
+  | ASCII punctuation and symbols | space | SPACE                  |  32 |   | x | [B/0]             |
+  |                               | !     | EXCLAMATION MARK       |  33 |   | x | [B/0]             |
+  |                               | "     | QUOTATION MARK         |  34 |   | x | [B/0]             |
+  |                               | #     | NUMBER SIGN            |  35 |   | x | [B/0]             |
+  |                               | $     | DOLLAR SIGN            |  36 |   | x | [B/0]             |
+  |                               | %     | PERCENT SIGN           |  37 |   | x | [B/0]             |
+  |                               | &     | AMPERSAND              |  38 |   | x | [B/0]             |
+  |                               | '     | APOSTROPHE             |  39 |   | x | [B/0]             |
+  |                               | (     | LEFT PARENTHESIS       |  40 |   | x | [B/0]             |
+  |                               | )     | RIGHT PARENTHESIS      |  41 |   | x | [B/0]             |
+  |                               | *     | ASTERISK               |  42 |   | x | [B/0]             |
+  | ------------------------------------------------------------------------------------------------ |
+  | ASCII math operator           | +     | PLUS SIGN              |  43 | x |   |             [B/2] |
+  | ------------------------------------------------------------------------------------------------ |
+  | ASCII punctuation             | ,     | COMMA                  |  44 |   | x | [B/0]             |
+  |                               | -     | HYPHEN-MINUS           |  45 | x |   |             [B/2] |
+  |                               | .     | FULL STOP              |  46 | x |   |             [B/2] |
+  |                               | /     | SOLIDUS                |  47 |   | x | [B/0]             |
+  | ------------------------------------------------------------------------------------------------ |
+  | ASCII digits                  | 0     | DIGIT ZERO             |  48 | x |   |       [B/1] [B/2] |
+  |                               | 1     | DIGIT ONE              |  49 | x |   |       [B/1] [B/2] |
+  |                               | 2     | DIGIT TWO              |  50 | x |   |       [B/1] [B/2] |
+  |                               | 3     | DIGIT THREE            |  51 | x |   |       [B/1] [B/2] |
+  |                               | 4     | DIGIT FOUR             |  52 | x |   |       [B/1] [B/2] |
+  |                               | 5     | DIGIT FIVE             |  53 | x |   |       [B/1] [B/2] |
+  |                               | 6     | DIGIT SIX              |  54 | x |   |       [B/1] [B/2] |
+  |                               | 7     | DIGIT SEVEN            |  55 | x |   |       [B/1] [B/2] |
+  |                               | 8     | DIGIT EIGHT            |  56 | x |   |       [B/1] [B/2] |
+  |                               | 9     | DIGIT NINE             |  57 | x |   |       [B/1] [B/2] |
+  | ------------------------------------------------------------------------------------------------ |
+  | ASCII punctuation             | :     | COLON                  |  58 |   | x | [B/0]             |
+  |                               | ;     | SEMICOLON              |  59 |   | x | [B/0]             |
+  | ------------------------------------------------------------------------------------------------ |
+  | ASCII math operators          | <     | LESS-THAN SIGN         |  60 |   | x | [B/0]             |
+  |                               | =     | EQUALS SIGN            |  61 |   | x | [B/0]             |
+  |                               | >     | GREATER-THAN SIGN      |  62 |   | x | [B/0]             |
+  | ------------------------------------------------------------------------------------------------ |
+  | ASCII punctuation             | ?     | QUESTION MARK          |  63 |   | x | [B/0]             |
+  |                               | @     | COMMERCIAL AT          |  64 |   | x | [B/0]             |
+  | ------------------------------------------------------------------------------------------------ |
+  | Uppercase Latin alphabet      | A     | LATIN CAPITAL LETTER A |  65 | x |   |       [B/1]       |
+  |                               | B     | LATIN CAPITAL LETTER B |  66 | x |   |       [B/1]       |
+  |                               | C     | LATIN CAPITAL LETTER C |  67 | x |   |       [B/1]       |
+  |                               | D     | LATIN CAPITAL LETTER D |  68 | x |   |       [B/1]       |
+  |                               | E     | LATIN CAPITAL LETTER E |  69 | x |   |       [B/1] [B/2] |
+  |                               | F     | LATIN CAPITAL LETTER F |  70 | x |   |       [B/1]       |
+  |                               | G     | LATIN CAPITAL LETTER G |  71 | x |   |       [B/1]       |
+  |                               | H     | LATIN CAPITAL LETTER H |  72 | x |   |       [B/1]       |
+  |                               | I     | LATIN CAPITAL LETTER I |  73 | x |   |       [B/1]       |
+  |                               | J     | LATIN CAPITAL LETTER J |  74 | x |   |       [B/1]       |
+  |                               | K     | LATIN CAPITAL LETTER K |  75 | x |   |       [B/1]       |
+  |                               | L     | LATIN CAPITAL LETTER L |  76 | x |   |       [B/1]       |
+  |                               | M     | LATIN CAPITAL LETTER M |  77 | x |   |       [B/1]       |
+  |                               | N     | LATIN CAPITAL LETTER N |  78 | x |   |       [B/1]       |
+  |                               | O     | LATIN CAPITAL LETTER O |  79 | x |   |       [B/1]       |
+  |                               | P     | LATIN CAPITAL LETTER P |  80 | x |   |       [B/1]       |
+  |                               | Q     | LATIN CAPITAL LETTER Q |  81 | x |   |       [B/1]       |
+  |                               | R     | LATIN CAPITAL LETTER R |  82 | x |   |       [B/1]       |
+  |                               | S     | LATIN CAPITAL LETTER S |  83 | x |   |       [B/1]       |
+  |                               | T     | LATIN CAPITAL LETTER T |  84 | x |   |       [B/1]       |
+  |                               | U     | LATIN CAPITAL LETTER U |  85 | x |   |       [B/1]       |
+  |                               | V     | LATIN CAPITAL LETTER V |  86 | x |   |       [B/1]       |
+  |                               | W     | LATIN CAPITAL LETTER W |  87 | x |   |       [B/1]       |
+  |                               | X     | LATIN CAPITAL LETTER X |  88 | x |   |       [B/1]       |
+  |                               | Y     | LATIN CAPITAL LETTER Y |  89 | x |   |       [B/1]       |
+  |                               | Z     | LATIN CAPITAL LETTER Z |  90 | x |   |       [B/1]       |
+  | ------------------------------------------------------------------------------------------------ |
+  | ASCII punctuation and symbols | [     | LEFT SQUARE BRACKET    |  91 |   | x | [B/0]             |
+  |                               | \     | REVERSE SOLIDUS        |  92 |   | x | [B/0]             |
+  |                               | ]     | RIGHT SQUARE BRACKET   |  93 |   | x | [B/0]             |
+  |                               | ^     | CIRCUMFLEX ACCENT      |  94 |   | x | [B/0]             |
+  |                               | _     | LOW LINE               |  95 | x |   |       [B/1]       |
+  |                               | `     | GRAVE ACCENT           |  96 |   | x | [B/0]             |
+  | ------------------------------------------------------------------------------------------------ |
+  | Lowercase Latin alphabet      | a     | LATIN SMALL LETTER A   |  97 | x |   |       [B/1]       |
+  |                               | b     | LATIN SMALL LETTER B   |  98 | x |   |       [B/1]       |
+  |                               | c     | LATIN SMALL LETTER C   |  99 | x |   |       [B/1]       |
+  |                               | d     | LATIN SMALL LETTER D   | 100 | x |   |       [B/1]       |
+  |                               | e     | LATIN SMALL LETTER E   | 101 | x |   |       [B/1] [B/2] |
+  |                               | f     | LATIN SMALL LETTER F   | 102 | x |   |       [B/1]       |
+  |                               | g     | LATIN SMALL LETTER G   | 103 | x |   |       [B/1]       |
+  |                               | h     | LATIN SMALL LETTER H   | 104 | x |   |       [B/1]       |
+  |                               | i     | LATIN SMALL LETTER I   | 105 | x |   |       [B/1]       |
+  |                               | j     | LATIN SMALL LETTER J   | 106 | x |   |       [B/1]       |
+  |                               | k     | LATIN SMALL LETTER K   | 107 | x |   |       [B/1]       |
+  |                               | l     | LATIN SMALL LETTER L   | 108 | x |   |       [B/1]       |
+  |                               | m     | LATIN SMALL LETTER M   | 109 | x |   |       [B/1]       |
+  |                               | n     | LATIN SMALL LETTER N   | 110 | x |   |       [B/1]       |
+  |                               | o     | LATIN SMALL LETTER O   | 111 | x |   |       [B/1]       |
+  |                               | p     | LATIN SMALL LETTER P   | 112 | x |   |       [B/1]       |
+  |                               | q     | LATIN SMALL LETTER Q   | 113 | x |   |       [B/1]       |
+  |                               | r     | LATIN SMALL LETTER R   | 114 | x |   |       [B/1]       |
+  |                               | s     | LATIN SMALL LETTER S   | 115 | x |   |       [B/1]       |
+  |                               | t     | LATIN SMALL LETTER T   | 116 | x |   |       [B/1]       |
+  |                               | u     | LATIN SMALL LETTER U   | 117 | x |   |       [B/1]       |
+  |                               | v     | LATIN SMALL LETTER V   | 118 | x |   |       [B/1]       |
+  |                               | w     | LATIN SMALL LETTER W   | 119 | x |   |       [B/1]       |
+  |                               | x     | LATIN SMALL LETTER X   | 120 | x |   |       [B/1]       |
+  |                               | y     | LATIN SMALL LETTER Y   | 121 | x |   |       [B/1]       |
+  |                               | z     | LATIN SMALL LETTER Z   | 122 | x |   |       [B/1]       |
+  | ------------------------------------------------------------------------------------------------ |
+  | ASCII punctuation and symbols | {     | LEFT CURLY BRACKET     | 123 |   | x | [B/0]             |
+  |                               | |     | VERTICAL LINE          | 124 |   | x | [B/0]             |
+  |                               | }     | RIGHT CURLY BRACKET    | 125 |   | x | [B/0]             |
+  |                               | ~     | TILDE                  | 126 |   | x | [B/0]             |
+  | ------------------------------------------------------------------------------------------------ |
+  | Control character             | DEL   | DELETE                 | 127 |   | x | [B/0]             |
+  + ------------------------------------------------------------------------------------------------ +
+
+
+
+# [B/0] DZE200 forbidden chars:
+# -----------------------------
+
+  (a) Forbidden characters are not used for text filtering.
+
+  (b) The preceding statement also applies to any subset of
+      the forbidden characters.
+
+  (c) This is because a filter created in this way would be
+      insufficient, as it would fail to filter out characters
+      outside the Basic Latin Unicode block.
+
+  (d) The correct implementation of the filter is as follows:
+
+      (1) First, we extract all unsupported characters,
+          including those that fall outside the scope
+          of the Basic Latin Unicode block.
+
+      (2) We then use the extracted list of unsupported characters
+          to filter the original string, thereby ensuring its
+          cleanliness and, consequently, its safety.
+
+      Example:
+      --------
+      local _string = toArray _this;
+      toString (_string - (_string - DZE200_<[B/1|2]>_char_filter));
+                        |          |
+                       (2)        (1)
+
+
+
+# [B/1] DZE200_strict_char_filter:
+# --------------------------------
+
+  The array is defined globally. For a function this small,
+  a global variable offers better performance*, since it is
+  accessed only once:
+  --------------------------------
+
+  * see 'DZE200/DZE200_unicode_scope_convention_test.sqf' / DZE200_fnc_sanitize_string
+
+  DZE200_strict_char_filter =
+  [
+      48,49,50,51,52,53,54,55,56,57,                                                                       // 0-9
+      65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,                       // A-Z
+      95,                                                                                                  // _
+      97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122 // a-z
+  ];
+
+  Recommended function definition:
+  --------------------------------
+
+  see: '[B/0] DZE200 forbidden chars' / (d)
+
+  DZE200_fnc_sanitize_string =
+  {
+      local _input = toArray _this;
+      toString (_input - (_input - DZE200_strict_char_filter));
+  };
+
+
+
+# [B/2] DZE200_number_char_filter:
+# --------------------------------
+
+  Note: command 'parseNumber' doesn't work with strings
+        representing hexadecimal (base 16) numbers.
+
+        That is why we can limit Latin alphabet to chars
+        representing decimal (base 10) numbers:
+
+        parseNumber  "123456789"
+        parseNumber  "0.25" (==  ".25")
+        parseNumber  "1e-6" (==  "1E-6"  )
+        parseNumber  "1e+6" (==  "1E+6"  )
+        parseNumber  "1e39" (==  "1.#INF")
+        parseNumber "-1e39" (== "-1.#INF")
+
+
+  The array is defined globally. For a function this small,
+  a global variable offers better performance*, since it is
+  accessed only once:
+  --------------------------------
+
+  * see 'DZE200/DZE200_unicode_scope_convention_test.sqf' / DZE200_fnc_sanitize_string
+
+  DZE200_number_char_filter =
+  [
+      43,45,46,                      // + - .
+      48,49,50,51,52,53,54,55,56,57, // 0-9
+      69,                            // E
+      101                            // e
+  ];
+
+  Recommended function definition:
+  --------------------------------
+
+  see: '[B/0] DZE200 forbidden chars' / (d)
+
+  DZE200_fnc_sanitize_number =
+  {
+      local _input = toArray _this;
+      parseNumber toString (_input - (_input - DZE200_number_char_filter));
+  };

@@ -286,7 +286,7 @@
 
 [//]: # (Link references)
 
-[1]: ../naming_convention/DZE100_hive_world_naming_convention.txt
+[1]: ../DZE_conventions/DZE100_hive_world_naming_convention.txt
 
 
 [10]: ../executive_summary/DHR100_hive_system.txt

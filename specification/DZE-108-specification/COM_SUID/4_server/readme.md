@@ -51,7 +51,7 @@
 
 [//]: # (Link references)
 
-[1]: ../../../naming_convention/DZE100_hive_world_naming_convention.txt
+[1]: ../../../DZE_conventions/DZE100_hive_world_naming_convention.txt
 
 [401]: COM_EXID/01_log_message/401_log_message_ssheet.txt
 
