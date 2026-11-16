@@ -18,8 +18,8 @@
 |               | on the server owner — and for which, consequently, exact     |
 |               | parameter types cannot be defined at compile time — must     |
 |               | be sent as a string:                                         |
-|               | BAD : "[1,true]"      --> (i,b) --> expected: (s)            |
-|               | GOOD: "\"[1,true]\""  --> (s)   --> expected: (s)            |
+|               | BAD : "[1,true]"      --> [i,b] --> expected: [s]            |
+|               | GOOD: "\"[1,true]\""  --> [s]   --> expected: [s]            |
 + ---------------------------------------------------------------------------- +
 
 
@@ -32,11 +32,11 @@
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
 | FIELD             | TYPE              | DEFAULT VALUE     | REPR             | STRICT | DESCRIPTION                                   | NOTES                             |
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
-| CharacterID       | INT               | AUTO_INCREMENT    | (i)              | YES    | primary key (PK)                              |                                   |
+| CharacterID       | INT               | AUTO_INCREMENT    | [i]              | YES    | primary key (PK)                              |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| PlayerUID         | VARCHAR(32)       | '0'               | (s)              | YES    | `Player_DATA`.`PlayerUID` (PK)                |                                   |
+| PlayerUID         | VARCHAR(32)       | '0'               | [s]              | YES    | `Player_DATA`.`PlayerUID` (PK)                |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| InstanceID        | INT               | 0                 | (i)              | YES    | dayZ_instance                                 |                                   |
+| InstanceID        | INT               | 0                 | [i]              | YES    | dayZ_instance                                 |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | Datestamp         | DATETIME          | CURRENT_TIMESTAMP | internal         |        | character's record creation DATETIME          |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
@@ -46,7 +46,7 @@
 |                   |                   |                   |                  |        |                                               |      `LastLogin`                  |
 |                   |                   |                   |                  |        |                                               |  ) AS pw_survival_time            |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Inventory         | MEDIUMTEXT        | _utf8mb4'[]'      | (a,a,s)          | YES    | character's gear data                         |                                   |
+| Inventory         | MEDIUMTEXT        | _utf8mb4'[]'      | [a,a,s]          | YES    | character's gear data                         |                                   |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        | [                                             |                                   |
 |                   |                   |                   |                  |        |     [weapons...],      a                      |                                   |
@@ -54,7 +54,7 @@
 |                   |                   |                   |                  |        |     dayz_onBack        s                      |                                   |
 |                   |                   |                   |                  |        | ]                                             |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Backpack          | MEDIUMTEXT        | _utf8mb4'[]'      | (s,(a,a),(a,a))  | YES    | character's backpack data                     | server_playerLogin.sqf:128        |
+| Backpack          | MEDIUMTEXT        | _utf8mb4'[]'      | [s,[a,a],[a,a]]  | YES    | character's backpack data                     | server_playerLogin.sqf:128        |
 |                   |                   |                   |                  |        |                                               | --------------------------        |
 |                   |                   |                   |                  |        | [                                             | @FIXME: missing dayz_onBack       |
 |                   |                   |                   |                  |        |     backpack type,             s              |         (CHILD:203)               |
@@ -68,12 +68,12 @@
 |                   |                   |                   |                  |        |     ]                                         |                                   |
 |                   |                   |                   |                  |        | ]                                             |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Worldspace        | VARCHAR(128)      | '[]'              | (s)              | NO     | character's world space data                  |                                   |
+| Worldspace        | VARCHAR(128)      | '[]'              | (s])              | NO     | character's world space data                  |                                   |
 |                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Medical           | VARCHAR(256)      | '[]'              | (b,b,b,b,b,      | YES*   | character's medical data                      | *TODO:                            |
+| Medical           | VARCHAR(256)      | '[]'              | [b,b,b,b,b,      | YES*   | character's medical data                      | *TODO:                            |
 |                   |                   |                   |  b,b,i,a,a,      |        |                                               |  if not stable, can't be STRICT,  |
-|                   |                   |                   |  i,s,b,a,b)      |        | [                                             |  hence use repr: "(a)" to avoid   |
+|                   |                   |                   |  i,s,b,a,b]      |        | [                                             |  hence use repr: "(a)" to avoid   |
 |                   |                   |                   |                  |        |      USEC_isDead,          b                  |  failure                          |
 |                   |                   |                   |                  |        |      NORRN_unconscious,    b                  |                                   |
 |                   |                   |                   |                  |        |      USEC_infected,        b                  |                                   |
@@ -101,7 +101,7 @@
 |                   |                   |                   |                  |        |      blood_testdone        b                  |                                   |
 |                   |                   |                   |                  |        | ]                                             |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Alive             | TINYINT           | 1                 | (i)              | YES    | character's lifespan status                   |                                   |
+| Alive             | TINYINT           | 1                 | [i]              | YES    | character's lifespan status                   |                                   |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        | Range:                                        |                                   |
 |                   |                   |                   |                  |        | ------                                        |                                   |
@@ -112,7 +112,7 @@
 |                   |                   |                   |                  |        |   0 - dead  character                         |                                   |
 |                   |                   |                   |                  |        |   1 - alive character (default)               |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Generation        | INT               | 1                 | (i)              | YES    |                                               | Total number of player's          |
+| Generation        | INT               | 1                 | [i]              | YES    |                                               | Total number of player's          |
 |                   |                   |                   |                  |        |                                               | characters over the time          |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | LastAte           | DATETIME          | CURRENT_TIMESTAMP | internal         |        | character's last meal                         | SQF argument is boolean.          |
@@ -123,15 +123,15 @@
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        |                                               | true -> CURRENT_TIMESTAMP         |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| KillsZ            | INT               | 0                 | (i)              | YES    | num of zed's killed                           |                                   |
+| KillsZ            | INT               | 0                 | [i]              | YES    | num of zed's killed                           |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| HeadshotsZ        | INT               | 0                 | (i)              | YES    | num of zed's headshot kills                   |                                   |
+| HeadshotsZ        | INT               | 0                 | [i]              | YES    | num of zed's headshot kills                   |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| DistanceFoot      | INT               | 0                 | (i)              | YES    | character's walk distance                     | SET in SQF, but not used.         |
+| DistanceFoot      | INT               | 0                 | [i]              | YES    | character's walk distance                     | SET in SQF, but not used.         |
 |                   |                   |                   |                  |        |                                               | --------------------------        |
 |                   |                   |                   |                  |        |                                               | NO POINT; KEPT FOR COMPABILITY    |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Duration          | INT               | 0                 | (i)              | YES    |                                               | server_playerDied.sqf:31          |
+| Duration          | INT               | 0                 | [i]              | YES    |                                               | server_playerDied.sqf:31          |
 |                   |                   |                   |                  |        |                                               | player_death.sqf:89               |
 |                   |                   |                   |                  |        |                                               | -------------------------         |
 |                   |                   |                   |                  |        |                                               | duration hardcoded to 0!!!        |
@@ -147,7 +147,7 @@
 |                   |                   |                   |                  |        |                                               | --------------------------        |
 |                   |                   |                   |                  |        |                                               | NO POINT; KEPT FOR COMPABILITY    |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| CurrentState      | VARCHAR(256)      | '[]'              | ((s,s,f),a)      | YES    | character's current state data                | Can be flattened.                 |
+| CurrentState      | VARCHAR(256)      | '[]'              | [[s,s,f],a]      | YES    | character's current state data                | Can be flattened.                 |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        | [                    a                        | [                                 |
 |                   |                   |                   |                  |        |      [                   a                    |      weapon,                      |
@@ -158,16 +158,16 @@
 |                   |                   |                   |                  |        |      []                  a                    |                                   |
 |                   |                   |                   |                  |        | ]                                             |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| KillsH            | INT               | 0                 | (i)              | YES    | num of player's hero kills                    |                                   |
+| KillsH            | INT               | 0                 | [i]              | YES    | num of player's hero kills                    |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Model             | VARCHAR(64)       | 'Survivor2_DZ'    | (s)              | YES    | character's skin                              |                                   |
+| Model             | VARCHAR(64)       | 'Survivor2_DZ'    | [s]              | YES    | character's skin                              |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| KillsB            | INT               | 0                 | (i)              | YES    | num of player's bandit kills                  |                                   |
+| KillsB            | INT               | 0                 | [i]              | YES    | num of player's bandit kills                  |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Humanity          | INT               | 2'500             | (i)              | YES    | character's humanity value                    | custom def value NOT supported    |
+| Humanity          | INT               | 2'500             | [i]              | YES    | character's humanity value                    | custom def value NOT supported    |
 |                   |                   |                   |                  |        |                                               | due to compability req (c++);     |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Infected          | TINYINT           | 0                 | (i)              | YES    | character's infection status                  |                                   |
+| Infected          | TINYINT           | 0                 | [i]              | YES    | character's infection status                  |                                   |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        | Range:                                        |                                   |
 |                   |                   |                   |                  |        | ------                                        |                                   |
@@ -181,7 +181,7 @@
 |                   |                   |                   |                  |        |       character may spawn as zombie           |                                   |
 |                   |                   |                   |                  |        |       (DZE_PlayerZed == true)                 |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Coins             | BIGINT            | 0                 | (i)              | YES    | character's wallet money                      |                                   |
+| Coins             | BIGINT            | 0                 | [i]              | YES    | character's wallet money                      |                                   |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        |                                               |                                   |
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +

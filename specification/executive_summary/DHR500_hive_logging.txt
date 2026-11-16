@@ -285,7 +285,7 @@ DHR400_hive_response_packet.txt
        [F1]      [F2]         [F3]                                                    [F4]
   |__________| |_____| |__________________| |_________________________________________________________________________________________|
         |         |            |                                                       |
-  22:08:45.105 [ERROR] system  : E(   1   ) ERR: Bad COM_ARGV. Original REQ: (2101,1,('string',true)). Expected: (s,a). Received: (s,b)
+  22:08:45.105 [ERROR] system  : E(   1   ) ERR: Bad COM_ARGV. Original REQ: [2101,1,["string",true]]. Expected: [s,a]. Received: [s,b]
 
 
 # [F/1] LOGFILE: BODY: LOG RECORD STRUCTURE: LOG_TMK:
@@ -356,13 +356,13 @@ DHR400_hive_response_packet.txt
 # [G] LOGGING:
 # -------------------------------------------------------- |
 
-  [G/1] UNIFIED ON REQUEST RECEIVED MSG
-  [G/2] UNIFIED ON REQUEST MSG
+  [G/1] UNIFIED ON REQUEST RECEIVED  MSG
+  [G/2] UNIFIED ON REQUEST RESPONSE  MSG
   [G/3] UNIFIED ON REQUEST (GENERIC) ERROR MSG
-  [G/4] UNIFIED ON REQUEST COM_SUID ERROR MSG
-  [G/5] UNIFIED ON REQUEST COM_TYPE ERROR MSG
-  [G/6] UNIFIED ON REQUEST COM_EXID ERROR MSG
-  [G/7] UNIFIED ON REQUEST COM_ARGV ERROR MSG
+  [G/4] UNIFIED ON REQUEST COM_SUID  ERROR MSG
+  [G/5] UNIFIED ON REQUEST COM_TYPE  ERROR MSG
+  [G/6] UNIFIED ON REQUEST COM_EXID  ERROR MSG
+  [G/7] UNIFIED ON REQUEST COM_ARGV  ERROR MSG
 
 
 # [G/1] LOGGING: UNIFIED ON REQUEST RECEIVED MSG:
@@ -374,7 +374,7 @@ DHR400_hive_response_packet.txt
 
 
 
-# [G/2] LOGGING: UNIFIED ON REQUEST MSG:
+# [G/2] LOGGING: UNIFIED ON REQUEST RESPONSE MSG:
 # -------------------------------------------------------- |
 
   specifier      : "{      :o       } {  }"
@@ -388,7 +388,7 @@ DHR400_hive_response_packet.txt
 
   specifier      : "{                      :e                      } {  }"
   translates to  : "E|P(   N   ) ERR: Original REQ: [[...]]. Reason: {:v}" [:v = reason.as_rpt_value_str()]
-  output example : 22:08:45.105 [ERROR] system  : ERR: Original REQ: (1,1,1,(),true). Reason: Packet signature mismatch. Expected: (i,i,i,a). Received: (i,i,i,a,b)
+  output example : 22:08:45.105 [ERROR] system  : ERR: Original REQ: [1,1,1,[],true]. Reason: Packet signature mismatch. Expected: [i,i,i,a]. Received: [i,i,i,a,b]
 
 
 
@@ -397,7 +397,7 @@ DHR400_hive_response_packet.txt
 
   specifier      : "{                         :s                         } Expected: {     }. Received: {     }"
   translates to  : "E|P(   N   ) ERR: Bad COM_SUID. Original REQ: [[...]]. Expected: [[...]]. Received: [[...]]"
-  output example : 22:08:45.105 [ERROR] system  : A(   1   ) ERR: Bad COM_SUID. Original REQ: (7,1,1,()). Expected: <1,6>. Received: 7
+  output example : 22:08:45.105 [ERROR] system  : A(   1   ) ERR: Bad COM_SUID. Original REQ: [7,1,1,[]]. Expected: <1,6>. Received: 7
 
 
 
@@ -406,16 +406,16 @@ DHR400_hive_response_packet.txt
 
   specifier      : "{                         :t                         } Expected: {     }. Received: {     }"
   translates to  : "E|P(   N   ) ERR: Bad COM_TYPE. Original REQ: [[...]]. Expected: [[...]]. Received: [[...]]"
-  output example : 22:08:45.105 [ERROR] system  : ?(   1   ) ERR: Bad COM_TYPE. Original REQ: (1,0,1,()). Expected: <1,4>. Received: 0
+  output example : 22:08:45.105 [ERROR] system  : ?(   1   ) ERR: Bad COM_TYPE. Original REQ: [1,0,1,[]]. Expected: <1,4>. Received: 0
 
 
 
 # [G/6] LOGGING: UNIFIED ON REQUEST COM_EXID ERROR MSG:
 # -------------------------------------------------------- |
 
-  specifier      : "{                         :x                         } COM_SUID '{}' doesn't support COM_EXID {}"
-  translates to  : "E|P(   N   ) ERR: Bad COM_EXID. Original REQ: [[...]]. COM_SUID '..' doesn't support COM_EXID .."
-  output example : 22:08:45.105 [ERROR] system  : E(   5   ) ERR: Bad COM_EXID. Original REQ: (6,1,10,()). COM_SUID 'controller' doesn't support COM_EXID 10
+  specifier      : "{                         :x                         } COM_SUID {} does NOT support COM_EXID {}"
+  translates to  : "E|P(   N   ) ERR: Bad COM_EXID. Original REQ: [[...]]. COM_SUID .. does NOT support COM_EXID .."
+  output example : 22:08:45.105 [ERROR] system  : E(   5   ) ERR: Bad COM_EXID. Original REQ: [6,1,10,[]]. Reason: COM_SUID controller does NOT support COM_EXID 10
 
 
 
@@ -424,7 +424,7 @@ DHR400_hive_response_packet.txt
 
   specifier      : "{                         :a                         } Expected: {     }. Received: {     }"
   translates to  : "E|P(   N   ) ERR: Bad COM_ARGV. Original REQ: [[...]]. Expected: [[...]]. Received: [[...]]"
-  output example : 22:08:45.105 [ERROR] system  : E(   5   ) ERR: Bad COM_ARGV. Original REQ: (6,1,5,(0.5,true)). Expected: (f,f). Received: (f,b)
+  output example : 22:08:45.105 [ERROR] system  : E(   5   ) ERR: Bad COM_ARGV. Original REQ: [6,1,5,[0.5,true]]. Expected: [f,f]. Received: [f,b]
 
 
 

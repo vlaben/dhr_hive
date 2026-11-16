@@ -25,8 +25,8 @@
 |               | on the server owner — and for which, consequently, exact     |
 |               | parameter types cannot be defined at compile time — must     |
 |               | be sent as a string:                                         |
-|               | BAD : "[1,true]"      --> (i,b) --> expected: (s)            |
-|               | GOOD: "\"[1,true]\""  --> (s)   --> expected: (s)            |
+|               | BAD : "[1,true]"      --> [i,b) --> expected: [s)            |
+|               | GOOD: "\"[1,true]\""  --> [s)   --> expected: [s)            |
 |               |                                                              |
 |               | [R/03]                                                       | @TODO: consult with AirwavesMan
 |               | Static weapons must not be stored in object table.           |
@@ -77,18 +77,18 @@
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
 | FIELD             | TYPE              | DEFAULT VALUE     | REPR             | STRICT | DESCRIPTION                                   | NOTES                             |
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
-| ow_oid            | INT               | AUTO_INCREMENT    | (i)              | YES    | primary key (PK)                              |                                   |
+| ow_oid            | INT               | AUTO_INCREMENT    | [i]              | YES    | primary key (PK)                              |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| oh_tid            | INT               | 0                 | (i)              | YES    | object's territory global ID                  |                                   |
+| oh_tid            | INT               | 0                 | [i]              | YES    | object's territory global ID                  |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ph_gid            | INT               | 0                 | (i)              | YES    | player's global ID                            | object's owner (ownerPUID)        |
+| ph_gid            | INT               | 0                 | [i]              | YES    | player's global ID                            | object's owner (ownerPUID)        |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        |                                               | @TODO: do we really need it?      |
 |                   |                   |                   |                  |        |                                               | oh_tid vs ownerPUID               |
 |                   |                   |                   |                  |        |                                               | I think whole ownership role      |
 |                   |                   |                   |                  |        |                                               | should be deeply discussed.       |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ow_sid            | TINYINT           | 1                 | (i)              | YES    | object's status ID                            |                                   |
+| ow_sid            | TINYINT           | 1                 | [i]              | YES    | object's status ID                            |                                   |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        | Range:                                        |                                   |
 |                   |                   |                   |                  |        | ------                                        |                                   |
@@ -99,7 +99,7 @@
 |                   |                   |                   |                  |        | 0 - scheduled for removal                     |                                   |
 |                   |                   |                   |                  |        | 1 - alive object available in-game (default)  |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ow_identity       | INT               | 0                 | (i)              | YES    | object's STATIC properties                    | Set up to 24 booleans that        |
+| ow_identity       | INT               | 0                 | [i]              | YES    | object's STATIC properties                    | Set up to 24 booleans that        |
 |                   |                   |                   |                  |        |                                               | represents 24 STATIC properties,  |
 |                   |                   |                   |                  |        | Range:                                        | e.g.: _is_plot                    |
 |                   |                   |                   |                  |        | ------                                        |       _is_base_fire               |
@@ -140,9 +140,9 @@
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | ow_updated        | DATETIME          | CURRENT_TIMESTAMP | internal         |        | object's record update DATETIME               | ON UPDATE CURRENT_TIMESTAMP       |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ow_bank           | BIGINT            | 0                 | (i)              | YES    | object's storage money                        |                                   |
+| ow_bank           | BIGINT            | 0                 | [i]              | YES    | object's storage money                        |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ow_damage         | DOUBLE            | 0.0               | (f)              | YES    | object's damage value                         | When object is fully damaged      |
+| ow_damage         | DOUBLE            | 0.0               | [f]              | YES    | object's damage value                         | When object is fully damaged      |
 |                   |                   |                   |                  |        |                                               | at update time, `ow_sid` = 0      |
 |                   |                   |                   |                  |        |                                               | (marked for scheduled removal).   |
 |                   |                   |                   |                  |        |                                               |                                   |
@@ -163,7 +163,7 @@
 |                   |                   |                   |                  |        |                                               |     @param.damage                 |
 |                   |                   |                   |                  |        |                                               | );                                |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ow_key            | VARCHAR(32)       | '0'               | (s)              | YES    | lockable object's combination key             | MUST always be handled as STRING. |
+| ow_key            | VARCHAR(32)       | '0'               | [s]              | YES    | lockable object's combination key             | MUST always be handled as STRING. |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        |                                               | Field represents lockables key    |
 |                   |                   |                   |                  |        |                                               | which can:                        |
@@ -175,10 +175,10 @@
 |                   |                   |                   |                  |        |                                               | This way, we can avoid checks     |
 |                   |                   |                   |                  |        |                                               | within 'server_monitor.sqf'.      |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ow_class          | VARCHAR(64)       | 'Sign_sphere      | (s)              | YES    | object's className                            |                                   |
+| ow_class          | VARCHAR(64)       | 'Sign_sphere      | [s]              | YES    | object's className                            |                                   |
 |                   |                   |  100cm_EP1'       |                  |        |                                               |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ow_position       | VARCHAR(128)      | '[]'              | (f,f,f)          | YES    | object's world space position                 |                                   |
+| ow_position       | VARCHAR(128)      | '[]'              | [f,f,f]          | YES    | object's world space position                 |                                   |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        | [                                             |                                   |
 |                   |                   |                   |                  |        |      position X,                              |                                   |
@@ -186,8 +186,8 @@
 |                   |                   |                   |                  |        |      position Z                               |                                   |
 |                   |                   |                   |                  |        | ]                                             |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ow_vectors        | VARCHAR(128)      | '[]'              | ((f,f,f),        | YES    | object's world space vectors                  |                                   |
-|                   |                   |                   |  (f,f,f))        |        |                                               |                                   |
+| ow_vectors        | VARCHAR(128)      | '[]'              | [[f,f,f],        | YES    | object's world space vectors                  |                                   |
+|                   |                   |                   |  [f,f,f]]        |        |                                               |                                   |
 |                   |                   |                   |                  |        | [                                             |                                   |
 |                   |                   |                   |                  |        |      [ vectorDir         a                    |                                   |
 |                   |                   |                   |                  |        |           position X,         f               |                                   |
@@ -201,19 +201,19 @@
 |                   |                   |                   |                  |        |      ]                                        |                                   |
 |                   |                   |                   |                  |        | ]                                             |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ow_friends        | VARCHAR(2048)     | '[]'              | (a)              | YES    | object's friends                              | @TODO: change to [ph_gid,...]?    |
+| ow_friends        | VARCHAR(2048)     | '[]'              | [a]              | YES    | object's friends                              | @TODO: change to [ph_gid,...]?    |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        | [                                             |                                   |
 |                   |                   |                   |                  |        |     "playerUID",    s                         |                                   |
 |                   |                   |                   |                  |        |     ...,            s...                      |                                   |
 |                   |                   |                   |                  |        | ]                                             |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ow_props          | VARCHAR(2048)     | '[]'              | (s)              | NO     | object's modding support                      | It is up to server owner /        |
+| ow_props          | VARCHAR(2048)     | '[]'              | [s]              | NO     | object's modding support                      | It is up to server owner /        |
 |                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | mod author to define it as needed |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ow_inventory      | MEDIUMTEXT        | _utf8mb4'[]'      | ((a,a),          | YES    | object's inventory data                       | @TODO: Trap items:                |
-|                   |                   |                   |  (a,a),          |        |                                               |                                   |
-|                   |                   |                   |  (a,a))          |        | [                                             | updateObject_functions.sqf:98     |
+| ow_inventory      | MEDIUMTEXT        | _utf8mb4'[]'      | [[a,a],          | YES    | object's inventory data                       | @TODO: Trap items:                |
+|                   |                   |                   |  [a,a],          |        |                                               |                                   |
+|                   |                   |                   |  [a,a]]          |        | [                                             | updateObject_functions.sqf:98     |
 |                   |                   |                   |                  |        |     [ getWeaponCargo          a               | -----------------------------     |
 |                   |                   |                   |                  |        |         [weapon_type, ...],       a           | [["armed", false]]                |
 |                   |                   |                   |                  |        |         [weapon_count,...]        a           |                                   |

@@ -18,8 +18,8 @@
 |               | on the server owner — and for which, consequently, exact     |
 |               | parameter types cannot be defined at compile time — must     |
 |               | be sent as a string:                                         |
-|               | BAD : "[1,true]"      --> (i,b) --> expected: (s)            |
-|               | GOOD: "\"[1,true]\""  --> (s)   --> expected: (s)            |
+|               | BAD : "[1,true]"      --> [i,b) --> expected: [s)            |
+|               | GOOD: "\"[1,true]\""  --> [s)   --> expected: [s)            |
 + ---------------------------------------------------------------------------- +
 
 
@@ -32,9 +32,9 @@
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
 | FIELD             | TYPE              | DEFAULT VALUE     | REPR             | STRICT | DESCRIPTION                                   | NOTES                             |
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
-| ObjectID          | INT               | AUTO_INCREMENT    | (i)              | YES    | primary key (PK)                              |                                   |
+| ObjectID          | INT               | AUTO_INCREMENT    | [i]              | YES    | primary key (PK)                              |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ObjectUID         | INT               | 0                 | (i)              | YES    | object's type identifier                      | No longer serves as workaround    |
+| ObjectUID         | INT               | 0                 | [i]              | YES    | object's type identifier                      | No longer serves as workaround    |
 |                   |                   |                   |                  |        |                                               | for missing ability of legacy     |
 |                   |                   |                   |                  |        | Range:                                        | HiveExt.dll to get last inserted  |
 |                   |                   |                   |                  |        | ------                                        | ID within single call to MySQL.   |
@@ -52,9 +52,9 @@
 |                   |                   |                   |                  |        |                                               | obj and veh tables - that is      |
 |                   |                   |                   |                  |        |                                               | possible only for 108 release.    |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Instance          | INT               | 0                 | (i)              | YES    | dayZ_instance                                 |                                   |
+| Instance          | INT               | 0                 | [i]              | YES    | dayZ_instance                                 |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Classname         | VARCHAR(64)       | 'Sign_sphere      | (s)              | YES    | object's className                            |                                   |
+| Classname         | VARCHAR(64)       | 'Sign_sphere      | [s]              | YES    | object's className                            |                                   |
 |                   |                   |  100cm_EP1'       |                  |        |                                               |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | Datestamp         | DATETIME          | CURRENT_TIMESTAMP | internal         |        | object's record creation DATETIME             |                                   |
@@ -71,7 +71,7 @@
 |                   |                   |                   |                  |        |                                               | TIMESTAMP upper year boundary     |
 |                   |                   |                   |                  |        |                                               | is limited to 2038, etc.          |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| CharacterID       | VARCHAR(32)       | '0'               | (s)              | YES    | lockable object's combination key             | MUST always be handled as STRING. |
+| CharacterID       | VARCHAR(32)       | '0'               | [s]              | YES    | lockable object's combination key             | MUST always be handled as STRING. |
 |                   |                   |                   |                  |        | or vehicle key                                |                                   |
 |                   |                   |                   |                  |        |                                               | Changed from BIGINT               |
 |                   |                   |                   |                  |        |                                               |           to VARCHAR(32)          |
@@ -89,18 +89,18 @@
 |                   |                   |                   |                  |        |                                               | Also, vehicle key can be now      |
 |                   |                   |                   |                  |        |                                               | stored as full key, not just num. |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Worldspace        | VARCHAR(128)      | '[]'              | (s)              | NO     | character's world space data                  | Can't be STRICT - Worldspace has  |
+| Worldspace        | VARCHAR(128)      | '[]'              | [s]              | NO     | character's world space data                  | Can't be STRICT - Worldspace has  |
 |                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | multiple patterns!                |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Inventory         | MEDIUMTEXT        | _utf8mb4'[]'      | (s)              | NO     | object's inventory data                       | Can't be STRICT - Inventory has   |
+| Inventory         | MEDIUMTEXT        | _utf8mb4'[]'      | [s]              | NO     | object's inventory data                       | Can't be STRICT - Inventory has   |
 |                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | multiple patterns!                |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Hitpoints         | MEDIUMTEXT        | _utf8mb4'[]'      | (s)              | NO     | object's hitpoints data                       |                                   |
+| Hitpoints         | MEDIUMTEXT        | _utf8mb4'[]'      | [s]              | NO     | object's hitpoints data                       |                                   |
 |                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Fuel              | DOUBLE            | 1.0               | (f)              | YES    | object's fuel value                           |                                   |
+| Fuel              | DOUBLE            | 1.0               | [f]              | YES    | object's fuel value                           |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Damage            | DOUBLE            | 0.0               | (f)              | YES    | object's damage value                         |                                   |
+| Damage            | DOUBLE            | 0.0               | [f]              | YES    | object's damage value                         |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| StorageCoins      | BIGINT            | 0                 | (i)              | YES    | object's storage money                        |                                   |
+| StorageCoins      | BIGINT            | 0                 | [i]              | YES    | object's storage money                        |                                   |
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +

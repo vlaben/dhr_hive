@@ -18,8 +18,8 @@
 |               | on the server owner — and for which, consequently, exact     |
 |               | parameter types cannot be defined at compile time — must     |
 |               | be sent as a string:                                         |
-|               | BAD : "[1,true]"      --> (i,b) --> expected: (s)            |
-|               | GOOD: "\"[1,true]\""  --> (s)   --> expected: (s)            |
+|               | BAD : "[1,true]"      --> [i,b) --> expected: [s)            |
+|               | GOOD: "\"[1,true]\""  --> [s)   --> expected: [s)            |
 + ---------------------------------------------------------------------------- +
 
 
@@ -32,15 +32,15 @@
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
 | FIELD             | TYPE              | DEFAULT VALUE     | REPR             | STRICT | DESCRIPTION                                   | NOTES                             |
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
-| LoginID           | INT               | AUTO_INCREMENT    | (i)              | YES    | primary key (PK)                              |                                   |
+| LoginID           | INT               | AUTO_INCREMENT    | [i]              | YES    | primary key (PK)                              |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| PlayerUID         | VARCHAR(32)       | '0'               | (s)              | YES    | `Player_DATA`.`PlayerUID` (PK)                |                                   |
+| PlayerUID         | VARCHAR(32)       | '0'               | [s]              | YES    | `Player_DATA`.`PlayerUID` (PK)                |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| CharacterID       | INT               | 0                 | (i)              | YES    | `Character_DATA`.`CharacterID` (PK)           |                                   |
+| CharacterID       | INT               | 0                 | [i]              | YES    | `Character_DATA`.`CharacterID` (PK)           |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | Datestamp         | DATETIME          | CURRENT_TIMESTAMP | internal         |        | record creation DATETIME                      |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Action            | INT               | 0                 | (i)              | YES    | logging process phase ID                      |                                   |
+| Action            | INT               | 0                 | [i]              | YES    | logging process phase ID                      |                                   |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        | Known logging process phase ID:               |                                   |
 |                   |                   |                   |                  |        | -------------------------------               |                                   |

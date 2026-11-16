@@ -20,8 +20,8 @@
 |               | on the server owner — and for which, consequently, exact     |
 |               | parameter types cannot be defined at compile time — must     |
 |               | be sent as a string:                                         |
-|               | BAD : "[1,true]"      --> (i,b) --> expected: (s)            |
-|               | GOOD: "\"[1,true]\""  --> (s)   --> expected: (s)            |
+|               | BAD : "[1,true]"      --> [i,b) --> expected: [s)            |
+|               | GOOD: "\"[1,true]\""  --> [s)   --> expected: [s)            |
 + ---------------------------------------------------------------------------- +
 
 
@@ -56,7 +56,7 @@
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
 | FIELD             | TYPE              | DEFAULT VALUE     | REPR             | STRICT | DESCRIPTION                                   | NOTES                             |
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
-| ph_gid            | INT               | AUTO_INCREMENT    | (i)              | YES    | player's global ID                            | 17 bytes playerUID string         |
+| ph_gid            | INT               | AUTO_INCREMENT    | [i]              | YES    | player's global ID                            | 17 bytes playerUID string         |
 |                   |                   |                   |                  |        |                                               |    "76562295476658565" is         |
 |                   |                   |                   |                  |        |                                               |    replaced by:                   |
 |                   |                   |                   |                  |        |                                               |                                   |
@@ -64,7 +64,7 @@
 |                   |                   |                   |                  |        |                                               |    integer enabling fast          |
 |                   |                   |                   |                  |        |                                               |    const queries                  |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ph_uid            | VARCHAR(32)       | '0'               | (s)              | YES    | player's in-game unique ID                    | Obtained by 'getPlayerUID player' |
+| ph_uid            | VARCHAR(32)       | '0'               | [s]              | YES    | player's in-game unique ID                    | Obtained by 'getPlayerUID player' |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        |                                               | Arma2OA server should get all     |
 |                   |                   |                   |                  |        |                                               | `ph_uid` and `ph_gid` early -     |
@@ -88,28 +88,28 @@
 |                   |                   |                   |                  |        |                                               | joins the server (make new        |
 |                   |                   |                   |                  |        |                                               | `th_plr` record + "gvar" sync).   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ph_name           | VARCHAR(32)       | 'no_name'         | (s)              | YES    | player's in-game name                         | Obtained by 'name player'         |
+| ph_name           | VARCHAR(32)       | 'no_name'         | [s]              | YES    | player's in-game name                         | Obtained by 'name player'         |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ph_humanity       | INT               | 0                 | (i)              | YES    | player's humanity value                       | custom def value supported (c++); |
+| ph_humanity       | INT               | 0                 | [i]              | YES    | player's humanity value                       | custom def value supported (c++); |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        |                                               | per-world alternative:            |
 |                   |                   |                   |                  |        |                                               | ----------------------            |
 |                   |                   |                   |                  |        |                                               | `tw_*_plr`.`pw_humanity`          |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ph_cash           | BIGINT            | 0                 | (i)              | YES    | player's wallet money                         | per-worlds alternative:           |
+| ph_cash           | BIGINT            | 0                 | [i]              | YES    | player's wallet money                         | per-worlds alternative:           |
 |                   |                   |                   |                  |        |                                               | -----------------------           |
 |                   |                   |                   |                  |        |                                               | `tw_*_plr`.`pw_cash`              |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ph_bank           | BIGINT            | 0                 | (i)              | YES    | player's bank money                           |                                   |
+| ph_bank           | BIGINT            | 0                 | [i]              | YES    | player's bank money                           |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ph_xp             | VARCHAR(1024)     | '[]'              | (s)              | NO     | player's experience support;                  | It is up to server owner /        |
+| ph_xp             | VARCHAR(1024)     | '[]'              | [s]              | NO     | player's experience support;                  | It is up to server owner /        |
 |                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | mod author to define it as needed |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        |                                               | per-worlds alternative:           |
 |                   |                   |                   |                  |        |                                               | -----------------------           |
 |                   |                   |                   |                  |        |                                               | `tw_*_plr`.`pw_xp`                |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ph_group          | VARCHAR(2048)     | '[]'              | (s)              | NO     | player's group membership                     | @TODO: change to [ph_gid,...]?    |
+| ph_group          | VARCHAR(2048)     | '[]'              | [s]              | NO     | player's group membership                     | @TODO: change to [ph_gid,...]?    |
 |                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         |                                   |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        | [                                             |                                   |
@@ -117,7 +117,7 @@
 |                   |                   |                   |                  |        |     ...,            s...                      |                                   |
 |                   |                   |                   |                  |        | ]                                             |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ph_props          | VARCHAR(2048)     | '[]'              | (s)              | NO     | player's modding support                      | It is up to server owner /        |
+| ph_props          | VARCHAR(2048)     | '[]'              | [s]              | NO     | player's modding support                      | It is up to server owner /        |
 |                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | mod author to define it as needed |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        |                                               | per-worlds alternative:           |

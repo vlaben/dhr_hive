@@ -18,8 +18,8 @@
 |               | on the server owner — and for which, consequently, exact     |
 |               | parameter types cannot be defined at compile time — must     |
 |               | be sent as a string:                                         |
-|               | BAD : "[1,true]"      --> (i,b) --> expected: (s)            |
-|               | GOOD: "\"[1,true]\""  --> (s)   --> expected: (s)            |
+|               | BAD : "[1,true]"      --> [i,b] --> expected: [s]            |
+|               | GOOD: "\"[1,true]\""  --> [s]   --> expected: [s]            |
 + ---------------------------------------------------------------------------- +
 
 
@@ -32,15 +32,15 @@
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
 | FIELD             | TYPE              | DEFAULT VALUE     | REPR             | STRICT | DESCRIPTION                                   | NOTES                             |
 + ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- +
-| id                | INT               | AUTO_INCREMENT    | (i)              | YES    | primary key (PK)                              |                                   |
+| id                | INT               | AUTO_INCREMENT    | [i]              | YES    | primary key (PK)                              |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| PlayerUID         | VARCHAR(32)       | '0'               | (s)              | YES    | `Player_DATA`.`PlayerUID` (PK)                |                                   |
+| PlayerUID         | VARCHAR(32)       | '0'               | [s]              | YES    | `Player_DATA`.`PlayerUID` (PK)                |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Name              | VARCHAR(128)      | 'invalid'         | (s)              | YES    | player's in-game name                         |                                   |
+| Name              | VARCHAR(128)      | 'invalid'         | [s]              | YES    | player's in-game name                         |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| DisplayName       | VARCHAR(128)      | 'Mountain Bike'   | (s)              | YES    | vehicles's displayName                        |                                   |
+| DisplayName       | VARCHAR(128)      | 'Mountain Bike'   | [s]              | YES    | vehicles's displayName                        |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Classname         | VARCHAR(64)       | 'MMT_Civ_DZE'     | (s)              | YES    | vehicles's className                          |                                   |
+| Classname         | VARCHAR(64)       | 'MMT_Civ_DZE'     | [s]              | YES    | vehicles's className                          |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | Datestamp         | DATETIME          | CURRENT_TIMESTAMP | internal         |        | vehicles's record creation DATETIME           | Changed from TIMESTAMP            |
 |                   |                   |                   |                  |        |                                               |           to DATETIME             |
@@ -52,7 +52,7 @@
 |                   |                   |                   |                  |        |                                               | TIMESTAMP upper year boundary     |
 |                   |                   |                   |                  |        |                                               | is limited to 2038, etc.          |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| DateStored        | VARCHAR(16)       | 'old'             | (s)              | YES    | 'DD-MM-YYYY' datestamp                        | Created by the hive.              |
+| DateStored        | VARCHAR(16)       | 'old'             | [s]              | YES    | 'DD-MM-YYYY' datestamp                        | Created by the hive.              |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
 | DateMaintained    | DATETIME          | CURRENT_TIMESTAMP | internal         |        | vehicles's record "maintanance" DATETIME      | Changed from TIMESTAMP            |
 |                   |                   |                   |                  |        |                                               |           to DATETIME             |
@@ -64,7 +64,7 @@
 |                   |                   |                   |                  |        |                                               | TIMESTAMP upper year boundary     |
 |                   |                   |                   |                  |        |                                               | is limited to 2038, etc.          |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| CharacterID       | VARCHAR(32)       | '0'               | (s)              | YES    | vehicle's key                                 | MUST always be handled as STRING. |
+| CharacterID       | VARCHAR(32)       | '0'               | [s]              | YES    | vehicle's key                                 | MUST always be handled as STRING. |
 |                   |                   |                   |                  |        |                                               |                                   |
 |                   |                   |                   |                  |        |                                               | Changed from UNSIGNED BIGINT      |
 |                   |                   |                   |                  |        |                                               |           to VARCHAR(32)          |
@@ -74,33 +74,33 @@
 |                   |                   |                   |                  |        |                                               | full key, not just keyID number   |
 |                   |                   |                   |                  |        |                                               | (e.g. "ItemKeyGreen100")          |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| StorageCounts     | VARCHAR(64)       | '[0,0,0]'         | (i,i,i)          | YES    | '[                                            |                                   |
+| StorageCounts     | VARCHAR(64)       | '[0,0,0]'         | [i,i,i]          | YES    | '[                                            |                                   |
 |                   |                   |                   |                  |        |     _weaponsCount,                            |                                   |
 |                   |                   |                   |                  |        |     _magazineCount,                           |                                   |
 |                   |                   |                   |                  |        |     _backPackCount                            |                                   |
 |                   |                   |                   |                  |        | ]'                                            |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Inventory         | MEDIUMTEXT        | _utf8mb4'[]'      | (s)              | NO     | vehicle's inventory data                      | Can't be STRICT - Inventory has   |
+| Inventory         | MEDIUMTEXT        | _utf8mb4'[]'      | [s]              | NO     | vehicle's inventory data                      | Can't be STRICT - Inventory has   |
 |                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         | multiple patterns!                |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Hitpoints         | MEDIUMTEXT        | _utf8mb4'[]'      | (s)              | NO     | vehicle's hitpoints data                      |                                   |
+| Hitpoints         | MEDIUMTEXT        | _utf8mb4'[]'      | [s]              | NO     | vehicle's hitpoints data                      |                                   |
 |                   |                   |                   |                  |        | NON-STRICT field; Rule [R/02] applies         |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Fuel              | DOUBLE            | 1.0               | (f)              | YES    | vehicle's fuel value                          |                                   |
+| Fuel              | DOUBLE            | 1.0               | [f]              | YES    | vehicle's fuel value                          |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Damage            | DOUBLE            | 0.0               | (f)              | YES    | vehicle's damage value                        |                                   |
+| Damage            | DOUBLE            | 0.0               | [f]              | YES    | vehicle's damage value                        |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Colour            | VARCHAR(64)       | '0'               | (s)              | YES    | vehicle's colour-1 value                      |                                   |
+| Colour            | VARCHAR(64)       | '0'               | [s]              | YES    | vehicle's colour-1 value                      |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| Colour2           | VARCHAR(64)       | '0'               | (s)              | YES    | vehicle's colour-2 value                      |                                   |
+| Colour2           | VARCHAR(64)       | '0'               | [s]              | YES    | vehicle's colour-2 value                      |                                   |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| serverKey         | VARCHAR(16)       | 'old'             | (s)              | YES    | vg_serverKey =                                | Assigned in 'garage/init.sqf:20', |
+| serverKey         | VARCHAR(16)       | 'old'             | [s]              | YES    | vg_serverKey =                                | Assigned in 'garage/init.sqf:20', |
 |                   |                   |                   |                  |        | toString (8 call VG_RandomizeMyKey);          | stored in DB using:               |
 |                   |                   |                   |                  |        |                                               | 'server_storeVehicle.sqf:59'      |
 |                   |                   |                   |                  |        |                                               | and used internally               |
 |                   |                   |                   |                  |        |                                               | by the legacy hive (see ObjUID).  |
 | ----------------- + ----------------- + ----------------- + ---------------- + ------ + --------------------------------------------- + --------------------------------- |
-| ObjUID            | VARCHAR(32)       | 'old'             | (s)              | YES    | _VG_ObjID =                                   | As original author explains       |
+| ObjUID            | VARCHAR(32)       | 'old'             | [s]              | YES    | _VG_ObjID =                                   | As original author explains       |
 |                   |                   |                   |                  |        | toString (18 call VG_RandomizeMyKey);         | in commit 'd57d9cd', this         |
 |                   |                   |                   |                  |        |                                               | should prevent duplicate          |
 |                   |                   |                   |                  |        | vg_alreadySpawned set                         | store/fetch - internally          |

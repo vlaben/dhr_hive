@@ -14,7 +14,7 @@
 
 
 
-# [B] PACKET REQUIRED STRUCTURE:
+# [B] REQUEST PACKET REQUIRED STRUCTURE:
 # -------------------------------------------------------- |
 
   + ---------------------------------------------------------- |
@@ -28,26 +28,26 @@
   |                 |               repr              |
   |                 |         (flat signature)        |
   |                 + ------------------------------- |
-  |                 |   (                             |
+  |                 |   [                             |
   |                 |       i,                        | HEADER  : COM_SUID
   |                 |       i,                        |           COM_TYPE
   |   Packet:       |       i,                        |           COM_EXID
   |   -------       |       a                         | PAYLOAD : COM_ARGV[ARG1,[...,]ARGN]
-  |   [             |   )                             |
+  |   [             |   ]                             |
   |       6,        + ------------------------------- +
   |       1,        |               repr              |
   |       1,        |      (recursive signature)      |
   |       [         + ------------------------------- |
   |          true,  |                                 |
-  |          ...    |   (                             |
+  |          ...    |   [                             |
   |       ]         |       i,                        | HEADER  : COM_SUID
   |   ]             |       i,                        |           COM_TYPE
   |                 |       i,                        |           COM_EXID
-  |                 |       (                         | PAYLOAD : COM_ARGV[
+  |                 |       [                         | PAYLOAD : COM_ARGV[
   |                 |           b,                    |             ARG1,
   |                 |           ...                   |             ...
   |                 |       )                         |           ]
-  |                 |   )                             |
+  |                 |   ]                             |
   + ------------------------------------------------- +
     Note: for more details about 'i', 'a', 'b', ...
           repr symbols read section:
@@ -89,51 +89,48 @@
   + ----------- + ------- + ------------------------------------------------- + ------------- + ---------------------------- + -------------------------- +
   |             |         | SYNC call type.                                   | 3             |                              |                            |
   |             |         |                                                   |               |                              |                            |
-  | auth        | 1       | System packets controlling interaction            |               | [1,0,"DATA"]                 | COM_EXID failure:          |
+  | auth        | 1       | System packets controlling interaction            |               | [1,1,"DATA"]                 | COM_EXID failure:          |
   |             |         | with dhr_hive[_d].dll.                            |               |                              | -----------------          |
-  |             |         | Guarded, strictly handled by the rules.           |               |                              | [1,1,"DATA"]               |
+  |             |         | Guarded, strictly handled by the rules.           |               |                              | [1,2,"DATA"]               |
   |             |         |                                                   |               |                              |                            |
   |             |         |                                                   |               |                              | hive RESPONSE failure:     |
   |             |         |                                                   |               |                              | ----------------------     |
-  |             |         |                                                   |               |                              | [1,2,"err_INVALID"]        |
-  |             |         |                                                   |               |                              | [1,2,"err_RESSIZE"]        |
+  |             |         |                                                   |               |                              | [1,3,"err_RESSIZE"]        |
   |             |         |                                                   |               |                              |                            |
   |             |         | On fail auth, all subsequent packets              |               |                              | hive SYSTEM failure:       |
   |             |         | are blocked (Arma2OA server will always           |               |                              | --------------------       |
-  |             |         | receive "err_REVOKED" response on each            |               |                              | [1,3,"err_ABORTED"]        |
-  |             |         | subsequent call).                                 |               |                              | [1,3,"err_REVOKED"]        |
+  |             |         | receive "err_REVOKED" response on each            |               |                              | [1,4,"err_REVOKED"]        |
+  |             |         | subsequent call).                                 |               |                              |                            |
   + ----------- + ------- + ------------------------------------------------- + ------------- + ---------------------------- + -------------------------- +
   |             |         | Execute call type.                                | 3             |                              |                            |
   |             |         |                                                   |               |                              |                            |
-  | execute     | 2       | Generally, request dispatcher to the target       |               | [2,0,"DATA"]                 | COM_EXID failure:          |
-  |             |         | background worker thread (without tracking).      |               | [2,0,""]                     | -----------------          |
-  |             |         |                                                   |               |                              | [2,1,"DATA"]               |
+  | execute     | 2       | Generally, request dispatcher to the target       |               | [2,1,"DATA"]                 | COM_EXID failure:          |
+  |             |         | background worker thread (without tracking).      |               | [2,1,""]                     | -----------------          |
+  |             |         |                                                   |               |                              | [2,2,"DATA"]               |
   |             |         | Since packet from Arma2OA server is always        |               |                              |                            |
   |             |         | deserialized and validated, caller should         |               |                              | hive RESPONSE failure:     |
   |             |         | always inspect at least RES_CODE                  |               |                              | ----------------------     |
-  |             |         | (even on success).                                |               |                              | [2,2,"err_INVALID"]        |
-  |             |         |                                                   |               |                              | [2,2,"err_RESSIZE"]        |
-  |             |         | Call is very fast - once validation               |               |                              |                            |
-  |             |         | is succcessfully done, packet is (mostly) passed  |               |                              | hive SYSTEM failure:       |
-  |             |         | to the target COM_SUID and enqueued to the worker |               |                              | --------------------       |
-  |             |         | thread queue, hence main thread blocking is       |               |                              | [2,3,"err_ABORTED"]        |
-  |             |         | minimal (non significant).                        |               |                              | [2,3,"err_REVOKED"]        |
+  |             |         | (even on success).                                |               |                              | [2,3,"err_RESSIZE"]        |
+  |             |         |                                                   |               |                              |                            |
+  |             |         | Call is very fast - once validation               |               |                              | hive SYSTEM failure:       |
+  |             |         | is succcessfully done, packet is (mostly) passed  |               |                              | --------------------       |
+  |             |         | to the target COM_SUID and enqueued to the worker |               |                              | [2,4,"err_REVOKED"]        |
+  |             |         | thread queue, hence main thread blocking is       |               |                              |                            |
+  |             |         | minimal (non significant).                        |               |                              |                            |
   + ----------- + ------- + ------------------------------------------------- + ------------- + ---------------------------- + -------------------------- +
   |             |         | ASYNC call type.                                  | 4             |                              |                            |
   |             |         |                                                   |               |                              |                            |
-  | promise     | 3       | Creates promise, stores future and returns        |               | [3,0,PRID,"DATA"]            | COM_EXID failure:          |
-  |             |         | back to the caller without blocking the main      |               | [3,0,PRID,""]                | -----------------          |
-  |             |         | thread. Caller will receive unique promise ID     |               |                              | [3,1,PRID,"DATA"]          |
+  | promise     | 3       | Creates promise, stores future and returns        |               | [3,1,PRID,"DATA"]            | COM_EXID failure:          |
+  |             |         | back to the caller without blocking the main      |               | [3,1,PRID,""]                | -----------------          |
+  |             |         | thread. Caller will receive unique promise ID     |               |                              | [3,2,PRID,"DATA"]          |
   |             |         | (PRID), which will be used for the next call,     |               |                              |                            |
   |             |         | when future result is required.                   |               |                              | hive RESPONSE failure:     |
   |             |         |                                                   |               |                              | ----------------------     |
-  |             |         |                                                   |               |                              | [3,2,PRID,"err_INVALID"]   |
-  |             |         |                                                   |               |                              | [3,2,PRID,"err_RESSIZE"]   |
+  |             |         |                                                   |               |                              | [3,3,PRID,"err_RESSIZE"]   |
   |             |         |                                                   |               |                              |                            |
   |             |         |                                                   |               |                              | hive SYSTEM failure:       |
   |             |         |                                                   |               |                              | --------------------       |
-  |             |         |                                                   |               |                              | [3,3,PRID,"err_ABORTED"]   |
-  |             |         |                                                   |               |                              | [3,3,PRID,"err_REVOKED"]   |
+  |             |         |                                                   |               |                              | [3,4,PRID,"err_REVOKED"]   |
   + ----------- + ------- + ------------------------------------------------- + ------------- + ---------------------------- + -------------------------- +
   |             |         | Part of ASYNC call type.                          | 5             |                              |                            |
   |             |         |                                                   |               |                              |                            |
@@ -141,22 +138,22 @@
   |             |         | PRID as received from promise request COM_TYPE.   |               |                              |                            |
   |             |         |                                                   |               |                              |                            |
   |             |         | If response is not ready yet, caller receives     |               | result not available yet:    | COM_EXID failure:          |
-  |             |         | signal (RES_CODE = -1) to repeat request later.   |               | -------------------------    | -----------------          |
-  |             |         |                                                   |               | [4,-1,PRID,0,""]             | [4,1,PRID,0,"DATA"]        |
+  |             |         | signal (RES_CODE = 0) to repeat request later.    |               | -------------------------    | -----------------          |
+  |             |         |                                                   |               | [4,0,PRID,0,""]              | [4,2,PRID,0,"DATA"]        |
   |             |         |                                                   |               |                              |                            |
   |             |         | When invalid PRID is received, a special          |               |                              | invalid PRID:              |
   |             |         | RESPONSE is sent back to the caller,              |               |                              | -------------              |
-  |             |         | where PRID == 0 signals the fact.                 |               |                              | [4,1,0,0,""]               |
+  |             |         | where PRID == 0 signals the fact.                 |               |                              | [4,2,0,0,""]               |
   |             |         |                                                   |               |                              |                            |
-  |             |         | All responses having RES_QUID = 0 (no msgs left)  |               | single packet result:        | hive RESPONSE failure:     |
+  |             |         | All responses having RES_MPAR = 0 (no msgs left)  |               | single packet result:        | hive RESPONSE failure:     |
   |             |         | are considered complete single packet result.     |               | ---------------------        | ----------------------     |
-  |             |         |                                                   |               | [4,0,PRID,0,"DATA_0"]        | [4,2,PRID,0,"err_INVALID"] |
-  |             |         |                                                   |               |                              | [4,2,PRID,0,"err_RESSIZE"] |
-  |             |         | All responses having RES_QUID > 0 (msgs left)     |               | multi packet result:         |                            |
-  |             |         | are considered multi packet result                |               | --------------------         | hive SYSTEM failure:       |
-  |             |         | and concrete RES_QUID value represents            |               | [4,0,PRID,2,"DATA_0"]        | --------------------       |
-  |             |         | the answer to the question:                       |               | [4,0,PRID,1,"DATA_1"]        | [4,3,PRID,0,"err_ABORTED"] |
-  |             |         | "HOW MANY TIMES SHOULD I SENT FUTURE COM_TYPE     |               | [4,0,PRID,0,"DATA_2"]        | [4,3,PRID,0,"err_REVOKED"] |
+  |             |         |                                                   |               | [4,1,PRID,0,"DATA_0"]        | [4,3,PRID,0,"err_RESSIZE"] |
+  |             |         |                                                   |               |                              |                            |
+  |             |         | All responses having RES_MPAR > 0 (msgs left)     |               | multi packet result:         | hive SYSTEM failure:       |
+  |             |         | are considered multi packet result                |               | --------------------         | --------------------       |
+  |             |         | and concrete RES_MPAR value represents            |               | [4,1,PRID,2,"DATA_0"]        | [4,4,PRID,0,"err_REVOKED"] |
+  |             |         | the answer to the question:                       |               | [4,1,PRID,1,"DATA_1"]        |                            |
+  |             |         | "HOW MANY TIMES SHOULD I SENT FUTURE COM_TYPE     |               | [4,1,PRID,0,"DATA_2"]        |                            |
   |             |         |  REQUEST TO RECEIVE COMPLETE RESPONSE?"           |               |                              |                            |
   + ----------------------------------------------------------------------------------------------------------------------------------------------------- +
 
@@ -206,31 +203,27 @@
   |                                                                    MAPPING                                                                    |
   |                                                           ARMA 2OA SQF TYPES -> C++                                                           |
   + --------------------------------------------------------------------------------------------------------------------------------------------- +
-  |                               |                                                  sqf::param                                                   |
-  |                               | ------------------------------------------------------------------------------------------------------------- |
-  |           Arma2 OA            |                 |         | specifier | "{:V}" | "{:v}" | "{:K}" | "{:k}" | "{:R}" | "{:r}" | "{:N}" | "{:n}" |--- +
-  |              SQF              |                 |         | --------- | ------ + ------ | ------ + ------ | ------ + ------ | ------ + ------ |    |
-  |                               |   AST traits    | index() | recursive |  YES   |  YES   |  YES   |   NO   |  YES   |   NO   |  YES   |   NO   |    |
-  | ----------------------------- |                 |         | --------- | ------ + ------ | ------ + ------ | ------ + ------ | ------ + ------ |    |
-  | Type    |      typeName       |                 |         | brackets* |   []   |   ()   |   ()   |   ()   |   ()   |   ()   |   ()   |   ()   |    |
+  |           Arma2 OA            |                                                  sqf::param                                                   |
+  |              SQF              | ------------------------------------------------------------------------------------------------------------- |
+  |                               |                 |         | specifier |     "{:V}"      | "{:K}" | "{:k}" | "{:R}" | "{:r}" | "{:N}" | "{:n}" |--- +
+  | ----------------------------- |                 |         | --------- | --------------- | ------ + ------ | ------ + ------ | ------ + ------ |    |
+  | Type    |      typeName       |   AST traits    | index() | recursive |       YES       |  YES   |   NO   |  YES   |   NO   |  YES   |   NO   |    |
   | ------- + ------------------- + --------------- + ------- + --------- + --------------- + --------------- + --------------- + --------------- |    |
   | nil     | UNDEFINED           | null_traits_t   |   0UZ   |           |      null       |       any       |        ?        |        ?        |    |
   | ------- + ------------------- + --------------- + ------- |           | --------------- + --------------- + --------------- + --------------- |    |
   | Boolean | "BOOL"              | bool_traits_t   |   1UZ   |           |   true / false  |       bool      |        b        |        b        |    |
   | --------+ ------------------- + --------------- + ------- |           | --------------- + --------------- + --------------- + --------------- |    |
   |         |           | int     | int64_traits_t  |   2UZ   |           |     -10LL       |      int64      |        i        |                 |    |
-  | **      |           | ------- | --------------- + ------- |           | --------------- + --------------- + --------------- |                 |    |
-  | Number  | "SCALAR"  | big int | uint64_traits_t |   3UZ   |           |      10ULL      |      uint64     |        u        |        n        |    |
+  |         |           | ------- | --------------- + ------- |           | --------------- + --------------- + --------------- |                 |    |
+  | Number* | "SCALAR"  | big int | uint64_traits_t |   3UZ   |           |      10ULL      |      uint64     |        u        |        n        |    |
   |         |           |-------- | --------------- + ------- |           | --------------- + --------------- + --------------- |                 |    |
   |         |           | float   | double_traits_t |   4UZ   |           |      0.53       |      double     |        f        |                 |    |
   | ------- + ------------------- + --------------- + ------- |           | --------------- + --------------- + --------------- + --------------- |    |
   | String  | "STRING"            | str_traits_t    |   5UZ   |           |     "[...]"     |       str       |        s        |        s        |    |
-  | ------- + ------------------- + --------------- + ------- |           | ------ + ------ + ------ + ------ + ------ + ------ + ------ + ------ |    |
-  | Array   | "ARRAY"             | arr_traits_t    |   6UZ   |           |  [...] | (...)  |     () | arr    |     () | a      |     () | a      |    |
+  | ------- + ------------------- + --------------- + ------- |           | --------------- + --------------- + --------------- + --------------- |    |
+  | Array   | "ARRAY"             | arr_traits_t    |   6UZ   |           |      [...]      |     [] | arr    |     [] | a      |     [] | a      |    |
   + --------------------------------------------------------------------------------------------------------------------------------------------- +    |
-  |                                                            *  brackets   : [] | SQF format | Arma2 OA 'call compile ...' | compatible for SQF      |
-  |                                                                            () | RPT format | Arma2 OA 'call compile ...' | compatible for RPT      |
-  |                                                            ** SQF Number : single precision floating-point number                                  |
+  |                                                                                         * SQF Number : single precision floating-point number      |
   |                                                                                                                                                    |
   |                                                                                                                                                    |
   |--input     ::= param                ast::arr_traits_t                                                                                              |
@@ -250,31 +243,27 @@
 # [B2/2] PAYLOAD: COM_ARGV: VALUE, REPR, KIND                                                                                                          |
 # -------------------------------------------------------- |                                                                                           |
                                                                                                                                                        |
-   # Overview of sqf::param value abstraction and textual repr:                                                                                        |
-   # --------- + ------------------------------------------------- + <-------------------------------------------------------------------------------- +
-               |          method           | specifier | brackets  |
-               + ------------------------- + --------- + --------- |
-           (1) | as_sqf_value_str          |  "{:V}"   |    []     |
-           (1) | as_rpt_value_str          |  "{:v}"   |    ()     |
-               | ------------------------- + --------- + --------- |
-               | as_recursive_cpp_repr_str |  "{:R}"   |    ()     |
-           (2) | as_flattened_cpp_repr_str |  "{:r}"   |    ()     |
-               | ------------------------- + --------- + --------- |
-               | as_recursive_sqf_repr_str |  "{:N}"   |    ()     |
-           (2) | as_flattened_sqf_repr_str |  "{:n}"   |    ()     |
-               | ------------------------- + --------- + --------- |
-           (3) | as_recursive_kind_str     |  "{:K}"   |    ()     |
-           (3) | as_flattened_kind_str     |  "{:k}"   |    ()     |
-               + ------------------------------------------------- +
+   # Overview of sqf::param value abstraction                                                                                                          |
+   # and textual repr:                                                                                                                                 |
+   # --------- + ------------------------------------- + <-------------------------------------------------------------------------------------------- +
+               |          method           | specifier |
+               + ------------------------- + --------- |
+           (1) | as_sqf_value_str          |  "{:V}"   |
+               | ------------------------- + --------- |
+               | as_recursive_cpp_repr_str |  "{:R}"   |
+           (2) | as_flattened_cpp_repr_str |  "{:r}"   |
+               | ------------------------- + --------- |
+               | as_recursive_sqf_repr_str |  "{:N}"   |
+           (2) | as_flattened_sqf_repr_str |  "{:n}"   |
+               | ------------------------- + --------- |
+           (3) | as_recursive_kind_str     |  "{:K}"   |
+           (3) | as_flattened_kind_str     |  "{:k}"   |
+               + ------------------------------------- +
 
          ---------------------------
-     (1) "{:V}": as_sqf_value_str()
-         "{:v}": as_rpt_value_str():
+     (1) "{:V}": as_sqf_value_str():
          ---------------------------
-         If the underlying value is of type `ast::str_traits::value_t`,
-         the resulting value is enclosed in quotes, and special characters
-         are escaped: "my_text" -> "{:V}" -> "\"my_text\""
-                                   "{:v}" ->  "'my_text'"
+         Recursively serialized value.
 
 
          ------------------------------------
@@ -294,8 +283,8 @@
               --------------------------------
          (2A) CPP target example:
               --------------------------------
-             "{:R}": as_recursive_cpp_repr_str() : "(i,f,((s,s,s),(i,i,i)))"
-             "{:r}": as_flattened_cpp_repr_str() : "(i,f,        a        )"                         // compile time
+             "{:R}": as_recursive_cpp_repr_str() : "[i,f,[[s,s,s],[i,i,i]]]"
+             "{:r}": as_flattened_cpp_repr_str() : "[i,f,        a        ]"                         // compile time
                                                                  |
                                                                 arr[2UZ].as_recursive_cpp_repr_str() // runtime
 
@@ -307,8 +296,8 @@
               would handle an Arma `Number` type (typename "SCALAR")
               during the validation of the request signature*:
 
-              "{:N}": as_recursive_sqf_repr_str() : "(n,n,((s,s,s),(n,n,n)))"
-              "{:n}": as_flattened_sqf_repr_str() : "(n,n,        a        )"                         // compile time
+              "{:N}": as_recursive_sqf_repr_str() : "[n,n,[[s,s,s],[n,n,n]]]"
+              "{:n}": as_flattened_sqf_repr_str() : "[n,n,        a        ]"                         // compile time
                                                                   |
                                                                  arr[2UZ].as_recursive_sqf_repr_str() // runtime
 
